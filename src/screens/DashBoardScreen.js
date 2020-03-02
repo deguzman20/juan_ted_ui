@@ -11,13 +11,10 @@ const MyTaskerRoute = () => <Text>My Tasker</Text>;
 const ProfileRoute = () => <Text>Profile</Text>;
 
 class DashBoardScreen extends React.Component {
-    // , icon: 'queue-music'
-    // icon: 'album'
-    // icon: 'history'
-    state = {
+  state = {
     index: 0,
     routes: [
-      { key: 'home', title: 'Home', icon: 'rocket' },
+      { key: 'home', title: 'Home' },
       { key: 'tasks', title: 'Tasks' },
       { key: 'my_taskers', title: 'My Taskers' },
       { key: 'profile', title: 'Profile' },

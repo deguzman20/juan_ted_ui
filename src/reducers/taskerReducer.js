@@ -29,7 +29,6 @@ export const taskerReducer = (state = initialState, action) => {
               hourly_rate: action.payload.hourly_rate,
               introduction: action.payload.introduction
           }
-        break;
         default:
           return state
       }

@@ -8,10 +8,11 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import { theme } from '../core/theme';
+import { connect } from 'react-redux';
+import { customerSignInAction } from '../actions';
 import { emailValidator, passwordValidator } from '../core/utils';
 
-
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, current_customer, customerSignInAction }) => {
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN);
 
   const [email, setEmail] = useState({ value: '', error: '' });
@@ -28,9 +29,7 @@ const LoginScreen = ({ navigation }) => {
     }
 
    customerSignIn({ variables: { email: email.value, password: password.value } }).then((data) =>{
-    if(data.data["customerSignin"]["token"] !== ""){
-       navigation.navigate('DashBoardScreen')
-     }
+    customerSignInAction(data.data.customerSignin)
    })
   };
 
@@ -106,4 +105,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(LoginScreen);
+const mapStateToProps = ({ customerReducer }) => {
+  return {
+    current_customer: customerReducer
+  }
+}
+
+export default memo(connect(mapStateToProps, { customerSignInAction })(LoginScreen));

@@ -1,4 +1,4 @@
-import { CURRENT_CUSTOMER_INFO } from '../actions/types';
+import { CUSTOMER_SIGN_IN } from '../actions/types';
 
 const initialState = {
   is_login: false,
@@ -14,7 +14,7 @@ const initialState = {
 
 export const customerReducer = (state = initialState, action) => {
     switch (action.type) {
-        case CURRENT_CUSTOMER_INFO:
+        case CUSTOMER_SIGN_IN:
           return {
               ...state,
               is_login: true,
@@ -27,7 +27,6 @@ export const customerReducer = (state = initialState, action) => {
               zip_code: action.payload.zip_code,
               card_detail: action.payload.card_detail
           }
-        break;
         default:
           return state
       }

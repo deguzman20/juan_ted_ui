@@ -9,6 +9,7 @@ import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import BackButton from '../components/BackButton';
 import { theme } from '../core/theme';
+import Loader from "react-native-modal-loader";
 import {
   emailValidator,
   passwordValidator,
@@ -20,6 +21,7 @@ import {
 const RegisterScreen = ({ navigation }) => {
   const [createCustomer, response] = useMutation(CREATE_CUSTOMER);
 
+  const [isLoading, setLoading] = useState(false)
   const [first_name, setFirstName] = useState({ value: '', error: '' });
   const [last_name, setLastName] = useState({ value: '', error: '' });
   const [mobile_number, setMobileNumber] = useState({ value: '', error: '' });
@@ -42,10 +44,21 @@ const RegisterScreen = ({ navigation }) => {
       return;
     }
 
-    createCustomer({ variables: { first_name: first_name.value, last_name: last_name.value, email: email.value, mobile_number: mobile_number.value, password: password.value } })
+    createCustomer({ variables: { first_name: first_name.value,
+                                  last_name: last_name.value,
+                                  email: email.value,
+                                  mobile_number: mobile_number.value,
+                                  password: password.value } })
+
+    //  set Loading to true to show loading modal
+    setLoading(true)
 
     if(response.data !== null){
       if(response.data.createCustomer.response === "Customer Created"){
+        setTimeout(() => {
+          setLoading(false)
+
+        }, 5000);
         navigation.navigate('LoginScreen')
       }
     }
@@ -119,6 +132,10 @@ const RegisterScreen = ({ navigation }) => {
           <Text style={styles.link}>Login</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.container}>
+        <Loader loading={isLoading} color="#ff66be" />
+      </View>
     </Background>
   );
 };
@@ -138,6 +155,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF"
+  }
 });
 
 export default memo(RegisterScreen);

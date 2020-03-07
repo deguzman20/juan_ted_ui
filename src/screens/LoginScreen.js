@@ -1,4 +1,4 @@
-import React, { memo, useState, Component } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { CUSTOMER_SIGN_IN } from '../queries';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
@@ -11,8 +11,9 @@ import { theme } from '../core/theme';
 import { connect } from 'react-redux';
 import { customerSignInAction } from '../actions';
 import { emailValidator, passwordValidator } from '../core/utils';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const LoginScreen = ({ navigation, current_customer, customerSignInAction }) => {
+const LoginScreen = ({ navigation, customerSignInAction }) => {
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN);
 
   const [email, setEmail] = useState({ value: '', error: '' });
@@ -32,10 +33,11 @@ const LoginScreen = ({ navigation, current_customer, customerSignInAction }) => 
     customerSignInAction(data.data.customerSignin)
    })
   };
+  
+  console.log(AsyncStorage.getItem('customer_auth_token'))
 
   return (
     <Background>
-      {/* <BackButton goBack={() => navigation.navigate('HomeScreen')} /> */}
 
       <Logo />
 
@@ -105,10 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ customerReducer }) => {
-  return {
-    current_customer: customerReducer
-  }
-}
-
-export default memo(connect(mapStateToProps, { customerSignInAction })(LoginScreen));
+export default memo(connect(null, { customerSignInAction })(LoginScreen));

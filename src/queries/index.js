@@ -1,49 +1,16 @@
 import gql from "graphql-tag";
 
 export const CUSTOMER_SIGN_IN = gql`
-  mutation CustomerSignIn($email: String!, $password: String!) {
-  customerSignin(email: {email: $email, password: $password}) {
-    response {
-      id
-      email
-      firstName
-      lastName
-      image
-      mobileNumber
-        tasks {
-          tasker {
-            email
-            firstName
-            lastName
-            image
-            mobileNumber
-            zipCode
-            hourlyRate
-            introduction
-          }
-        }
-      }
+  mutation customerSignIn($email: String!, $password: String!) {
+    customerSignin(email: {email: $email, password: $password}) {
+      token
     }
   }`;
 
 export const TASKER_SIGN_IN = gql`
-  mutation taskerSignin($email: String!, $password: String!) {
-    taskerSignin(email: {email: $email, password: $password}) {
-      response {
-        email
-        firstName
-        lastName
-        introduction
-        hourlyRate
-        tasks {
-          customer {
-            id
-            firstName
-            lastName
-            mobileNumber
-          }
-        }
-      }
+ mutation taskerSignIn($email: String!, $password: String!) {
+    customerSignin(email: {email: $email, password: $password}) {
+      token
     }
   }`;
 

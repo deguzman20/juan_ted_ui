@@ -1,4 +1,4 @@
-import { CURRENT_TASKER_INFO } from '../actions/types';
+import { GET_CURRENT_TASKER_INFO } from '../actions/types';
 
 const initialState = {
   is_login: false,
@@ -15,7 +15,7 @@ const initialState = {
 
 export const taskerReducer = (state = initialState, action) => {
     switch (action.type) {
-        case CURRENT_TASKER_INFO:
+        case GET_CURRENT_TASKER_INFO:
           return {
               ...state,
               is_login: true,

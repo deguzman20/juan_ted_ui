@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { CREATE_CUSTOMER } from '../queries';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import Background from '../components/Background';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
@@ -44,28 +44,25 @@ const RegisterScreen = ({ navigation }) => {
       return;
     }
 
+    // setLoading(true)
+
     createCustomer({ variables: { first_name: first_name.value,
                                   last_name: last_name.value,
                                   email: email.value,
                                   mobile_number: mobile_number.value,
                                   password: password.value } })
 
-    //  set Loading to true to show loading modal
-    setLoading(true)
+    // if(response){
+    //   setLoading(false)
+    // }
+   console.log(response)
 
-    if(response.data !== null){
-      if(response.data.createCustomer.response === "Customer Created"){
-        setTimeout(() => {
-          setLoading(false)
-
-        }, 5000);
-        navigation.navigate('LoginScreen')
-      }
-    }
   };
 
   return (
-    <Background>
+    <>
+      <SafeAreaView></SafeAreaView>
+      <Background>
       <BackButton goBack={() => navigation.navigate('LoginScreen')} />
 
       <Logo />
@@ -137,6 +134,7 @@ const RegisterScreen = ({ navigation }) => {
         <Loader loading={isLoading} color="#ff66be" />
       </View>
     </Background>
+    </>
   );
 };
 

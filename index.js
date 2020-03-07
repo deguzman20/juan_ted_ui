@@ -9,18 +9,23 @@ import { Provider } from 'react-redux';
 import {name as appName} from './app.json';
 import ApolloClient from "apollo-boost";
 import { PersistGate } from 'redux-persist/lib/integration/react';
-import { Text } from 'react-native';
-import App from './App';
+import { BASE_URL } from './src/actions/types';
 import { store, persistor } from './src/reducers/store';
+import AsyncStorage from '@react-native-community/async-storage';
+import App from './App';
+
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql"
+  uri: `${BASE_URL}`,
+  headers: {
+    authorization: `bearer ${AsyncStorage.getItem('customer_auth_token')}`
+  }
 });
 
 const Application = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <PersistGate loading={<Text>Loading</Text>} persistor={persistor}>
+      <PersistGate loading={null} persistor={persistor}>
         <App />
       </PersistGate>
     </Provider>

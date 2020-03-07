@@ -1,6 +1,7 @@
 import * as React from 'react';
 // import Icon from 'react-native-vector-icons/Ionicons';
 import { BottomNavigation, Text } from 'react-native-paper';
+import ProfileScreen from './ProfileScreen';
 
 const HomeRoute = () => <Text>Home</Text>;
 
@@ -8,7 +9,6 @@ const TasksRoute = () => <Text>Tasks</Text>;
 
 const MyTaskerRoute = () => <Text>My Tasker</Text>;
 
-const ProfileRoute = () => <Text>Profile</Text>;
 
 class DashBoardScreen extends React.Component {
   state = {
@@ -27,7 +27,7 @@ class DashBoardScreen extends React.Component {
     home: HomeRoute,
     tasks: TasksRoute,
     my_taskers: MyTaskerRoute,
-    profile: ProfileRoute
+    profile: ProfileScreen
   });
 
   render() {

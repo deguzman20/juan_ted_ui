@@ -40,7 +40,6 @@ target 'juan_ted_ui' do
 
 
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'juan_ted_uiTests' do
     inherit! :search_paths

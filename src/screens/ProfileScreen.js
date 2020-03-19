@@ -7,10 +7,11 @@ import { StyleSheet } from 'react-native';
 const ProfileScreen = ({ navigation }) => {
   return (
     <Background>
-       <List.Item
-            title="First Item"
-            description="Item description"
-            left={props => <List.Icon {...props} icon="folder" />}/>
+      <List.Item
+        title="First Item"
+        description="Item description"
+        left={props => <List.Icon {...props} icon="folder" />}
+      />
     </Background>
   );
 };

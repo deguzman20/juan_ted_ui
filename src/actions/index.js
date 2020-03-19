@@ -18,7 +18,7 @@ export const customerSignInAction = (data) => {
   }
 }
 
-export const taskerSignInAction = async (data) => {
+export const taskerSignInAction = (data) => {
   AsyncStorage.setItem('tasker_auth_token', data.token)
   return (dispatch) =>{
     dispatch({
@@ -39,7 +39,7 @@ export const customerLogoutAction = () => {
 }
 
 
-export const taskerLogoutAction = async () => {
+export const taskerLogoutAction = () => {
   AsyncStorage.removeItem('tasker_auth_token');
   return (dispatch) =>{
     dispatch({

@@ -33,7 +33,7 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
     customerSignInAction(data.data.customerSignin)
    })
   };
-  
+
   console.log(AsyncStorage.getItem('customer_auth_token'))
 
   return (

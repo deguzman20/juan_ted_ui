@@ -8,7 +8,7 @@ export const CUSTOMER_SIGN_IN = gql`
   }`;
 
 export const TASKER_SIGN_IN = gql`
- mutation taskerSignIn($email: String!, $password: String!) {
+  mutation taskerSignIn($email: String!, $password: String!) {
     customerSignin(email: {email: $email, password: $password}) {
       token
     }

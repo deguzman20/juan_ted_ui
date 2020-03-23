@@ -16,10 +16,10 @@ import App from './App';
 
 
 const client = new ApolloClient({
-  uri: `${BASE_URL}`,
-  headers: {
-    authorization: `bearer ${AsyncStorage.getItem('customer_auth_token')}`
-  }
+  uri: `${BASE_URL}`
+  // headers: {
+  //   authorization: `bearer ${AsyncStorage.getItem('customer_auth_token')}`
+  // }
 });
 
 const Application = () => (

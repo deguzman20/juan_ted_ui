@@ -1,20 +1,22 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState } from 'react';
+import { theme } from '../core/theme';
+import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { CUSTOMER_SIGN_IN } from '../queries';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import Background from '../components/Background';
+import { CUSTOMER_SIGN_IN } from '../queries';
+import { customerSignInAction } from '../actions';
+import { emailValidator, passwordValidator } from '../core/utils';
 import Logo from '../components/Logo';
 import Header from '../components/Header';
 import Button from '../components/Button';
+import Loader from "react-native-modal-loader";
 import TextInput from '../components/TextInput';
-import { theme } from '../core/theme';
-import { connect } from 'react-redux';
-import { customerSignInAction } from '../actions';
-import { emailValidator, passwordValidator } from '../core/utils';
-import AsyncStorage from '@react-native-community/async-storage';
+import Background from '../components/Background';
+
 
 const LoginScreen = ({ navigation, customerSignInAction }) => {
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN);
+  const [isLoading, setLoading] = useState(false)
 
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
@@ -29,62 +31,74 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
       return;
     }
 
-   customerSignIn({ variables: { email: email.value, password: password.value } }).then((data) =>{
-    customerSignInAction(data.data.customerSignin)
-   })
+    setTimeout(() => {
+      for(let i = 1; i <= 3; i++){
+        setLoading(true)
+        customerSignIn({ variables: { email: email.value, password: password.value } }).then((data) =>{
+          if(i == 3 && data.data.customerSignIn !== null){
+            setLoading(false)
+            customerSignInAction(data)
+            navigation.navigate('DashBoardScreen')
+          }
+        })
+      }
+    }, 3000)
   };
 
-  console.log(AsyncStorage.getItem('customer_auth_token'))
-
   return (
-    <Background>
+    <>
+      <Background>
 
-      <Logo />
+        <Logo />
 
-      <Header>Juan Ted</Header>
+        <Header>Juan Ted</Header>
 
-      <TextInput
-        label="Email"
-        returnKeyType="next"
-        value={email.value}
-        onChangeText={text => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-      />
+        <TextInput
+          label="Email"
+          returnKeyType="next"
+          value={email.value}
+          onChangeText={text => setEmail({ value: text, error: '' })}
+          error={!!email.error}
+          errorText={email.error}
+          autoCapitalize="none"
+          autoCompleteType="email"
+          textContentType="emailAddress"
+          keyboardType="email-address"
+        />
 
-      <TextInput
-        label="Password"
-        returnKeyType="done"
-        value={password.value}
-        onChangeText={text => setPassword({ value: text, error: '' })}
-        error={!!password.error}
-        errorText={password.error}
-        secureTextEntry
-      />
+        <TextInput
+          label="Password"
+          returnKeyType="done"
+          value={password.value}
+          onChangeText={text => setPassword({ value: text, error: '' })}
+          error={!!password.error}
+          errorText={password.error}
+          secureTextEntry
+        />
 
-      <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ForgotPasswordScreen')}
-        >
-          <Text style={styles.label}>Forgot your password?</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.forgotPassword}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ForgotPasswordScreen')}
+          >
+            <Text style={styles.label}>Forgot your password?</Text>
+          </TouchableOpacity>
+        </View>
 
-      <Button mode="contained" onPress={_onLoginPressed}>
-        Login
-      </Button>
+        <Button mode="contained" onPress={_onLoginPressed}>
+          Login
+        </Button>
 
-      <View style={styles.row}>
-        <Text style={styles.label}>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
-          <Text style={styles.link}>Sign up</Text>
-        </TouchableOpacity>
-      </View>
-    </Background>
+        <View style={styles.row}>
+          <Text style={styles.label}>Don’t have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+            <Text style={styles.link}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.container}>
+          <Loader loading={isLoading} color="#ff66be" />
+        </View>
+      </Background>
+    </>
   );
 };
 

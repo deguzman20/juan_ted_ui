@@ -1,32 +1,28 @@
 import * as React from 'react';
-// import Icon from 'react-native-vector-icons/Ionicons';
 import { BottomNavigation, Text } from 'react-native-paper';
 import ProfileScreen from './ProfileScreen';
-
-const HomeRoute = () => <Text>Home</Text>;
-
-const TasksRoute = () => <Text>Tasks</Text>;
-
-const MyTaskerRoute = () => <Text>My Tasker</Text>;
-
+import TaskScreen from './TaskScreen';
+import HomeScreen from './HomeScreen';
+import MyTaskerScreen from './MyTaskerScreen';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class DashBoardScreen extends React.Component {
   state = {
     index: 0,
     routes: [
-      { key: 'home', title: 'Home' },
-      { key: 'tasks', title: 'Tasks' },
-      { key: 'my_taskers', title: 'My Taskers' },
-      { key: 'profile', title: 'Profile' },
+      { key: 'home', title: 'Home', icon: 'home' },
+      { key: 'tasks', title: 'Tasks', icon: 'view-list' },
+      { key: 'my_taskers', title: 'My Taskers', icon: 'worker' },
+      { key: 'profile', title: 'Profile', icon: 'account' },
     ],
   };
 
   _handleIndexChange = index => this.setState({ index });
 
   _renderScene = BottomNavigation.SceneMap({
-    home: HomeRoute,
-    tasks: TasksRoute,
-    my_taskers: MyTaskerRoute,
+    home: HomeScreen,
+    tasks: TaskScreen,
+    my_taskers: MyTaskerScreen,
     profile: ProfileScreen
   });
 
@@ -40,7 +36,5 @@ class DashBoardScreen extends React.Component {
     );
   }
 }
-
-
 
 export default DashBoardScreen;

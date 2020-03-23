@@ -3,14 +3,58 @@ import gql from "graphql-tag";
 export const CUSTOMER_SIGN_IN = gql`
   mutation customerSignIn($email: String!, $password: String!) {
     customerSignin(email: {email: $email, password: $password}) {
-      token
+      email
+      firstName
+      lastName
+      image
+      mobileNumber
+      zipCode
+      cardDetail
+      authToken
+      tasks{
+        startLocationAddress
+        endLocationAddress
+        taskCompleted
+        tasker{
+          email
+          firstName
+          lastName
+          image
+          mobileNumber
+          zipCode
+          hourlyRate
+          introduction
+        }
+      }
     }
   }`;
 
 export const TASKER_SIGN_IN = gql`
   mutation taskerSignIn($email: String!, $password: String!) {
     customerSignin(email: {email: $email, password: $password}) {
-      token
+      id
+      email
+      firstName
+      lastName
+      mobileNumber
+      zipCode
+      hourlyRate
+      introduction
+      tasks{
+        startLocationAddress
+        endLocationAddress
+        taskCompleted
+        customer{
+          id
+          email
+          firstName
+          lastName
+          image
+          mobileNumber
+          zipCode
+          cardDetail
+        }
+      }
     }
   }`;
 
@@ -63,3 +107,13 @@ export const ALL_REVIEWS = gql`
       }
     }
   }`;
+
+  export const ALL_SERVICES = gql`
+    {
+      allServices {
+        id
+        name
+        image
+        price
+      }
+    }`;

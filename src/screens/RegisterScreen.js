@@ -44,24 +44,16 @@ const RegisterScreen = ({ navigation }) => {
       return;
     }
 
-    // setLoading(true)
-
     createCustomer({ variables: { first_name: first_name.value,
                                   last_name: last_name.value,
                                   email: email.value,
                                   mobile_number: mobile_number.value,
                                   password: password.value } })
-
-    // if(response){
-    //   setLoading(false)
-    // }
-   console.log(response)
-
   };
 
   return (
     <>
-      <SafeAreaView></SafeAreaView>
+      <SafeAreaView/>
       <Background>
       <BackButton goBack={() => navigation.navigate('LoginScreen')} />
 

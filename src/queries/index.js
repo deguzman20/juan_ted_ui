@@ -26,6 +26,13 @@ export const CUSTOMER_SIGN_IN = gql`
           introduction
         }
       }
+      todos{
+        id
+        todoDescription
+        service {
+          name
+        }
+      }
     }
   }`;
 
@@ -85,8 +92,8 @@ export const FORGOT_PASSWORD = gql`
   }`;
 
 export const UPDATE_PASSWORD = gql`
-  mutation updatePassword($id: Int!, $new_password: String!, $confirm_password: String!, $customer: Boolean!){
-    updatePassword(id: $id, newPassword: $new_password, confirmPassword: $confirm_password, customer: $customer){
+  mutation updatePassword($id: Int!, $old_password: String!, $new_password: String!, $confirm_password: String!){
+    updatePassword(id: $id, oldPassword: $old_password, newPassword: $new_password, confirmPassword: $confirm_password, customer: true){
       response
     }
 }`;

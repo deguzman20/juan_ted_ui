@@ -10,8 +10,10 @@ const Button = ({ mode, style, children, ...props }) => (
       mode === 'outlined' && { backgroundColor: theme.colors.surface },
       style,
     ]}
+    color="#00ccff"
     labelStyle={styles.text}
     mode={mode}
+    labelStyle={{ color: "white" }}
     {...props}
   >
     {children}

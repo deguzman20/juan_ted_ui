@@ -15,7 +15,8 @@ import DashBoardScreen from './src/screens/DashBoardScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
 
-const Navigator = createStackNavigator({
+
+const App = createStackNavigator({
   AppSwiperScreen: { screen: AppSwiperScreen },
   LoginScreen: { screen: LoginScreen },
   DashBoardScreen: { screen: DashBoardScreen },
@@ -23,6 +24,5 @@ const Navigator = createStackNavigator({
   ForgotPasswordScreen: { screen: ForgotPasswordScreen }
 }, { headerMode:'none' });
 
-const App = createAppContainer(Navigator);
 
-export default App;
+export default createAppContainer(App);

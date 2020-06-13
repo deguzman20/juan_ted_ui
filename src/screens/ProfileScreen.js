@@ -1,12 +1,13 @@
 import React, { memo } from 'react';
 import { connect } from 'react-redux';
-import Background from '../components/Background';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
 import { StyleSheet, SafeAreaView, View, Dimensions, Text } from 'react-native';
 import { List, ListItem, Avatar } from 'react-native-elements'
-import Icon from 'react-native-vector-icons/Ionicons';
 
-const width = Dimensions.get('window').width; //full width
-const height = Dimensions.get('window').height; //full height
+import Background from '../components/Background';
+import ChangePasswordScreen from './ChangePasswordScreen';
 
 const ProfileScreen = ({ navigation, email, image, first_name, last_name }) => {
   const image_nil = image === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : image
@@ -37,12 +38,13 @@ const ProfileScreen = ({ navigation, email, image, first_name, last_name }) => {
               <ListItem
                 roundAvatar
                 title={"Change Password"}
+                onPress={() => navigation.navigate('ChangePasswordScreen')}
               />
               <ListItem
                 roundAvatar
                 title={"Location"}
               />
-              <ListItem
+              {/* <ListItem
                 roundAvatar
                 title={"Promos"}
               />
@@ -53,7 +55,7 @@ const ProfileScreen = ({ navigation, email, image, first_name, last_name }) => {
               <ListItem
                 roundAvatar
                 title={"Support"}
-              />
+              /> */}
               <ListItem
                 roundAvatar
                 title={"Logout"}
@@ -68,8 +70,8 @@ const ProfileScreen = ({ navigation, email, image, first_name, last_name }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: width,
-    height: height,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
     flexDirection: 'column',
     alignItems: 'stretch',
   },
@@ -89,4 +91,9 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(ProfileScreen));
+const App = createStackNavigator({
+  ProfileScreen: { screen: connect(mapStateToProps, null)(ProfileScreen) },
+  ChangePasswordScreen: { screen: ChangePasswordScreen },
+}, { headerMode:'none' });
+
+export default memo(createAppContainer(App));

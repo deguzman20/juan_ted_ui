@@ -34,3 +34,21 @@ export const lastNameValidator = last_name => {
   return '';
 };
 
+export const oldPasswordValidator = old_password => {
+  if (!old_password || old_password.length <= 0) return 'Old Password cannot be empty.';
+
+  return '';
+};
+
+export const newPasswordValidator = new_password => {
+  if (!new_password || new_password.length <= 0) return 'New Password cannot be empty.';
+
+  return '';
+};
+
+export const confirmPasswordValidator = confirm_password => {
+  if (!confirm_password || confirm_password.length <= 0) return 'Confirm Password cannot be empty.';
+
+  return '';
+};
+

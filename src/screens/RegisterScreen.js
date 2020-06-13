@@ -3,7 +3,6 @@ import { useMutation } from '@apollo/react-hooks';
 import { CREATE_CUSTOMER } from '../queries';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import Background from '../components/Background';
-import Logo from '../components/Logo';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
@@ -55,76 +54,74 @@ const RegisterScreen = ({ navigation }) => {
     <>
       <SafeAreaView/>
       <Background>
-      <BackButton goBack={() => navigation.navigate('LoginScreen')} />
+        <BackButton goBack={() => navigation.navigate('LoginScreen')} />
 
-      <Logo />
+        <Header>Create Account</Header>
 
-      <Header>Create Account</Header>
+        <TextInput
+          label="Firstname"
+          returnKeyType="next"
+          value={first_name.value}
+          onChangeText={text => setFirstName({ value: text, error: '' })}
+          error={!!first_name.error}
+          errorText={first_name.error}
+        />
 
-      <TextInput
-        label="Firstname"
-        returnKeyType="next"
-        value={first_name.value}
-        onChangeText={text => setFirstName({ value: text, error: '' })}
-        error={!!first_name.error}
-        errorText={first_name.error}
-      />
+        <TextInput
+          label="LastName"
+          returnKeyType="next"
+          value={last_name.value}
+          onChangeText={text => setLastName({ value: text, error: '' })}
+          error={!!last_name.error}
+          errorText={last_name.error}
+        />
 
-      <TextInput
-        label="LastName"
-        returnKeyType="next"
-        value={last_name.value}
-        onChangeText={text => setLastName({ value: text, error: '' })}
-        error={!!last_name.error}
-        errorText={last_name.error}
-      />
+        <TextInput
+          label="Mobile Number"
+          returnKeyType="next"
+          value={mobile_number.value}
+          onChangeText={text => setMobileNumber({ value: text, error: '' })}
+          error={!!mobile_number.error}
+          errorText={mobile_number.error}
+        />
 
-      <TextInput
-        label="Mobile Number"
-        returnKeyType="next"
-        value={mobile_number.value}
-        onChangeText={text => setMobileNumber({ value: text, error: '' })}
-        error={!!mobile_number.error}
-        errorText={mobile_number.error}
-      />
+        <TextInput
+          label="Email"
+          returnKeyType="next"
+          value={email.value}
+          onChangeText={text => setEmail({ value: text, error: '' })}
+          error={!!email.error}
+          errorText={email.error}
+          autoCapitalize="none"
+          autoCompleteType="email"
+          textContentType="emailAddress"
+          keyboardType="email-address"
+        />
 
-      <TextInput
-        label="Email"
-        returnKeyType="next"
-        value={email.value}
-        onChangeText={text => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-      />
+        <TextInput
+          label="Password"
+          returnKeyType="done"
+          value={password.value}
+          onChangeText={text => setPassword({ value: text, error: '' })}
+          error={!!password.error}
+          errorText={password.error}
+          secureTextEntry
+        />
 
-      <TextInput
-        label="Password"
-        returnKeyType="done"
-        value={password.value}
-        onChangeText={text => setPassword({ value: text, error: '' })}
-        error={!!password.error}
-        errorText={password.error}
-        secureTextEntry
-      />
+        <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
+          Sign Up
+        </Button>
 
-      <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
-        Sign Up
-      </Button>
+        <View style={styles.row}>
+          <Text style={styles.label}>Already have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+            <Text style={styles.link}>Login</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.row}>
-        <Text style={styles.label}>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-          <Text style={styles.link}>Login</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.container}>
-        <Loader loading={isLoading} color="#ff66be" />
-      </View>
+        <View style={styles.container}>
+          <Loader loading={isLoading} color="#ff66be" />
+        </View>
     </Background>
     </>
   );

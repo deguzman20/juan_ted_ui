@@ -5,7 +5,6 @@ import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { emailValidator } from '../core/utils';
 import Background from '../components/Background';
 import BackButton from '../components/BackButton';
-import Logo from '../components/Logo';
 import Header from '../components/Header';
 import TextInput from '../components/TextInput';
 import { theme } from '../core/theme';
@@ -25,14 +24,12 @@ const ForgotPasswordScreen = ({ navigation }) => {
     }
 
     forgotPassword({ variables: { email: email.value } })
-    // navigation.navigate('LoginScreen');
+    navigation.navigate('LoginScreen');
   };
 
   return (
     <Background>
       <BackButton goBack={() => navigation.navigate('LoginScreen')} />
-
-      <Logo />
 
       <Header>Restore Password</Header>
 

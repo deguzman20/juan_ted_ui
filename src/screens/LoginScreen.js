@@ -6,7 +6,6 @@ import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import { CUSTOMER_SIGN_IN } from '../queries';
 import { customerSignInAction } from '../actions';
 import { emailValidator, passwordValidator } from '../core/utils';
-import Logo from '../components/Logo';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import Loader from "react-native-modal-loader";
@@ -30,7 +29,7 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-
+    
     setTimeout(() => {
       for(let i = 1; i <= 3; i++){
         setLoading(true)
@@ -48,9 +47,6 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
   return (
     <>
       <Background>
-
-        <Logo />
-
         <Header>Juan Ted</Header>
 
         <TextInput

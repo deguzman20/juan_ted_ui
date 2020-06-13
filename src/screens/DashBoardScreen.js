@@ -4,16 +4,15 @@ import ProfileScreen from './ProfileScreen';
 import TaskScreen from './TaskScreen';
 import HomeScreen from './HomeScreen';
 import MyTaskerScreen from './MyTaskerScreen';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 class DashBoardScreen extends React.Component {
   state = {
     index: 0,
     routes: [
-      { key: 'home', title: 'Home', icon: 'home' },
-      { key: 'tasks', title: 'Tasks', icon: 'view-list' },
-      { key: 'my_taskers', title: 'My Taskers', icon: 'worker' },
-      { key: 'profile', title: 'Profile', icon: 'account' },
+      { key: 'home', title: 'Home', icon: 'home', color: '#00b8e6' },
+      { key: 'tasks', title: 'Tasks', icon: 'view-list', color: '#00b8e6' },
+      { key: 'my_taskers', title: 'My Taskers', icon: 'worker', color: '#00b8e6' },
+      { key: 'profile', title: 'Profile', icon: 'account', color: '#00b8e6' },
     ],
   };
 

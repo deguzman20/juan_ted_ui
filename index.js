@@ -22,6 +22,10 @@ const client = new ApolloClient({
   // }
 });
 
+if(__DEV__) {
+  import('./reactotron-config').then(() => console.log('Reactotron Configured'))
+}
+
 const Application = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>

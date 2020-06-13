@@ -12,7 +12,8 @@ const initialState = {
   zip_code: '',
   card_detail: '',
   auth_token: '',
-  tasks: []
+  tasks: [],
+  todos: {}
 }
 
 export default customerReducer = (state = initialState, action) => {
@@ -20,7 +21,8 @@ export default customerReducer = (state = initialState, action) => {
     case GET_CURRENT_CUSTOMER_INFO:
       return {
         ...state,
-        is_login: true, id: '',
+        is_login: true, 
+        id: action.payload.id,
         email: action.payload.email,
         first_name: action.payload.firstName,
         last_name: action.payload.lastName,
@@ -29,7 +31,8 @@ export default customerReducer = (state = initialState, action) => {
         zip_code: action.payload.zipCode,
         card_detail: action.payload.cardDetail,
         auth_token: action.payload.authToken,
-        tasks: _.mapKeys(action.payload.tasks, action.payload.tasks.id)
+        tasks: _.mapKeys(action.payload.tasks, action.payload.tasks.id),
+        todos: _.mapKeys(action.payload.todos, action.payload.todos.id)
       }
     case CUSTOMER_LOGOUT:
       return {
@@ -44,7 +47,8 @@ export default customerReducer = (state = initialState, action) => {
         zip_code: "",
         card_detail: "",
         auth_token: "",
-        tasks: []
+        tasks: [],
+        todos: []
       }
   default:
     return state

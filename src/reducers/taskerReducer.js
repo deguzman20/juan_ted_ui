@@ -1,4 +1,7 @@
-import { GET_CURRENT_TASKER_INFO, TASKER_LOGOUT } from '../actions/types';
+import { 
+  GET_CURRENT_TASKER_INFO, 
+  TASKER_LOGOUT 
+} from '../actions/types';
 
 const initialState = {
   is_login: false,

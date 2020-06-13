@@ -1,35 +1,26 @@
-import React, { memo, useEffect, useState } from 'react';
-import {  StyleSheet,
-          View,
-          Dimensions,
-          Text,
-          ScrollView,
-          SafeAreaView,
-          Image, TouchableHighlight, Button} from 'react-native';
+import React, { memo, useState } from 'react';
+import {  
+  StyleSheet,
+  View,
+  Dimensions,
+  ScrollView,
+  SafeAreaView,
+  Image
+} from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import { FlatGrid } from 'react-native-super-grid';
 import { useQuery } from '@apollo/react-hooks';
 import { ALL_SERVICES } from '../queries';
 import { getAllServiceAction } from '../actions';
 import { connect } from 'react-redux';
-import { Card } from 'react-native-elements';
+import { Card, Text, Button, Icon } from 'react-native-elements';
+
+import MyTodoListScreen from './MyTodoListScreen';
 
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').width;
-
-const items = [
-  { name: 'TURQUOISE', code: '#1abc9c' }, { name: 'EMERALD', code: '#2ecc71' },
-  { name: 'PETER RIVER', code: '#3498db' }, { name: 'AMETHYST', code: '#9b59b6' },
-  { name: 'WET ASPHALT', code: '#34495e' }, { name: 'GREEN SEA', code: '#16a085' },
-  { name: 'NEPHRITIS', code: '#27ae60' }, { name: 'BELIZE HOLE', code: '#2980b9' },
-  { name: 'WISTERIA', code: '#8e44ad' }, { name: 'MIDNIGHT BLUE', code: '#2c3e50' },
-  { name: 'SUN FLOWER', code: '#f1c40f' }, { name: 'CARROT', code: '#e67e22' },
-  { name: 'ALIZARIN', code: '#e74c3c' }, { name: 'CLOUDS', code: '#ecf0f1' },
-  { name: 'CONCRETE', code: '#95a5a6' }, { name: 'ORANGE', code: '#f39c12' },
-  { name: 'PUMPKIN', code: '#d35400' }, { name: 'POMEGRANATE', code: '#c0392b' },
-  { name: 'SILVER', code: '#bdc3c7' }, { name: 'ASBESTOS', code: '#7f8c8d' },
-];
-
 
 const HomeScreen = ({ navigation, getAllServiceAction, services }) => {
   const { loading, error, data } = useQuery(ALL_SERVICES)
@@ -39,7 +30,22 @@ const HomeScreen = ({ navigation, getAllServiceAction, services }) => {
   return(
     <View style={styles.container}>
       <SafeAreaView/>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.grid}>
+          <Text h4>My to-do list</Text>
+        </View>
+        <View style={styles.grid}>
+          <Card>
+            <Text style={{marginBottom: 10}}>
+              Tell us what you need help with, and we'll connect you with Taskers to get the job done.
+            </Text>
+            <Button
+              icon={<Icon name='code' color='#ffffff' />}
+              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+              title='Add to list'
+              onPress={() => navigation.navigate('MyTodoListScreen')} />
+          </Card> 
+        </View>
         <FlatGrid
           itemDimension={130}
           items={data["allServices"]}
@@ -49,12 +55,7 @@ const HomeScreen = ({ navigation, getAllServiceAction, services }) => {
               <Card
                 onClick={() => console.log('a')}
                 title={item.name} key={item.id}>
-                <Image style={{width: (ITEM_WIDTH / columnCount) - 60, height: 100}} source={{  uri: `file:///Users/Andy/Desktop/juan-ted/juan-ted-api/public/${item.image}` }}  />
-                {/* <Button
-                  icon={{name: 'code'}}
-                  backgroundColor='#03A9F4'
-                  buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                  title='VIEW NOW' /> */}
+                <Image style={{width: (ITEM_WIDTH / columnCount) - 60, height: 100}} source={{  uri: `file:///Users/andy/Desktop/juan-ted/juan-ted-api/public/${item.image}` }}  />
               </Card>
             </View>
           )}
@@ -71,10 +72,10 @@ const styles = StyleSheet.create({
     paddingRight: 25
   },
   grid: {
-      justifyContent: 'center',
+      paddingLeft:30,
+      paddingTop: 20,
       flexDirection: 'row',
-      flexWrap: 'wrap',
-      flex: 1,
+      flexWrap: 'wrap'
   },
   gridItem: {
       margin:5,
@@ -102,4 +103,22 @@ const mapStateToProps = ({ serviceReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, { getAllServiceAction })(HomeScreen))
+const App = createStackNavigator({
+  Home: { 
+    screen: connect(mapStateToProps, { getAllServiceAction })(HomeScreen),
+    navigationOptions: {
+      title: ''
+    }
+  },
+  MyTodoListScreen: { 
+    screen: MyTodoListScreen, 
+    navigationOptions: {
+      title: 'Todo List',
+      headerStyle: { backgroundColor: 'white' },
+      headerTintColor: 'black'
+    } 
+  },
+});
+
+
+export default memo(createAppContainer(App));

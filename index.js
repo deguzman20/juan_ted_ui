@@ -6,21 +6,47 @@ import React from 'react';
 import { AppRegistry } from 'react-native';
 import { ApolloProvider } from "@apollo/react-hooks";
 import { Provider } from 'react-redux';
-import {name as appName} from './app.json';
-import ApolloClient from "apollo-boost";
+import { name as appName } from './app.json';
 import { PersistGate } from 'redux-persist/lib/integration/react';
-import { BASE_URL } from './src/actions/types';
+import { BASE_URL, API_WS_ROOT } from './src/actions/types';
 import { store, persistor } from './src/reducers/store';
-import AsyncStorage from '@react-native-community/async-storage';
+import { ApolloClient } from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import ActionCable from 'actioncable';
+import ActionCableLink from 'graphql-ruby-client/dist/subscriptions/ActionCableLink';
+import { ApolloLink } from 'apollo-link';
+import { WebSocketLink } from 'apollo-link-ws';
 import App from './App';
 
+const httpLink = createHttpLink({
+  uri: BASE_URL
+})
 
+// const wsLink = new WebSocketLink({
+//   uri: `ws://localhost:5000/`,
+//   options: {
+//     reconnect: true
+//   }
+// });
+
+const cable = ActionCable.createConsumer(API_WS_ROOT)
+
+const hasSubscriptionOperation = ({ query: { definitions } }) => {
+  return definitions.some(
+    ({ kind, operation }) => kind === 'OperationDefinition' && operation === 'subscription',
+  )
+}
+
+const link = ApolloLink.split(
+  hasSubscriptionOperation,
+  new ActionCableLink({cable}),
+  httpLink
+)
 const client = new ApolloClient({
-  uri: `${BASE_URL}`
-  // headers: {
-  //   authorization: `bearer ${AsyncStorage.getItem('customer_auth_token')}`
-  // }
-});
+  link: link,
+  cache: new InMemoryCache()
+})
 
 if(__DEV__) {
   import('./reactotron-config').then(() => console.log('Reactotron Configured'))

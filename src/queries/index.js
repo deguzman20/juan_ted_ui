@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 export const CUSTOMER_SIGN_IN = gql`
   mutation customerSignIn($email: String!, $password: String!) {
     customerSignin(email: {email: $email, password: $password}) {
+      id
       email
       firstName
       lastName
@@ -83,6 +84,17 @@ export const CREATE_TASKER = gql`
     }
   }`;
 
+export const CREATE_TODO = gql `
+  mutation createTodo($id: Int!, $todo_description: String!){
+    createTodo(customerId: $id, todoDescription: $todo_description){
+      id
+      todoDescription
+      service {
+        name
+      }
+    }  
+  }`;
+
 export const FORGOT_PASSWORD = gql`
   mutation forgotPassword($email: String!){
     forgotPassword(email: $email){
@@ -96,7 +108,25 @@ export const UPDATE_PASSWORD = gql`
     updatePassword(id: $id, oldPassword: $old_password, newPassword: $new_password, confirmPassword: $confirm_password, customer: true){
       response
     }
-}`;
+  }`;
+
+export const SUBSCRIPTION_ADD_MESSAGE_TO_CONVERSATION = gql`
+  subscription messageAddedToConversation($conversation_id: Int!) {
+    messageAddedToConversation(conversationId: $conversation_id) {
+      id
+      text
+      conversationId
+    }
+  }`;
+
+export const CONVERSATION_MESSAGES = gql`
+  query conversationMessages($conversation_id: Int!) {
+    conversationMessages(conversationId: $conversation_id) {
+      id
+      text
+      conversationId
+    }
+  }`;
 
 export const ALL_REVIEWS = gql`
   {
@@ -124,3 +154,32 @@ export const ALL_REVIEWS = gql`
         price
       }
     }`;
+
+export const CONVERSATION_LIST = gql`
+  query conversationList($user_id: Int!, $is_customer: Boolean!) {
+    conversationList(userId: $user_id, isCustomer: $is_customer) {
+      id
+      customerId
+      taskerId
+    }
+}`;
+
+export const LINKS = gql`
+  query {
+    links {
+      id
+      url
+      description
+    }
+  }
+`;
+
+const NEW_LINKS = gql`
+  subscription {
+    newLink {
+      id
+      url
+      description
+    }
+  }
+`;

@@ -4,6 +4,8 @@ import ProfileScreen from './ProfileScreen';
 import TaskScreen from './TaskScreen';
 import HomeScreen from './HomeScreen';
 import MyTaskerScreen from './MyTaskerScreen';
+import ConversationScreen from './ConversationScreen';
+import LinksScreen from './LinksScreen';
 
 class DashBoardScreen extends React.Component {
   state = {
@@ -12,6 +14,7 @@ class DashBoardScreen extends React.Component {
       { key: 'home', title: 'Home', icon: 'home', color: '#00b8e6' },
       { key: 'tasks', title: 'Tasks', icon: 'view-list', color: '#00b8e6' },
       { key: 'my_taskers', title: 'My Taskers', icon: 'worker', color: '#00b8e6' },
+      { key: 'links', title: 'Links', icon: 'message', color: '#00b8e6' },
       { key: 'profile', title: 'Profile', icon: 'account', color: '#00b8e6' },
     ],
   };
@@ -22,7 +25,8 @@ class DashBoardScreen extends React.Component {
     home: HomeScreen,
     tasks: TaskScreen,
     my_taskers: MyTaskerScreen,
-    profile: ProfileScreen
+    links: LinksScreen,
+    profile: ProfileScreen,
   });
 
   render() {

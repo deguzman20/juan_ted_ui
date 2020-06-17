@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import { Card, Text, Button, Icon } from 'react-native-elements';
 
 import MyTodoListScreen from './MyTodoListScreen';
+import ProfileScreen from './ProfileScreen';
 
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').width;
@@ -118,6 +119,9 @@ const App = createStackNavigator({
       headerTintColor: 'black'
     } 
   },
+  ProfileScreen: {
+    screen: ProfileScreen
+  }
 });
 
 

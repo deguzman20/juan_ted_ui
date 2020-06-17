@@ -52,3 +52,8 @@ export const confirmPasswordValidator = confirm_password => {
   return '';
 };
 
+export const todoDescriptionValidator = todo_description => {
+  if (!todo_description || todo_description.length <= 0) return '   Todo Description cannot be empty.';
+
+  return '';
+};

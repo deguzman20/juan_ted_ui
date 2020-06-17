@@ -5,7 +5,9 @@ import {
   TASKER_UPDATE_PASSWORD,
   GET_CURRENT_CUSTOMER_INFO,
   GET_CURRENT_TASKER_INFO,
-  GET_ALL_SERVICES } from '../actions/types';
+  GET_ALL_SERVICES,
+  ADD_TODO,
+  DELETE_TODO } from '../actions/types';
 
 export const customerSignInAction = (data) => dispatch => {
   var data_obj = data.data.customerSignin
@@ -29,11 +31,25 @@ export const customerLogoutAction = () => dispatch => {
   })
 }
 
-
 export const taskerLogoutAction = () => dispatch => {
   dispatch({
     type: TASKER_LOGOUT,
     payload: null
+  })
+}
+
+export const addTodo = (data) => dispatch => {
+  var data_obj = data.data.createTodo.response
+  dispatch({
+    type: ADD_TODO,
+    payload: data.data.createTodo
+  })
+}
+
+export const deleteTodo = (id) => dispatch => {
+  dispatch({
+    type: DELETE_TODO,
+    payload: id
   })
 }
 

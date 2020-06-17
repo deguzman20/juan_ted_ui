@@ -24,4 +24,8 @@ export const GET_ALL_SERVICES = 'GET_ALL_SERVICES';
 export const CUSTOMER_LOGOUT = 'CUSTOMER_LOGOUT';
 export const TASKER_LOGOUT = 'TASKER_LOGOUT';
 
+export const ADD_TODO = 'ADD_TODO';
+export const DELETE_TODO = 'DELETE_TODO';
+
 export const BASE_URL = 'http://localhost:3000/graphql';
+export const API_WS_ROOT = 'ws://localhost:3000/cable';

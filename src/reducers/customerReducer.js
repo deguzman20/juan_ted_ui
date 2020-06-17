@@ -1,5 +1,8 @@
-import _ from 'lodash'
-import { GET_CURRENT_CUSTOMER_INFO, CUSTOMER_LOGOUT } from '../actions/types';
+import { 
+  GET_CURRENT_CUSTOMER_INFO, 
+  CUSTOMER_LOGOUT, 
+  ADD_TODO, 
+  DELETE_TODO } from '../actions/types';
 
 const initialState = {
   is_login: false,
@@ -12,7 +15,7 @@ const initialState = {
   zip_code: '',
   card_detail: '',
   auth_token: '',
-  tasks: [],
+  tasks: {},
   todos: {}
 }
 
@@ -21,8 +24,8 @@ export default customerReducer = (state = initialState, action) => {
     case GET_CURRENT_CUSTOMER_INFO:
       return {
         ...state,
-        is_login: true, 
         id: action.payload.id,
+        is_login: true, 
         email: action.payload.email,
         first_name: action.payload.firstName,
         last_name: action.payload.lastName,
@@ -31,8 +34,8 @@ export default customerReducer = (state = initialState, action) => {
         zip_code: action.payload.zipCode,
         card_detail: action.payload.cardDetail,
         auth_token: action.payload.authToken,
-        tasks: _.mapKeys(action.payload.tasks, action.payload.tasks.id),
-        todos: _.mapKeys(action.payload.todos, action.payload.todos.id)
+        tasks: Object.values(action.payload.tasks),
+        todos: Object.values(action.payload.todos)
       }
     case CUSTOMER_LOGOUT:
       return {
@@ -47,9 +50,19 @@ export default customerReducer = (state = initialState, action) => {
         zip_code: "",
         card_detail: "",
         auth_token: "",
-        tasks: [],
-        todos: []
+        tasks: {},
+        todos: {}
       }
+    case ADD_TODO:
+    return {
+        ...state,
+        todos: state.todos.concat(action.payload)
+      }
+    case DELETE_TODO:
+      return {
+        ...state,
+        todos: state.todos.filter((todo) => todo["id"] !== action.payload)
+      };
   default:
     return state
   }

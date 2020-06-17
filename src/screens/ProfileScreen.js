@@ -9,12 +9,23 @@ import { List, ListItem, Avatar } from 'react-native-elements'
 import Background from '../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
 
+const list = [
+  {
+    title: 'Change Password',
+    icon: 'ac-unit'
+  },
+  {
+    title: 'Logout',
+    icon: 'dehaze'
+  },
+]
+
 const ProfileScreen = ({ navigation, email, image, first_name, last_name }) => {
   const image_nil = image === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : image
   return (
     <>
       <Background>
-        <SafeAreaView style={{ marginBottom: 200 }}/>
+        <SafeAreaView style={{ marginBottom: 25 }}/>
           <View>
             <Avatar
               xlarge
@@ -22,46 +33,29 @@ const ProfileScreen = ({ navigation, email, image, first_name, last_name }) => {
               source={{uri: image_nil}}
               onPress={() => console.log("Works!")}
               activeOpacity={0.7}
+              size={150}
             />
           </View>
           <View>
             <Text style={{fontSize: 20}}>{first_name} {last_name}</Text>
           </View>
-          <List style={styles.list}>
-            <View style={styles.container}>
-              <ListItem
-                roundAvatar
-                title={"Account"}
-                subtitle={`${email}`}
-                hideChevron={true}
-              />
-              <ListItem
-                roundAvatar
-                title={"Change Password"}
-                onPress={() => navigation.navigate('ChangePasswordScreen')}
-              />
-              <ListItem
-                roundAvatar
-                title={"Location"}
-              />
-              {/* <ListItem
-                roundAvatar
-                title={"Promos"}
-              />
-              <ListItem
-                roundAvatar
-                title={"Notifications"}
-              />
-              <ListItem
-                roundAvatar
-                title={"Support"}
-              /> */}
-              <ListItem
-                roundAvatar
-                title={"Logout"}
-              />
-            </View>
-          </List>
+          <View style={styles.container}>
+            <ListItem
+              key={1}
+              title={'Change Password'}
+              leftIcon={{ name: 'ac-unit' }}
+              bottomDivider
+              chevron
+              onPress={() => navigation.navigate('ChangePasswordScreen')}
+            />
+            <ListItem
+              key={1}
+              title={'Logout'}
+              leftIcon={{ name: 'dehaze' }}
+              bottomDivider
+              chevron
+            />
+          </View>
       </Background>
     </>
   );
@@ -74,6 +68,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     flexDirection: 'column',
     alignItems: 'stretch',
+    marginTop:30
   },
   list: {
     flex: 1,

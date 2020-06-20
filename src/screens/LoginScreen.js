@@ -11,6 +11,8 @@ import Button from '../components/Button';
 import Loader from "react-native-modal-loader";
 import TextInput from '../components/TextInput';
 import Background from '../components/Background';
+import Modal, { ModalFooter, ModalButton, ModalContent } from 'react-native-modals';
+
 
 
 const LoginScreen = ({ navigation, customerSignInAction }) => {
@@ -19,6 +21,12 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
 
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
+
+  const [isModalVisible, setModalVisible] = useState(false);
+  
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -38,6 +46,9 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
             setLoading(false)
             customerSignInAction(data)
             navigation.navigate('DashBoardScreen')
+          }
+          else{
+            setLoading(false)
           }
         })
       }
@@ -94,11 +105,34 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
           <Loader loading={isLoading} color="#ff66be" />
         </View>
       </Background>
+      <View style={styles.container}>
+        <Modal
+          visible={isModalVisible}
+          footer={
+            <ModalFooter>
+              <ModalButton
+                text="CANCEL"
+                onPress={() => {}}
+              />
+              <ModalButton
+                text="OK"
+                onPress={() => {}}
+              />
+            </ModalFooter>
+          }
+        >
+          <ModalContent>
+          </ModalContent>
+        </Modal>
+      </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  container:{
+
+  },
   forgotPassword: {
     width: '100%',
     alignItems: 'flex-end',

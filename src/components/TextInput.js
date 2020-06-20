@@ -7,9 +7,10 @@ const TextInput = ({ errorText, ...props }) => (
   <View style={styles.container}>
     <Input
       style={styles.input}
-      selectionColor={theme.colors.secondary}
+      selectionColor={theme.colors.primary}
       underlineColor="transparent"
       mode="outlined"
+      theme={{ colors: { primary: 'gray',underlineColor:'transparent',}}}
       {...props}
     />
     {errorText ? <Text style={styles.error}>{errorText}</Text> : null}

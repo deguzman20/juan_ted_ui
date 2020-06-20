@@ -159,8 +159,14 @@ export const CONVERSATION_LIST = gql`
   query conversationList($user_id: Int!, $is_customer: Boolean!) {
     conversationList(userId: $user_id, isCustomer: $is_customer) {
       id
-      customerId
-      taskerId
+      customer {
+        firstName
+        lastName
+      }
+      tasker {
+        firstName
+        lastName
+      }
     }
 }`;
 
@@ -174,12 +180,11 @@ export const LINKS = gql`
   }
 `;
 
-const NEW_LINKS = gql`
+export const NEW_LINKS = gql`
   subscription {
     newLink {
       id
       url
       description
     }
-  }
-`;
+  }`;

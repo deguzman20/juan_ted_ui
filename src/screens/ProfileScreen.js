@@ -69,11 +69,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'stretch',
     marginTop:30
-  },
-  list: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'stretch'
   }
 });
 

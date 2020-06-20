@@ -1,59 +1,103 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
-  Button
+  StatusBar,
+  Image,
+  Dimensions
 } from 'react-native';
+import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
+
+const ITEM_WIDTH = Dimensions.get('window').width;
+const ITEM_HEIGHT = Dimensions.get('window').height;
+
 
 class AppSwiperScreen extends Component {
   render(){
     return (
-      <Swiper style={styles.wrapper} showsButtons={true}>
-        <View style={styles.slide1}>
-          <Text style={styles.text}>Hello Swiper</Text>
+      <>
+        <View style={styles.container}>
+          <StatusBar barStyle="light-content" />
+          <Swiper
+            style={styles.wrapper}
+            dot={
+              <View
+                style={{
+                  backgroundColor: 'rgba(255,255,255,.3)',
+                  width: 13,
+                  height: 13,
+                  borderRadius: 7,
+                  marginLeft: 7,
+                  marginRight: 7
+                }}
+              />
+            }
+            activeDot={
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                  width: 20,
+                  height: 20,
+                  borderRadius: 7,
+                  marginLeft: 7,
+                  marginRight: 7
+                }}
+              />
+            }
+            paginationStyle={{
+              bottom: 70
+            }}
+            loop={false}
+          >
+            <View style={styles.slide}>
+              <Image
+                style={styles.image}
+                source={require('../assets/house-cleaning.jpg')}
+                resizeMode="cover"
+              />
+            </View>
+            <View style={styles.slide}>
+              <Image
+                style={styles.image}
+                source={require('../assets/repairing.jpg')}
+                resizeMode="cover"
+              />
+            </View>
+            <View style={styles.slide}>
+              <Image style={styles.image} source={require('../assets/plumbing.jpg')} />
+              <Button
+                title="Next"
+                style={styles.button}
+                onPress={() => this.props.navigation.navigate('LoginScreen')}
+              />
+            </View>
+          </Swiper>
         </View>
-        <View style={styles.slide2}>
-          <Text style={styles.text}>Beautiful</Text>
-        </View>
-        <View style={styles.slide3}>
-          <Text style={styles.text}>And simple</Text>
-          <Button
-            title="Next"
-            onPress={() => this.props.navigation.navigate('LoginScreen')}
-          />
-        </View>
-      </Swiper>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-  },
-  slide1: {
+  slide: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB',
+    backgroundColor: 'transparent'
   },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
+  container: {
+    flex: 1
   },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
+
+  image: {
+    width: ITEM_WIDTH,
+    height: ITEM_HEIGHT,
+    backgroundColor: 'transparent',
+    position: 'absolute'
   },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
+
+  button: {
+    padding:10,
+    marginTop:ITEM_HEIGHT-175,
   }
 })
 

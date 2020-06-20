@@ -19,18 +19,42 @@ import { Card, Text, Button, Icon } from 'react-native-elements';
 
 import MyTodoListScreen from './MyTodoListScreen';
 import ProfileScreen from './ProfileScreen';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
+import HomeCleaningScreen from './services/HomeCleaningScreen';
+import LaundryScreen from './services/LaundryScreen';
+import HomeRepairScreen from './services/HomeRepairScreen';
+import NailCareScreen from './services/NailCareScreen';
+
+import HeatMap from './map/HeatMap';
 
 const ITEM_WIDTH = Dimensions.get('window').width;
-const ITEM_HEIGHT = Dimensions.get('window').width;
+const ITEM_HEIGHT = Dimensions.get('window').height;
 
-const HomeScreen = ({ navigation, getAllServiceAction, services }) => {
+const HomeScreen = ({ navigation }) => {
   const { loading, error, data } = useQuery(ALL_SERVICES)
   const [columnCount, setColumnCount] = useState(2)
   if (loading) return <Text>Loading.....</Text>;
 
+  navigateToService = (id) => {
+    if(id === 1){
+      navigation.navigate('HomeCleaningScreen');
+    }
+    else if(id === 2){
+      navigation.navigate('HomeRepairScreen');
+    }
+    else if(id === 3){
+      navigation.navigate('LaundryScreen');
+    }
+    else{
+      navigation.navigate("NailCareScreen");
+    }
+  }
+
   return(
     <View style={styles.container}>
       <SafeAreaView/>
+      <HeatMap />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.grid}>
           <Text h4>My to-do list</Text>
@@ -51,13 +75,17 @@ const HomeScreen = ({ navigation, getAllServiceAction, services }) => {
           itemDimension={130}
           items={data["allServices"]}
           style={styles.gridView}
+          spacing={10}
           renderItem={({ item, index, separators }) => (
             <View style={{ width: ITEM_WIDTH / columnCount}}>
-              <Card
-                onClick={() => console.log('a')}
-                title={item.name} key={item.id}>
-                <Image style={{width: (ITEM_WIDTH / columnCount) - 60, height: 100}} source={{  uri: `file:///Users/andy/Desktop/juan-ted/juan-ted-api/public/${item.image}` }}  />
-              </Card>
+              <TouchableWithoutFeedback onPress={() => { navigateToService(parseInt(item.id))}}>
+                <Card
+                  title={item.name} 
+                  key={item.id}
+                >
+                  <Image style={{width: (ITEM_WIDTH / columnCount) - 60, height: 100}} source={{  uri: `file:///Users/andy/Desktop/juan-ted/juan-ted-api/public/${item.image}` }}  />
+                </Card>
+              </TouchableWithoutFeedback>
             </View>
           )}
         />
@@ -115,12 +143,39 @@ const App = createStackNavigator({
     screen: MyTodoListScreen, 
     navigationOptions: {
       title: 'Todo List',
-      headerStyle: { backgroundColor: 'white' },
-      headerTintColor: 'black'
+      headerStyle: { backgroundColor: 'white' }
     } 
   },
   ProfileScreen: {
-    screen: ProfileScreen
+    screen: ProfileScreen,
+  },
+  HomeCleaningScreen: {
+    screen:  HomeCleaningScreen,
+    navigationOptions: {
+      title: 'Home Cleaning',
+      headerStyle: { backgroundColor: 'white' },
+    }
+  },
+  LaundryScreen: {
+    screen: LaundryScreen,
+    navigationOptions: {
+      title: 'Laundry',
+      headerStyle: { backgroundColor: 'white' },
+    }
+  },
+  HomeRepairScreen: {
+    screen: HomeRepairScreen,
+    navigationOptions: {
+      title: 'Home Repair',
+      headerStyle: { backgroundColor: 'white' },
+    }
+  },
+  NailCareScreen: {
+    screen: NailCareScreen,
+    navigationOptions: {
+      title: 'Nail Care',
+      headerStyle: { backgroundColor: 'white' },
+    }
   }
 });
 

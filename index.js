@@ -16,19 +16,11 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import ActionCable from 'actioncable';
 import ActionCableLink from 'graphql-ruby-client/dist/subscriptions/ActionCableLink';
 import { ApolloLink } from 'apollo-link';
-import { WebSocketLink } from 'apollo-link-ws';
 import App from './App';
 
 const httpLink = createHttpLink({
   uri: BASE_URL
 })
-
-// const wsLink = new WebSocketLink({
-//   uri: `ws://localhost:5000/`,
-//   options: {
-//     reconnect: true
-//   }
-// });
 
 const cable = ActionCable.createConsumer(API_WS_ROOT)
 

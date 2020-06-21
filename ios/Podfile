@@ -47,6 +47,8 @@ target 'juan_ted_ui' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
+  pod 'GoogleMaps'
+
   target 'juan_ted_uiTests' do
     inherit! :search_paths
     # Pods for testing

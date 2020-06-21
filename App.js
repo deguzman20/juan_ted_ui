@@ -9,11 +9,11 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import AppSwiperScreen from './src/screens/AppSwiperScreen';
-import LoginScreen from './src/screens/LoginScreen';
-import DashBoardScreen from './src/screens/DashBoardScreen';
-import RegisterScreen from './src/screens/RegisterScreen';
-import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
+import AppSwiperScreen from './src/screens/unauthorized/AppSwiperScreen';
+import LoginScreen from './src/screens/unauthorized/LoginScreen';
+import DashBoardScreen from './src/screens/authorized/DashBoardScreen';
+import RegisterScreen from './src/screens/unauthorized/RegisterScreen';
+import ForgotPasswordScreen from './src/screens/unauthorized/ForgotPasswordScreen';
 
 
 const App = createStackNavigator({

@@ -1,13 +1,13 @@
 import React, { memo, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_CUSTOMER } from '../queries';
+import { CREATE_CUSTOMER } from './../../queries';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-import Background from '../components/Background';
-import Header from '../components/Header';
-import Button from '../components/Button';
-import TextInput from '../components/TextInput';
-import BackButton from '../components/BackButton';
-import { theme } from '../core/theme';
+import Background from './../../components/Background';
+import Header from './../../components/Header';
+import Button from './../../components/Button';
+import TextInput from './../../components/TextInput';
+import BackButton from './../../components/BackButton';
+import { theme } from './../../core/theme';
 import Loader from "react-native-modal-loader";
 import {
   emailValidator,
@@ -15,7 +15,7 @@ import {
   firstNameValidator,
   lastNameValidator,
   mobileNumberValidator
-} from '../core/utils';
+} from './../../core/utils';
 
 const RegisterScreen = ({ navigation }) => {
   const [createCustomer, response] = useMutation(CREATE_CUSTOMER);

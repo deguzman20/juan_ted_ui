@@ -2,13 +2,13 @@ import React, { memo, useState } from 'react';
 import _ from 'lodash'
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_TODO } from '../queries';
-import { addTodo, deleteTodo } from '../actions';
+import { CREATE_TODO } from './../../queries';
+import { addTodo, deleteTodo } from './../../actions';
 import { StyleSheet, ScrollView } from 'react-native';
-import { todoDescriptionValidator } from '../core/utils';
+import { todoDescriptionValidator } from './../../core/utils';
 import { Card, Icon, Text, Button as TodoItemButton } from 'react-native-elements';
-import TextInput from '../components/TextInput';
-import Button from '../components/Button';
+import TextInput from './../../components/TextInput';
+import Button from './../../components/Button';
 
 const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
   const obj = Object.values(todos);

@@ -4,7 +4,7 @@ import ProfileScreen from './ProfileScreen';
 import TaskScreen from './TaskScreen';
 import HomeScreen from './HomeScreen';
 import MyTaskerScreen from './MyTaskerScreen';
-import ConversationsScreen from './conversation/ConversationsScreen';
+import ConversationsScreen from './conversation/ConversationScreen';
 // import LinksScreen from './LinksScreen';
 
 class DashBoardScreen extends React.Component {

@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { Query, Subscription } from 'react-apollo';
 import { 
   SUBSCRIPTION_ADD_MESSAGE_TO_CONVERSATION,
-  CONVERSATION_MESSAGES } from '../queries';
+  CONVERSATION_MESSAGES } from './../../queries';
 
 class MyTaskerScreen extends React.Component {
   // _subscribeToNewMessageFromSpecificConversation = subscribeToMore => {

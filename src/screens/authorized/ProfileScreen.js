@@ -6,7 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { StyleSheet, SafeAreaView, View, Dimensions, Text } from 'react-native';
 import { List, ListItem, Avatar } from 'react-native-elements'
 
-import Background from '../components/Background';
+import Background from './../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
 
 const list = [

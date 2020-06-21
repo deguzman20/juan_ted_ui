@@ -9,7 +9,7 @@ import {
 
 import { FlatGrid } from 'react-native-super-grid';
 import { Card } from 'react-native-elements';
-import { BACKEND_ASSET_URL } from '../../actions/types';
+import { BACKEND_ASSET_URL } from './../../../actions/types';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const ITEM_WIDTH = Dimensions.get('window').width;

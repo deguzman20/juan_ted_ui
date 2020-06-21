@@ -53,19 +53,19 @@ class AppSwiperScreen extends Component {
             <View style={styles.slide}>
               <Image
                 style={styles.image}
-                source={require('../assets/house-cleaning.jpg')}
+                source={require('./../../assets/house-cleaning.jpg')}
                 resizeMode="cover"
               />
             </View>
             <View style={styles.slide}>
               <Image
                 style={styles.image}
-                source={require('../assets/repairing.jpg')}
+                source={require('./../../assets/repairing.jpg')}
                 resizeMode="cover"
               />
             </View>
             <View style={styles.slide}>
-              <Image style={styles.image} source={require('../assets/plumbing.jpg')} />
+              <Image style={styles.image} source={require('./../../assets/plumbing.jpg')} />
               <Button
                 title="Next"
                 style={styles.button}

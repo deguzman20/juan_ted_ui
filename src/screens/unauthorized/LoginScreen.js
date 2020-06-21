@@ -1,16 +1,16 @@
 import React, { memo, useState } from 'react';
-import { theme } from '../core/theme';
+import { theme } from './../../core/theme';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import { CUSTOMER_SIGN_IN } from '../queries';
-import { customerSignInAction } from '../actions';
-import { emailValidator, passwordValidator } from '../core/utils';
-import Header from '../components/Header';
-import Button from '../components/Button';
+import { CUSTOMER_SIGN_IN } from './../../queries';
+import { customerSignInAction } from './../../actions';
+import { emailValidator, passwordValidator } from './../../core/utils';
+import Header from './../../components/Header';
+import Button from './../../components/Button';
 import Loader from "react-native-modal-loader";
-import TextInput from '../components/TextInput';
-import Background from '../components/Background';
+import TextInput from './../../components/TextInput';
+import Background from './../../components/Background';
 import Modal, { ModalFooter, ModalButton, ModalContent } from 'react-native-modals';
 
 

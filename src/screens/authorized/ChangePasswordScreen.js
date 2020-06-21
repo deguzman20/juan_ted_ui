@@ -1,15 +1,15 @@
 import React, { memo, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { UPDATE_PASSWORD } from '../queries';
+import { UPDATE_PASSWORD } from './../../queries';
 import { View, StyleSheet, SafeAreaView, Text, Dimensions } from 'react-native';
-import { theme } from '../core/theme';
+import { theme } from './../../core/theme';
 import { connect } from 'react-redux';
-import { oldPasswordValidator, newPasswordValidator, confirmPasswordValidator } from '../core/utils';
-import Background from '../components/Background';
-import Header from '../components/Header';
-import Button from '../components/Button';
-import TextInput from '../components/TextInput';
-import BackButton from '../components/BackButton';
+import { oldPasswordValidator, newPasswordValidator, confirmPasswordValidator } from './../../core/utils';
+import Background from './../../components/Background';
+import Header from './../../components/Header';
+import Button from './../../components/Button';
+import TextInput from './../../components/TextInput';
+import BackButton from './../../components/BackButton';
 import Loader from "react-native-modal-loader";
 import Modal from 'react-native-modal';
 

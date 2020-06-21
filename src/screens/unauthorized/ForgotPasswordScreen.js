@@ -1,14 +1,14 @@
 import React, { memo, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { FORGOT_PASSWORD } from '../queries';
+import { FORGOT_PASSWORD } from './../../queries';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { emailValidator } from '../core/utils';
-import Background from '../components/Background';
-import BackButton from '../components/BackButton';
-import Header from '../components/Header';
-import TextInput from '../components/TextInput';
-import { theme } from '../core/theme';
-import Button from '../components/Button';
+import { emailValidator } from './../../core/utils';
+import Background from './../../components/Background';
+import BackButton from './../../components/BackButton';
+import Header from './../../components/Header';
+import TextInput from './../../components/TextInput';
+import { theme } from './../../core/theme';
+import Button from './../../components/Button';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [forgotPassword] = useMutation(FORGOT_PASSWORD);

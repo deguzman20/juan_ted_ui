@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { View, Dimensions, StyleSheet, Text} from 'react-native';
-import Background from '../../components/BackButton';
+import Background from './../../../components/BackButton';
 import { connect } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
-import { CONVERSATION_LIST } from '../../queries';
+import { CONVERSATION_LIST } from './../../../queries';
 import { ListItem } from 'react-native-elements';
 // import ConversationList from './ConversationList';
 

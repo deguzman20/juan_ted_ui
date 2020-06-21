@@ -12,8 +12,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import { FlatGrid } from 'react-native-super-grid';
 import { useQuery } from '@apollo/react-hooks';
-import { ALL_SERVICES } from '../queries';
-import { getAllServiceAction } from '../actions';
+import { ALL_SERVICES } from './../../queries';
+import { getAllServiceAction } from './../../actions';
 import { connect } from 'react-redux';
 import { Card, Text, Button, Icon } from 'react-native-elements';
 
@@ -26,7 +26,7 @@ import LaundryScreen from './services/LaundryScreen';
 import HomeRepairScreen from './services/HomeRepairScreen';
 import NailCareScreen from './services/NailCareScreen';
 
-import HeatMap from './map/HeatMap';
+// import HeatMap from './map/HeatMap';
 
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').height;
@@ -54,7 +54,6 @@ const HomeScreen = ({ navigation }) => {
   return(
     <View style={styles.container}>
       <SafeAreaView/>
-      <HeatMap />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.grid}>
           <Text h4>My to-do list</Text>

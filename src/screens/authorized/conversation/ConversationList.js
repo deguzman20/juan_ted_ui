@@ -2,7 +2,7 @@ import { memo } from 'react';
 // import { connect } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import { CONVERSATION_LIST } from '../../queries';
-// import ConversationItem from './ConversationItem';
+import ConversationItem from './ConversationItem';
 
 
 const list = [

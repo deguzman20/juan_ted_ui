@@ -26,7 +26,7 @@ import LaundryScreen from './services/LaundryScreen';
 import HomeRepairScreen from './services/HomeRepairScreen';
 import NailCareScreen from './services/NailCareScreen';
 
-// import HeatMap from './map/HeatMap';
+import GoogleMap from './map/GoogleMap';
 
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').height;
@@ -54,6 +54,7 @@ const HomeScreen = ({ navigation }) => {
   return(
     <View style={styles.container}>
       <SafeAreaView/>
+      <GoogleMap />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.grid}>
           <Text h4>My to-do list</Text>

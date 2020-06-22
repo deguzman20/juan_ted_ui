@@ -45,9 +45,22 @@ target 'juan_ted_ui' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+  pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
+  pod 'react-native-maps', path: '../node_modules/react-native-maps'
+  # pod 'react-native-google-maps', path: '../node_modules/react-native-maps'  # If you need GoogleMaps support on iOS
+  post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name == 'react-native-google-maps'
+            target.build_configurations.each do |config|
+                config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
+            end
+        end
 
-  pod 'GoogleMaps'
+        if target.name == "React"
+            target.remove_from_project
+        end
+    end
+end
 
   target 'juan_ted_uiTests' do
     inherit! :search_paths

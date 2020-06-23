@@ -4,7 +4,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import { StyleSheet, SafeAreaView, View, Dimensions, Text } from 'react-native';
-import { List, ListItem, Avatar } from 'react-native-elements'
+import { ListItem, Avatar } from 'react-native-elements'
 
 import Background from './../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';

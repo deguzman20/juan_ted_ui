@@ -2,38 +2,32 @@ import React, { memo, useState } from 'react';
 import {  
   StyleSheet,
   View,
-  Dimensions,
   ScrollView,
   SafeAreaView,
   Image
 } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-
-import { FlatGrid } from 'react-native-super-grid';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useQuery } from '@apollo/react-hooks';
 import { ALL_SERVICES } from './../../queries';
 import { getAllServiceAction } from './../../actions';
 import { connect } from 'react-redux';
 import { Card, Text, Button, Icon } from 'react-native-elements';
+import { FlatGrid } from 'react-native-super-grid';
+import { ITEM_WIDTH, ITEM_HEIGHT } from './../../actions/types';
 
 import MyTodoListScreen from './MyTodoListScreen';
 import ProfileScreen from './ProfileScreen';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-
 import HomeCleaningScreen from './services/HomeCleaningScreen';
 import LaundryScreen from './services/LaundryScreen';
 import HomeRepairScreen from './services/HomeRepairScreen';
 import NailCareScreen from './services/NailCareScreen';
 
-import GoogleMap from './map/GoogleMap';
-
-const ITEM_WIDTH = Dimensions.get('window').width;
-const ITEM_HEIGHT = Dimensions.get('window').height;
 
 const HomeScreen = ({ navigation }) => {
   const { loading, error, data } = useQuery(ALL_SERVICES)
-  const [columnCount, setColumnCount] = useState(2)
+  const [columnCount] = useState(2)
   if (loading) return <Text>Loading.....</Text>;
 
   navigateToService = (id) => {
@@ -54,7 +48,6 @@ const HomeScreen = ({ navigation }) => {
   return(
     <View style={styles.container}>
       <SafeAreaView/>
-      <GoogleMap />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.grid}>
           <Text h4>My to-do list</Text>

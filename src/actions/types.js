@@ -1,3 +1,5 @@
+import { Dimensions } from 'react-native';
+
 // get current user info
 export const GET_CURRENT_CUSTOMER_INFO = 'GET_CURRENT_CUSTOMER_INFO';
 export const GET_CURRENT_TASKER_INFO = 'GET_CURRENT_TASKER_INFO';
@@ -34,3 +36,7 @@ export const BACKEND_ASSET_URL = 'file:///Users/andy/Desktop/juan-ted/juan-ted-a
 
 export const GOOGLE_PLACE_API_KEY = 'AIzaSyA4wmpcfAbGvLMbBqcVCY6uPuI-m5KYEbs';
 export const GOOGLE_MAP_API_KEY = 'AIzaSyAyvCbJhmXauM0yrRrpJPX3T1He9AVhed';
+
+// default size of mobile app
+export const ITEM_WIDTH = Dimensions.get('window').width;
+export const ITEM_HEIGHT = Dimensions.get('window').height;

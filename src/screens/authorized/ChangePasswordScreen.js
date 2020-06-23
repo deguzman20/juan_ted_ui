@@ -4,6 +4,9 @@ import { UPDATE_PASSWORD } from './../../queries';
 import { View, StyleSheet, SafeAreaView, Text, Dimensions } from 'react-native';
 import { theme } from './../../core/theme';
 import { connect } from 'react-redux';
+
+import { ITEM_WIDTH, ITEM_HEIGHT } from './../../actions/types';
+
 import { oldPasswordValidator, newPasswordValidator, confirmPasswordValidator } from './../../core/utils';
 import Background from './../../components/Background';
 import Header from './../../components/Header';
@@ -13,13 +16,9 @@ import BackButton from './../../components/BackButton';
 import Loader from "react-native-modal-loader";
 import Modal from 'react-native-modal';
 
+
 const ChangePasswordScreen = ({ navigation, customer_id }) => {
 
-  const deviceWidth = Dimensions.get("window").width;
-  const deviceHeight = Platform.OS === "ios"
-  ? Dimensions.get("window").height
-  : null;
-  
   const [updatePassword, response] = useMutation(UPDATE_PASSWORD);
 
   const [isLoading, setLoading] = useState(false);

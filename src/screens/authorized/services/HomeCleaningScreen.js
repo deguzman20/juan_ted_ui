@@ -7,16 +7,15 @@ import {
   Image
 } from 'react-native';
 
+import { ITEM_WIDTH, ITEM_HEIGHT } from './../../../actions/types';
 import { FlatGrid } from 'react-native-super-grid';
 import { Card } from 'react-native-elements';
 import { BACKEND_ASSET_URL } from './../../../actions/types';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-const ITEM_WIDTH = Dimensions.get('window').width;
-const ITEM_HEIGHT = Dimensions.get('window').height;
 
 const HomeCleaningScreen = () => {
-  const [home_types, setHomeType] = React.useState([
+  const [home_types] = React.useState([
     { type: 'Condo', url: '' },
     { type: 'House', url: '' }
   ]);
@@ -29,7 +28,7 @@ const HomeCleaningScreen = () => {
         items={home_types}
         style={styles.gridView}
         spacing={10}
-        renderItem={({ item, index, separators }) => (
+        renderItem={({ item }) => (
           <View style={{ width: ITEM_WIDTH / 2}}>
             <TouchableWithoutFeedback onPress={() => {}}>
               <Card

@@ -95,6 +95,13 @@ export const CREATE_TODO = gql `
     }  
   }`;
 
+export const DELETE_TODO = gql `
+  mutation deleteTodo($todo_id: Int!){
+    deleteTodo(todoId: $todo_id) {
+      id
+    }
+  }`;
+
 export const FORGOT_PASSWORD = gql`
   mutation forgotPassword($email: String!){
     forgotPassword(email: $email){
@@ -111,25 +118,27 @@ export const UPDATE_PASSWORD = gql`
   }`;
 
 export const SUBSCRIPTION_ADD_MESSAGE_TO_CONVERSATION = gql`
-  subscription messageAddedToConversation($conversation_id: Int!) {
+  subscription ($conversation_id: Int!) {
     messageAddedToConversation(conversationId: $conversation_id) {
       id
       text
       conversationId
+      
     }
   }`;
 
 export const CONVERSATION_MESSAGES = gql`
-  query conversationMessages($conversation_id: Int!) {
+  query ($conversation_id: Int!){
     conversationMessages(conversationId: $conversation_id) {
       id
       text
       conversationId
+      createdAt
     }
   }`;
 
 export const ALL_REVIEWS = gql`
-  {
+  query {
     allReviews {
       id
       rating
@@ -145,30 +154,48 @@ export const ALL_REVIEWS = gql`
     }
   }`;
 
-  export const ALL_SERVICES = gql`
-    {
-      allServices {
-        id
-        name
-        image
-        price
-      }
-    }`;
-
-export const CONVERSATION_LIST = gql`
-  query conversationList($user_id: Int!, $is_customer: Boolean!) {
-    conversationList(userId: $user_id, isCustomer: $is_customer) {
+export const ALL_SERVICES = gql`
+  query {
+    allServices {
       id
+      name
+      image
+      price
+    }
+  }`;
+
+export const CUSTOMER_CONVERSATION_LIST = gql`
+  query conversationList($user_id: Int!) {
+    conversationList(userId: $user_id, isCustomer: true) {
       customer {
-        firstName
-        lastName
-      }
-      tasker {
-        firstName
-        lastName
+        conversations {
+          id
+          tasker {
+            id
+            firstName
+            lastName
+          }
+        }
       }
     }
-}`;
+  }`;
+
+export const TASKER_CONVERSATION_LIST = gql`
+  query conversationList($user_id: Int!, $is_customer: Boolean!) {
+    conversationList(userId: $user_id, isCustomer: $is_customer) {
+      customer {
+        conversations {
+          id
+          customer {
+            id
+            firstName
+            lastName
+          }
+        }
+      }
+    }
+  }`;
+
 
 export const LINKS = gql`
   query {
@@ -188,3 +215,4 @@ export const NEW_LINKS = gql`
       description
     }
   }`;
+  

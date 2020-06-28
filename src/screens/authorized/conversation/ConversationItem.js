@@ -1,14 +1,21 @@
-import { memo, Component } from 'react';
+import React, { memo } from 'react';
 import { ListItem } from 'react-native-elements';
-const ConversationItem = ({ l, i }) => {
+import { TouchableWithoutFeedback } from 'react-native';
+const ConversationItem = ({ l, i, navigation }) => {
   return(
-    <ListItem
-      key={i}
-      leftAvatar={{ source: { uri: l.avatar_url } }}
-      title={l.name}
-      subtitle={l.subtitle}
-      bottomDivider
-    />
+    <TouchableWithoutFeedback onPress={() =>{
+      navigation.navigate('MessageScreen',
+                            { conversation_id: l.id })
+                          }}
+    >
+      <ListItem
+        key={i}
+        leftAvatar={{ source: { uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg' } }}
+        title={`${l['tasker'].firstName} ${l['tasker'].lastName}`}
+        // // subtitle={""}
+        bottomDivider
+      />
+    </TouchableWithoutFeedback>
   )
 }
 export default memo(ConversationItem);

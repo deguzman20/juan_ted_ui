@@ -1,80 +1,34 @@
 import React, { memo } from 'react';
-import { View, Dimensions, StyleSheet, Text} from 'react-native';
-import Background from './../../../components/BackButton';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { useQuery } from '@apollo/react-hooks';
-import { CONVERSATION_LIST } from './../../../queries';
-import { ListItem } from 'react-native-elements';
-// import ConversationList from './ConversationList';
+import { Query } from 'react-apollo';
+import { CUSTOMER_CONVERSATION_LIST } from './../../../queries';
+import ConversationList from './ConversationList';
+import MessageScreen from '../messages/MessageScreen';
 
-const ConversationsScreen = ({ user_id }) => { 
-  const { error, data, loading } = useQuery(CONVERSATION_LIST,{
-    variables: {
-      user_id: parseInt(user_id),
-      is_customer: true
-    }, 
-    pollInterval: 500,
-    requestPolicy: 'cache-and-network',
-    requestPolicy: 'network-only'
-  });
 
-  const list = [
-    {
-      name: 'Amy Farha',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-      subtitle: 'Vice President'
-    },
-    {
-      name: 'Chris Jackson',
-      avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-      subtitle: 'Vice Chairman'
-    }];
-    
-//   <ListItem
-//   key={i}
-//   // leftAvatar={{ source: { uri: l.avatar_url } }}
-//   title={l.first_name}
-//   // subtitle={l.subtitle}
-//   bottomDivider
-// />
- if(data.conversationList[0]["tasker"].length >= 2){
-    return(
-      <Text>greater than or equal to two</Text>
-    )
-  } 
- if(data.conversationList[0]["tasker"].length === 1){
-    // return(
-    //   <Background>
-    //     <View>
-    //     {
-    //       data.conversationList[0]["tasker"].map((l, i) => (
-    //       <Text>{l.firstName}</Text>
-    //       )) 
-    //     }
-    //   </View>
-    //   </Background>
-    // )
-    return(
-      <Text>only one</Text>
-    )
-  }
-  else {
-    return <Text>empty</Text>;
-  }
-  
+const ConversationsScreen = ({ user_id, navigation }) => {
+  return(
+    <Query
+      query={CUSTOMER_CONVERSATION_LIST}
+      variables={{ user_id: parseInt(user_id) }}
+      pollInterval={700}
+    >
+      {({ data, loading, error }) => (
+        <ScrollView>
+          <ConversationList 
+            data={data}
+            loading={loading} 
+            error={error}
+            navigation={navigation}
+          />
+        </ScrollView>
+      )}
+    </Query>
+  )
 }
-  
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    marginTop:30
-  },
-})
 
 const mapStateToProps = ({ customerReducer }) => {
   return {
@@ -82,4 +36,20 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(ConversationsScreen))
+const App = createStackNavigator({
+  ConversationsScreen: { 
+    screen: connect(mapStateToProps, null)(ConversationsScreen),
+    navigationOptions: {
+      title: ''
+    }
+  },
+  MessageScreen: { 
+    screen: MessageScreen, 
+    navigationOptions: {
+      title: 'Message',
+      headerStyle: { backgroundColor: 'white' }
+    } 
+  }
+});
+
+export default memo(createAppContainer(App));

@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react';
 import _ from 'lodash'
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_TODO } from './../../queries';
+import { CREATE_TODO, DELETE_TODO  } from './../../queries';
 import { addTodo, deleteTodo } from './../../actions';
 import { StyleSheet, ScrollView } from 'react-native';
 import { todoDescriptionValidator } from './../../core/utils';
@@ -11,15 +11,9 @@ import TextInput from './../../components/TextInput';
 import Button from './../../components/Button';
 
 const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
-  const obj = Object.values(todos);
   const [createTodo] = useMutation(CREATE_TODO);
+  const [removeTodo] = useMutation(DELETE_TODO)
   const [todo_description, setTodoDescription] = useState({ value: '', error: '' });
-
-  // if(todos.length === 0){
-  //   return (
-  //     <Text>Empty</Text>
-  //   )
-  // }
 
   const _onAddTodoPressed = () => {
     const todoDescriptionError = todoDescriptionValidator(todo_description.value);
@@ -33,6 +27,12 @@ const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
       addTodo(data)
     })
   };
+
+  const _onDeleteTodoPressed = (todo_id) => {
+    removeTodo({ variables: { todo_id } }).then((data) => {
+      deleteTodo(todo_id)
+    })
+  }
 
   return(
     <>
@@ -51,7 +51,7 @@ const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
         <Button mode="contained" style={styles.add_todo_button} onPress={() => _onAddTodoPressed()}>
           Add todo
         </Button>
-        {obj.map(todo => (
+        {Object.values(todos).map(todo => (
           <Card title={`${todo['todoDescription']}`} key={Math.random((1000))}>
             <TodoItemButton
               icon={<Icon name='code' color='#ffffff' />}
@@ -67,7 +67,7 @@ const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
               color="white"
               backgroundColor="#f13a59"
               title='Remove'
-              onPress={() => deleteTodo(todo['id'])} 
+              onPress={() => _onDeleteTodoPressed(parseInt(todo['id']))} 
             />
           </Card>
         ))}

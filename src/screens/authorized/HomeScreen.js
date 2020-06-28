@@ -15,7 +15,7 @@ import { getAllServiceAction } from './../../actions';
 import { connect } from 'react-redux';
 import { Card, Text, Button, Icon } from 'react-native-elements';
 import { FlatGrid } from 'react-native-super-grid';
-import { ITEM_WIDTH, ITEM_HEIGHT } from './../../actions/types';
+import { ITEM_WIDTH } from './../../actions/types';
 
 import MyTodoListScreen from './MyTodoListScreen';
 import ProfileScreen from './ProfileScreen';
@@ -23,6 +23,7 @@ import HomeCleaningScreen from './services/HomeCleaningScreen';
 import LaundryScreen from './services/LaundryScreen';
 import HomeRepairScreen from './services/HomeRepairScreen';
 import NailCareScreen from './services/NailCareScreen';
+
 
 
 const HomeScreen = ({ navigation }) => {
@@ -40,7 +41,7 @@ const HomeScreen = ({ navigation }) => {
     else if(id === 3){
       navigation.navigate('LaundryScreen');
     }
-    else{
+    else if(id === 4){
       navigation.navigate("NailCareScreen");
     }
   }

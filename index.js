@@ -13,14 +13,24 @@ import { store, persistor } from './src/reducers/store';
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloLink } from 'apollo-link';
+import { WebSocketLink } from 'apollo-link-ws';
 import ActionCable from 'actioncable';
 import ActionCableLink from 'graphql-ruby-client/dist/subscriptions/ActionCableLink';
-import { ApolloLink } from 'apollo-link';
+
 import App from './App';
 
 const httpLink = createHttpLink({
   uri: BASE_URL
 })
+
+// Create a WebSocket link:
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:5000/`,
+  options: {
+    reconnect: true
+  }
+});
 
 const cable = ActionCable.createConsumer(API_WS_ROOT)
 
@@ -34,6 +44,7 @@ const link = ApolloLink.split(
   hasSubscriptionOperation,
   new ActionCableLink({cable}),
   httpLink
+  // wsLink
 )
 const client = new ApolloClient({
   link: link,

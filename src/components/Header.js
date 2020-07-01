@@ -6,8 +6,9 @@ const Header = ({ children }) => <Text style={styles.header}>{children}</Text>;
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 45,
+    fontSize: 65,
     color: theme.colors.primary,
+    textAlign: 'center',
     fontWeight: 'bold',
     paddingVertical: 14,
   },

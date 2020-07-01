@@ -4,12 +4,11 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { Query } from 'react-apollo';
-import { CUSTOMER_CONVERSATION_LIST } from './../../../queries';
+import { CUSTOMER_CONVERSATION_LIST } from './../../../../queries';
 import ConversationList from './ConversationList';
 import MessageScreen from '../messages/MessageScreen';
 
-
-const ConversationsScreen = ({ user_id, navigation }) => {
+const ConversationScreen = ({ user_id, navigation }) => {
   return(
     <Query
       query={CUSTOMER_CONVERSATION_LIST}
@@ -37,8 +36,8 @@ const mapStateToProps = ({ customerReducer }) => {
 }
 
 const App = createStackNavigator({
-  ConversationsScreen: { 
-    screen: connect(mapStateToProps, null)(ConversationsScreen),
+  ConversationScreen: { 
+    screen: connect(mapStateToProps, null)(ConversationScreen),
     navigationOptions: {
       title: ''
     }

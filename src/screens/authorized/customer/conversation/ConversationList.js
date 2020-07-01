@@ -2,10 +2,11 @@ import React, { memo } from 'react';
 import { SafeAreaView, View, Text } from 'react-native';
 import ConversationItem from './ConversationItem';
 
-const ConversationList = ({ data, navigation }) => {
-  if(data.conversationList[0]["customer"]["conversations"].length >= 1 || data.conversationList[0]["customer"]["conversations"].length !== 0){
+const ConversationList = ({ data, loading, error, navigation }) => {
+  if (loading || error) return null;
+  if(data.conversationList[0]["customer"]["conversations"].length >= 1 && data.conversationList[0]["customer"]["conversations"].length !== 0){
     return(
-      <>
+      <React.Fragment>
         <SafeAreaView />
         <View>
           {
@@ -17,7 +18,7 @@ const ConversationList = ({ data, navigation }) => {
             ))
           }
         </View>
-      </>    
+      </React.Fragment>    
     )
   }
   return(

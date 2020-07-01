@@ -2,13 +2,13 @@ import React, { memo, useState } from 'react';
 import _ from 'lodash'
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_TODO, DELETE_TODO  } from './../../queries';
-import { addTodo, deleteTodo } from './../../actions';
+import { CREATE_TODO, DELETE_TODO  } from './../../../queries';
+import { addTodo, deleteTodo } from './../../../actions';
 import { StyleSheet, ScrollView } from 'react-native';
-import { todoDescriptionValidator } from './../../core/utils';
-import { Card, Icon, Text, Button as TodoItemButton } from 'react-native-elements';
-import TextInput from './../../components/TextInput';
-import Button from './../../components/Button';
+import { todoDescriptionValidator } from './../../../core/utils';
+import { Card, Icon, Button as TodoItemButton } from 'react-native-elements';
+import TextInput from './../../../components/TextInput';
+import Button from './../../../components/Button';
 
 const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
   const [createTodo] = useMutation(CREATE_TODO);
@@ -35,7 +35,7 @@ const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
   }
 
   return(
-    <>
+    <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
         <TextInput
           label="Enter todo description"
@@ -72,7 +72,7 @@ const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
           </Card>
         ))}
       </ScrollView>
-    </>
+    </React.Fragment>
   )
 }
 

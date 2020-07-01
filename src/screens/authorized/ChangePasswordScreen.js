@@ -18,7 +18,6 @@ import Modal from 'react-native-modal';
 
 
 const ChangePasswordScreen = ({ navigation, customer_id }) => {
-
   const [updatePassword, response] = useMutation(UPDATE_PASSWORD);
 
   const [isLoading, setLoading] = useState(false);
@@ -64,7 +63,7 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
   };
 
   return(
-    <>
+    <React.Fragment>
       <SafeAreaView/>
       <Background>
         <BackButton goBack={() => navigation.navigate('ProfileScreen')} />
@@ -109,7 +108,7 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
           <Loader loading={isLoading} color="#ff66be" />
         </View>
       </Background>
-    </>
+    </React.Fragment>
   );
 };
 

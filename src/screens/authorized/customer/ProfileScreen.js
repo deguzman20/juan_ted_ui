@@ -2,12 +2,12 @@ import React, { memo } from 'react';
 import { connect } from 'react-redux';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-
-import { StyleSheet, SafeAreaView, View, Dimensions, Text } from 'react-native';
+import { ITEM_WIDTH, ITEM_HEIGHT } from './../../../actions/types';
+import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 import { ListItem, Avatar } from 'react-native-elements'
 
-import Background from './../../components/Background';
-import ChangePasswordScreen from './ChangePasswordScreen';
+import Background from '../../../components/Background';
+import ChangePasswordScreen from './../ChangePasswordScreen';
 
 const list = [
   {
@@ -23,7 +23,7 @@ const list = [
 const ProfileScreen = ({ navigation, email, image, first_name, last_name }) => {
   const image_nil = image === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : image
   return (
-    <>
+    <React.Fragment>
       <Background>
         <SafeAreaView style={{ marginBottom: 25 }}/>
           <View>
@@ -57,15 +57,15 @@ const ProfileScreen = ({ navigation, email, image, first_name, last_name }) => {
             />
           </View>
       </Background>
-    </>
+    </React.Fragment>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: ITEM_WIDTH,
+    height: ITEM_HEIGHT,
     flexDirection: 'column',
     alignItems: 'stretch',
     marginTop:30

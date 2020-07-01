@@ -11,8 +11,10 @@ import Button from './../../components/Button';
 import Loader from "react-native-modal-loader";
 import TextInput from './../../components/TextInput';
 import Background from './../../components/Background';
-import Modal, { ModalFooter, ModalButton, ModalContent } from 'react-native-modals';
-
+import Dialog, { DialogTitle, 
+                  DialogFooter, 
+                  DialogContent, 
+                  DialogButton } from 'react-native-popup-dialog';
 
 
 const LoginScreen = ({ navigation, customerSignInAction }) => {
@@ -49,6 +51,7 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
           }
           else{
             setLoading(false)
+            toggleModal()
           }
         })
       }
@@ -56,7 +59,7 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Background>
         <Header>Juan Ted</Header>
 
@@ -106,26 +109,24 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
         </View>
       </Background>
       <View style={styles.container}>
-        <Modal
+        <Dialog
           visible={isModalVisible}
+          dialogTitle={<DialogTitle title="Message" />}
           footer={
-            <ModalFooter>
-              <ModalButton
-                text="CANCEL"
-                onPress={() => {}}
+            <DialogFooter>
+              <DialogButton
+                text="Close"
+                onPress={() => {toggleModal()}}
               />
-              <ModalButton
-                text="OK"
-                onPress={() => {}}
-              />
-            </ModalFooter>
+            </DialogFooter>
           }
         >
-          <ModalContent>
-          </ModalContent>
-        </Modal>
+          <DialogContent>
+            <Text>Incorrect username and password</Text>
+          </DialogContent>
+        </Dialog>
       </View>
-    </>
+    </React.Fragment>
   );
 };
 

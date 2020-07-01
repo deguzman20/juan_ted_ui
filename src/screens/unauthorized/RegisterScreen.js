@@ -51,7 +51,7 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <SafeAreaView/>
       <Background>
         <BackButton goBack={() => navigation.navigate('LoginScreen')} />
@@ -123,7 +123,7 @@ const RegisterScreen = ({ navigation }) => {
           <Loader loading={isLoading} color="#ff66be" />
         </View>
     </Background>
-    </>
+    </React.Fragment>
   );
 };
 

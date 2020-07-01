@@ -10,12 +10,12 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useQuery } from '@apollo/react-hooks';
-import { ALL_SERVICES } from './../../queries';
-import { getAllServiceAction } from './../../actions';
+import { ALL_SERVICES } from './../../../queries';
+import { getAllServiceAction } from './../../../actions';
 import { connect } from 'react-redux';
 import { Card, Text, Button, Icon } from 'react-native-elements';
 import { FlatGrid } from 'react-native-super-grid';
-import { ITEM_WIDTH } from './../../actions/types';
+import { ITEM_WIDTH } from './../../../actions/types';
 
 import MyTodoListScreen from './MyTodoListScreen';
 import ProfileScreen from './ProfileScreen';
@@ -23,13 +23,14 @@ import HomeCleaningScreen from './services/HomeCleaningScreen';
 import LaundryScreen from './services/LaundryScreen';
 import HomeRepairScreen from './services/HomeRepairScreen';
 import NailCareScreen from './services/NailCareScreen';
+import GoogleMapScreen from './map/GoogleMapScreen';
 
 
 
 const HomeScreen = ({ navigation }) => {
   const { loading, error, data } = useQuery(ALL_SERVICES)
   const [columnCount] = useState(2)
-  if (loading) return <Text>Loading.....</Text>;
+  if (loading || error) return null;
 
   navigateToService = (id) => {
     if(id === 1){
@@ -70,7 +71,7 @@ const HomeScreen = ({ navigation }) => {
           items={data["allServices"]}
           style={styles.gridView}
           spacing={10}
-          renderItem={({ item, index, separators }) => (
+          renderItem={({ item }) => (
             <View style={{ width: ITEM_WIDTH / columnCount}}>
               <TouchableWithoutFeedback onPress={() => { navigateToService(parseInt(item.id))}}>
                 <Card
@@ -95,28 +96,28 @@ const styles = StyleSheet.create({
     paddingRight: 25
   },
   grid: {
-      paddingLeft:30,
-      paddingTop: 20,
-      flexDirection: 'row',
-      flexWrap: 'wrap'
+    paddingLeft:30,
+    paddingTop: 20,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   },
   gridItem: {
-      margin:5,
-      width: 150,
-      height: 150,
-      justifyContent: 'center',
-      alignItems: 'center',
+    margin:5,
+    width: 150,
+    height: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   gridItemImage: {
-      width: 100,
-      height: 100,
-      borderWidth: 1.5,
-      borderColor: 'white',
-      borderRadius: 50,
+    width: 100,
+    height: 100,
+    borderWidth: 1.5,
+    borderColor: 'white',
+    borderRadius: 50,
   },
   gridItemText: {
-      marginTop: 5,
-      textAlign:'center',
+    marginTop: 5,
+    textAlign:'center',
   },
 });
 
@@ -169,6 +170,13 @@ const App = createStackNavigator({
     navigationOptions: {
       title: 'Nail Care',
       headerStyle: { backgroundColor: 'white' },
+    }
+  },
+  GoogleMapScreen: {
+    screen: GoogleMapScreen,
+    navigationOptions: {
+      title: '',
+      headerStyle: {}
     }
   }
 });

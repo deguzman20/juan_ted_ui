@@ -11,7 +11,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import AppSwiperScreen from './src/screens/unauthorized/AppSwiperScreen';
 import LoginScreen from './src/screens/unauthorized/LoginScreen';
-import DashBoardScreen from './src/screens/authorized/DashBoardScreen';
+import DashBoardScreen from './src/screens/authorized/customer/DashBoardScreen';
 import RegisterScreen from './src/screens/unauthorized/RegisterScreen';
 import ForgotPasswordScreen from './src/screens/unauthorized/ForgotPasswordScreen';
 

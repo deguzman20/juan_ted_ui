@@ -95,6 +95,15 @@ export const CREATE_TODO = gql `
     }  
   }`;
 
+export const SEND_MESSAGE = gql`
+  mutation createMessage($customer_id: Int!, $tasker_id: Int!, $own_by_customer: Boolean!, $text: String!) {
+    createMessage(customerId: $customer_id, taskerId: $tasker_id, ownByCustomer: $own_by_customer, text: $text) {
+      message {
+        id
+      }
+    }
+  }`;
+
 export const DELETE_TODO = gql `
   mutation deleteTodo($todo_id: Int!){
     deleteTodo(todoId: $todo_id) {
@@ -123,7 +132,6 @@ export const SUBSCRIPTION_ADD_MESSAGE_TO_CONVERSATION = gql`
       id
       text
       conversationId
-      
     }
   }`;
 
@@ -133,6 +141,7 @@ export const CONVERSATION_MESSAGES = gql`
       id
       text
       conversationId
+      ownByCustomer
       createdAt
     }
   }`;
@@ -175,6 +184,11 @@ export const CUSTOMER_CONVERSATION_LIST = gql`
             firstName
             lastName
           }
+          messages {
+            id
+            text
+            createdAt
+          }
         }
       }
     }
@@ -185,7 +199,6 @@ export const TASKER_CONVERSATION_LIST = gql`
     conversationList(userId: $user_id, isCustomer: $is_customer) {
       customer {
         conversations {
-          id
           customer {
             id
             firstName

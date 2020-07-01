@@ -16,7 +16,7 @@ const ITEM_HEIGHT = Dimensions.get('window').height;
 class AppSwiperScreen extends Component {
   render(){
     return (
-      <>
+      <React.Fragment>
         <View style={styles.container}>
           <StatusBar barStyle="light-content" />
           <Swiper
@@ -74,7 +74,7 @@ class AppSwiperScreen extends Component {
             </View>
           </Swiper>
         </View>
-      </>
+      </React.Fragment>
     );
   }
 }

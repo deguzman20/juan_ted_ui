@@ -1,18 +1,17 @@
 import React, { memo, useState } from 'react';
-import _ from 'lodash'
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_TODO, DELETE_TODO  } from './../../../queries';
-import { addTodo, deleteTodo } from './../../../actions';
+import { CREATE_TODO, DELETE_TODO  } from './../../../../queries';
+import { addTodo, deleteTodo } from './../../../../actions';
 import { StyleSheet, ScrollView } from 'react-native';
-import { todoDescriptionValidator } from './../../../core/utils';
+import { todoDescriptionValidator } from './../../../../core/utils';
 import { Card, Icon, Button as TodoItemButton } from 'react-native-elements';
-import TextInput from './../../../components/TextInput';
-import Button from './../../../components/Button';
+import TextInput from './../../../../components/TextInput';
+import Button from './../../../../components/Button';
 
 const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
   const [createTodo] = useMutation(CREATE_TODO);
-  const [removeTodo] = useMutation(DELETE_TODO)
+  const [removeTodo] = useMutation(DELETE_TODO);
   const [todo_description, setTodoDescription] = useState({ value: '', error: '' });
 
   const _onAddTodoPressed = () => {
@@ -58,7 +57,6 @@ const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
               buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
               color="white"
               title={'Book'}
-              // todo['service']['name'] 
               onPress={() => _onAddTodoPressed()}
             />
             <TodoItemButton

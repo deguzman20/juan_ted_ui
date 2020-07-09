@@ -31,8 +31,9 @@ export const DELETE_TODO = 'DELETE_TODO';
 
 // export const BASE_URL = 'http://localhost:3000/graphql';
 export const BASE_URL = 'http://localhost:3000/graphql';
+export const DEFAULT_URL = 'http://localhost:3000';
 export const API_WS_ROOT = 'ws://localhost:3000/cable';
-export const BACKEND_ASSET_URL = 'file:///Users/andy/Desktop/juan-ted/juan-ted-api/public/';
+export const BACKEND_ASSET_URL = 'file:///Users/andy/Desktop/juan-ted/juan-ted-api/public';
 
 export const GOOGLE_PLACE_API_KEY = 'AIzaSyA4wmpcfAbGvLMbBqcVCY6uPuI-m5KYEbs';
 export const GOOGLE_MAP_API_KEY = 'AIzaSyAyvCbJhmXauM0yrRrpJPX3T1He9AVhed';

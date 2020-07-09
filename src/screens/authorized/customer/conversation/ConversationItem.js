@@ -15,7 +15,7 @@ const ConversationItem = ({ l, i, navigation }) => {
         key={i}
         leftAvatar={{ source: { uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg' } }}
         title={`${l['tasker'].firstName} ${l['tasker'].lastName}`}
-        subtitle={l['messages'].length >= 1 ? `${_.last(l['messages']).text}` : ''} 
+        subtitle={l['messages'].length >= 1 ? `${_.last(l['messages']).text.substring(0, 20)}....` : ''} 
         bottomDivider
         rightSubtitle={l['messages'].length >= 1 ? `${_.last(l['messages']).createdAt}` :  '' }
       />

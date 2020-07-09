@@ -61,7 +61,7 @@ export default customerReducer = (state = initialState, action) => {
     case DELETE_TODO:
       return {
         ...state,
-        todos: state.todos.filter((todo) => todo["id"] !== action.payload)
+        todos: state.todos.filter((todo) => parseInt(todo["id"]) !== action.payload)
       };
   default:
     return state

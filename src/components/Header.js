@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     textAlign: 'center',
     fontWeight: 'bold',
-    paddingVertical: 14,
+    paddingVertical: 14
   },
 });
 

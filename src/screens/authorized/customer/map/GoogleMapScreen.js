@@ -1,21 +1,34 @@
-import React, { memo } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { ITEM_WIDTH } from './../../../../actions/types';
+import React, { memo, useState } from 'react';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import { ITEM_WIDTH, ITEM_HEIGHT } from './../../../../actions/types';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { GOOGLE_PLACE_API_KEY } from '../../../../actions/types';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Button } from 'react-native-elements';
+import { formatMoney } from '../../../../core/utils';
+import axios from 'axios';
 
 const GoogleMapScreen = ({ navigation }) => {
+  const [geolocation, setGeolocation] = useState({ lng: 1100.5680867, lat: 120.8805576 })
+
+  const _onNavigateToChooseSchedulePressed = () => {
+    navigation.navigate('ChooseDayScreen', { 
+      longitude: geolocation.lng,
+      latitude: geolocation.lat,
+      service_type_id: navigation.state.params["service_type_id"],
+      services: navigation.state.params["services"]
+    })
+  }
   return (
     <View style={styles.container}>
+      <ScrollView>
       <View style={styles.mapViewStack}>
         <MapView
           initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitude: geolocation.lat,
+            longitude: geolocation.lng,
+            latitudeDelta: 60,
+            longitudeDelta: ITEM_WIDTH / ITEM_HEIGHT,
           }}
           customMapStyle={[]}
           style={styles.mapView}
@@ -23,8 +36,16 @@ const GoogleMapScreen = ({ navigation }) => {
         />
         <GooglePlacesAutocomplete
           placeholder='Search'
-          onPress={(data, details = null) => {
-            console.log(data, details);
+          onPress={(details = null) => {
+            axios.get(`https://maps.googleapis.com/maps/api/geocode/json?place_id=${details['place_id']}&key=${GOOGLE_PLACE_API_KEY}`)
+            .then((response) => {
+              const data = response.data["results"];
+              const lng = data[0]["geometry"]["location"]["lng"]
+              const lat = data[0]["geometry"]["location"]["lat"]
+              setGeolocation(({ lng, lat }))
+              console.log(geolocation)
+            })
+            .catch((error) => console.log(error))
           }}
           query={{
             key: GOOGLE_PLACE_API_KEY,
@@ -51,16 +72,23 @@ const GoogleMapScreen = ({ navigation }) => {
           }}
         />
       </View>
-      <View style={{
-        width: ITEM_WIDTH,
-        height: 171,
-        marginTop:-100,
-        backgroundColor: "white"
-      }}>
-        <Text style={styles.totalCost}>Total Cost</Text>
-        <Text style={styles.cost}>P {navigation.state.params["totalPrice"]}</Text>
-        <Button style={styles.rect2} title="Next" onPress={() => console.log('sample')} />
-      </View>
+        <View style={{ 
+          width: '100%', 
+          height: 171,
+          backgroundColor: "white", 
+          alignItems: 'stretch',
+        }}>
+          <Text style={styles.totalCost}>Total Cost</Text>
+          <Text style={styles.cost}>₱ {formatMoney(navigation.state.params["totalPrice"])}</Text>
+          <Button 
+            style={styles.next_button}
+            buttonStyle={styles.next_button_background_color}
+            title="Next" 
+            onPress={() =>{  _onNavigateToChooseSchedulePressed() }} 
+            buttonStyle={styles.next_button_background_color } 
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -73,8 +101,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -70,
     left: 0,
-    height: 641,
-    width: ITEM_WIDTH
+    height: 550,
+    width: '100%'
   },
   placeholder: {
     top: 98,
@@ -86,12 +114,12 @@ const styles = StyleSheet.create({
     width: 291
   },
   mapViewStack: {
-    width: ITEM_WIDTH,
-    height: 641,
+    width: '100%',
+    height: 550,
     top:70,
   },
   rect: {
-    width: ITEM_WIDTH,
+    width: '100%',
     height: 171,
     backgroundColor: "white"
   },
@@ -106,16 +134,19 @@ const styles = StyleSheet.create({
     fontFamily: "verdana",
     color: "#121212",
     fontSize: 25,
-    marginLeft: 300,
+    marginLeft: '60%',
     marginTop: -30,
   },
-  rect2: {
-    width: ITEM_WIDTH,
-    height: 41,
+  next_button: {
+    width: '100%',
+    height: 150,
     marginTop: 43,
     color:'white',
     paddingLeft:10,
     paddingRight:10,
+  },
+  next_button_background_color: {
+    backgroundColor: '#009C3C'
   }
 });
 

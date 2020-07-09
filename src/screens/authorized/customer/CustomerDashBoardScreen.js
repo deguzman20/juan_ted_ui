@@ -1,19 +1,18 @@
 import * as React from 'react';
+import { Text } from 'react-native';
 import { BottomNavigation } from 'react-native-paper';
-import ProfileScreen from './ProfileScreen';
-import TaskScreen from './TaskScreen';
+import ProfileScreen from './profile/ProfileScreen';
+import TaskScreen from './tasks/TaskScreen';
 import HomeScreen from './HomeScreen';
 import ConversationsScreen from './conversation/ConversationScreen';
-import AppointmentScreen from '../tasker/AppointmentScreen';
-class DashBoardScreen extends React.Component {
+class CustomerDashBoardScreen extends React.Component {
   state = {
     index: 0,
     routes: [
-      { key: 'home', title: 'Home', icon: 'home', color: '#00b8e6' },
-      { key: 'tasks', title: 'Tasks', icon: 'view-list', color: '#00b8e6' },
-      { key: 'chat', title: 'Chat', icon: 'message', color: '#00b8e6' },
-      { key: 'appointment', title: 'Appointment', icon: 'message', color: '#00b8e6' },
-      { key: 'profile', title: 'Profile', icon: 'account', color: '#00b8e6' },
+      { key: 'home', title: 'Home', icon: 'home-outline', color: 'white'},
+      { key: 'tasks', title: 'Tasks', icon: 'view-list', color: 'white' },
+      { key: 'chat', title: 'Chat', icon: 'message-text-outline', color: 'white' },
+      { key: 'profile', title: 'Profile', icon: 'account-outline', color: 'white' },
     ],
   };
 
@@ -23,7 +22,6 @@ class DashBoardScreen extends React.Component {
     home: HomeScreen,
     tasks: TaskScreen,
     chat: ConversationsScreen,
-    appointment: AppointmentScreen,
     profile: ProfileScreen,
   });
 
@@ -33,9 +31,11 @@ class DashBoardScreen extends React.Component {
         navigationState={this.state}
         onIndexChange={this._handleIndexChange}
         renderScene={this._renderScene}
+        inactiveColor="silver"
+        activeColor="#009C3C"
       />
     );
   }
 }
 
-export default DashBoardScreen;
+export default CustomerDashBoardScreen;

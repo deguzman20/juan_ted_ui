@@ -12,7 +12,6 @@ import Swiper from 'react-native-swiper';
 const ITEM_WIDTH = Dimensions.get('window').width;
 const ITEM_HEIGHT = Dimensions.get('window').height;
 
-
 class AppSwiperScreen extends Component {
   render(){
     return (

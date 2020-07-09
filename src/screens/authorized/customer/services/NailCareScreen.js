@@ -9,79 +9,75 @@ import {
   FlatList,
   TextInput,
   Button,
-  ImageBackground,
 } from 'react-native';
-import { ITEM_WIDTH } from './../../../../actions/types';
+import { formatMoney } from '../../../../core/utils';
+import {  BACKEND_ASSET_URL } from './../../../../actions/types';
+import { SERVICES } from '../../../../queries';
+import { useQuery } from '@apollo/react-hooks';
+
 import { Button as ButtonElement } from 'react-native-elements';
 
-import BackButton from '../../../../components/BackButton';
-
 const NailCareScreen = ({ navigation }) => {
+  const { loading, error, data } = useQuery(SERVICES, {
+    variables: { service_type_id: parseInt(navigation.state.params["service_type_id"]) },
+    pollInterval: 500,
+  });
+
   const [manicure, setManicure] = useState({ quantity: 0, price: 200 });
   const [pedicure, setPedicure] = useState({ quantity: 0, price: 150 });
-  const [both, setBoth] = useState({ quantity: 0, price: 350 });
   const [containerVisibility, setContainerVisibility] = useState("none");
-  const totalPrice = (manicure.quantity * manicure.price) + (pedicure.quantity * pedicure.price) + (both.quantity * both.price);
+  const totalPrice = (manicure.quantity * manicure.price) + (pedicure.quantity * pedicure.price);
 
   increaseQuantity = (item) => {
     item.setQuantity({ quantity: item.quantity += 1, price: item.price })
-    console.log(item.quantity)
     setContainerVisibility("")
   }
 
   decreaseQuantity = (item) => {
-    item.setQuantity({ quantity: item.quantity -= 1, price: item.price  })
-    console.log(item.quantity)
-    setContainerVisibility("")
+    if(item.quantity === 0) return false;
+    item.setQuantity({ quantity: item.quantity -= 1, price: item.price })
+    if(((manicure.quantity + pedicure.quantity) - 1) >= 1) {
+      setContainerVisibility("")
+    }
+    else{
+      setContainerVisibility("none")
+    }
   }
 
+  if(loading || error) return null; 
   return (
     <React.Fragment>
       <SafeAreaView style={styles.container}>
         <FlatList
           data={[
             {
-              key: 'Manicure', 
-              id: '1', 
-              price: 200, 
-              description: 'Clean Hands Nails',
+              key: data["service"][0]["name"], 
+              id: data["service"][0]["id"], 
+              price: data["service"][0]["price"], 
+              description: data["service"][0]["description"],
               quantity: manicure.quantity,
               setQuantity: setManicure,
-              serviceInfo: manicure
+              serviceInfo: manicure,
+              image: data["service"][0]["image"]
             },
             {
-              key: 'Pedicure', 
-              id: '2', 
-              price: 150, 
-              description: 'Clean Foot Nails and othera asdasd dasdadasd akjsdhaiuld daklsdhaklsjdh',
+              key: data["service"][1]["name"], 
+              id: data["service"][1]["id"], 
+              price: data["service"][1]["price"], 
+              description: data["service"][1]["description"],
               quantity: pedicure.quantity,
               setQuantity: setPedicure,
-              serviceInfo: pedicure
-            },
-            {
-              key: 'Both', 
-              id: '3', 
-              price: 350, 
-              description: 'saamplesaamplesaamplesaamplesaamplesaample',
-              quantity: both.quantity,
-              setQuantity: setBoth,
-              serviceInfo: both
+              serviceInfo: pedicure,
+              image: data["service"][1]["image"]
             },
           ]}
-          ListHeaderComponent={        
-            <View style={styles.container}>
-              <ImageBackground source={require('../../../../assets/banner2.jpg')} style={styles.image}>
-                
-              <BackButton goBack={() => {}} />
-              </ImageBackground>
-            </View>
-          }
 
           renderItem={({ item }) => 
             <Card>
               <View style={styles.containerRows}>
-                <Image style={styles.imageServiceItem} source={require('../../../../assets/nail2.png')} />
-              
+                <Image style={styles.imageServiceItem} 
+                  source={{  uri: `${BACKEND_ASSET_URL}/${item.image}` }} 
+                />
                 <View style={styles.containerDetails}>
                   <View style={styles.containerRow}>
                     <Text style={styles.serviceItemName}>{item.key}</Text>
@@ -113,14 +109,34 @@ const NailCareScreen = ({ navigation }) => {
           }
         />
         <View style={{ 
-          width: ITEM_WIDTH, 
-          height: 171, 
+          width: '100%', 
+          height: 171,
           backgroundColor: "white", 
-          display: `${containerVisibility}` 
+          display: `${containerVisibility}`,
+          alignItems: 'stretch',
         }}>
           <Text style={styles.totalCost}>Total Cost</Text>
-          <Text style={styles.cost}>₱ {totalPrice}</Text>
-          <ButtonElement style={styles.rect2} title="Next" onPress={() => { navigation.navigate('GoogleMapScreen', { totalPrice }) }} />
+          <Text style={styles.cost}>₱ {formatMoney(totalPrice)}</Text>
+          <ButtonElement 
+            style={styles.next_button}
+            buttonStyle={styles.next_button_background_color}
+            title="Next" 
+            onPress={() => { 
+              navigation.navigate('GoogleMapScreen', { 
+              totalPrice, 
+              service_type_id: 4, 
+              services: [
+                { 
+                  quantity: manicure.quantity,
+                  service_id: 1
+                }, 
+                {  
+                  quantity: pedicure.quantity,
+                  service_id: 2
+                }] 
+              }) 
+            }} 
+          />
         </View>
       </SafeAreaView>
     </React.Fragment>
@@ -128,6 +144,10 @@ const NailCareScreen = ({ navigation }) => {
 
 };
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: 300
+  },
   containerDetails: {
     flex: 3,
     height: 150,
@@ -148,7 +168,7 @@ const styles = StyleSheet.create({
     flex: 2,
     alignSelf: 'baseline',
     width: 150, 
-    height: 150
+    height: 150,
   },
   quantityButton: {
     width:50,
@@ -170,30 +190,14 @@ const styles = StyleSheet.create({
     fontSize: 14
   },
   serviceItemDesc: {
+    top: -10,
     fontSize: 14
-  },
-  totalCost:{
-    fontSize: 30,
-    paddingLeft:52,
-    paddingRight:52,
-    paddingTop: 20,
-    alignItems: 'center',
-    height:70
   },
   image: {
     flex: 1,
     resizeMode: "cover",
     justifyContent: "center"
   }, 
-  container: {
-    flex: 1,
-    height: 300
-  },
-  rect: {
-    width: ITEM_WIDTH,
-    height: 171,
-    backgroundColor: "white"
-  },
   totalCost: {
     fontFamily: "verdana",
     color: "#121212",
@@ -205,16 +209,19 @@ const styles = StyleSheet.create({
     fontFamily: "verdana",
     color: "#121212",
     fontSize: 25,
-    marginLeft: 300,
+    marginLeft: '60%',
     marginTop: -30,
   },
-  rect2: {
-    width: ITEM_WIDTH,
+  next_button: {
+    width: '100%',
     height: 41,
     marginTop: 43,
     color:'white',
     paddingLeft:10,
     paddingRight:10,
+  },
+  next_button_background_color: {
+    backgroundColor: '#009C3C'
   }
 });
 

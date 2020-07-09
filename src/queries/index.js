@@ -38,8 +38,8 @@ export const CUSTOMER_SIGN_IN = gql`
   }`;
 
 export const TASKER_SIGN_IN = gql`
-  mutation taskerSignIn($email: String!, $password: String!) {
-    customerSignin(email: {email: $email, password: $password}) {
+  mutation taskerSignin($email: String!, $password: String!) {
+    taskerSignin(email: {email: $email, password: $password}) {
       id
       email
       firstName
@@ -163,13 +163,12 @@ export const ALL_REVIEWS = gql`
     }
   }`;
 
-export const ALL_SERVICES = gql`
+export const ALL_SERVICE_TYPES = gql`
   query {
-    allServices {
+    allServiceType {
       id
       name
       image
-      price
     }
   }`;
 
@@ -209,7 +208,6 @@ export const TASKER_CONVERSATION_LIST = gql`
     }
   }`;
 
-
 export const LINKS = gql`
   query {
     links {
@@ -228,4 +226,42 @@ export const NEW_LINKS = gql`
       description
     }
   }`;
-  
+
+export const SERVICES = gql`
+  query service($service_type_id: Int!){
+    service(serviceTypeId: $service_type_id){
+      id
+      name
+      description
+      image
+      price
+    }
+  }`;
+
+
+export const SPECIFIC_TODO = gql `
+  query todo($customer_id: Int!) {
+    todo(customerId: $customer_id) {
+      id
+      service {
+        id
+        name
+        description
+      }
+      todoDescription
+    }
+  }`;
+
+export const TASKER_BY_GEOLOCATION = gql `
+  query taskerByGeolocation($lng: String!, $lat: String!, $service_type_id: Int!, $start_from: String!, $start_to: String!) {
+    taskerByGeolocation(lng: $lng, lat: $lat, serviceTypeId: $service_type_id, startFrom: $start_from, startTo: $start_to) {
+      id
+      firstName
+      lastName
+      email
+      reviews {
+        id
+        rating
+      }
+    }
+  }`;

@@ -3,22 +3,26 @@ import { theme } from './../../core/theme';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import { CUSTOMER_SIGN_IN } from './../../queries';
-import { customerSignInAction } from './../../actions';
+import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from './../../queries';
+import { customerSignInAction, taskerSignInAction } from './../../actions';
 import { emailValidator, passwordValidator } from './../../core/utils';
+import Dialog, { DialogTitle, 
+  DialogFooter, 
+  DialogContent, 
+  DialogButton } from 'react-native-popup-dialog';
+
+import { SocialIcon } from 'react-native-elements';
+
 import Header from './../../components/Header';
 import Button from './../../components/Button';
 import Loader from "react-native-modal-loader";
 import TextInput from './../../components/TextInput';
 import Background from './../../components/Background';
-import Dialog, { DialogTitle, 
-                  DialogFooter, 
-                  DialogContent, 
-                  DialogButton } from 'react-native-popup-dialog';
 
 
 const LoginScreen = ({ navigation, customerSignInAction }) => {
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN);
+  const [taskerSignIn] = useMutation(TASKER_SIGN_IN);
   const [isLoading, setLoading] = useState(false)
 
   const [email, setEmail] = useState({ value: '', error: '' });
@@ -47,11 +51,22 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
           if(i == 3 && data.data.customerSignIn !== null){
             setLoading(false)
             customerSignInAction(data)
-            navigation.navigate('DashBoardScreen')
+            navigation.navigate('CustomerDashBoardScreen')
           }
           else{
-            setLoading(false)
-            toggleModal()
+            taskerSignIn({ variables: { email: email.value, password: password.value } }).then((data) => {
+              if(data.data.taskerSignin !== null){
+                setLoading(false)
+                taskerSignInAction(data)
+                navigation.navigate('TaskerDashBoardScreen')
+                
+              }
+              else{
+                setLoading(false)
+                // toggleModal()
+                return false;
+              }
+            })
           }
         })
       }
@@ -61,7 +76,7 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
   return (
     <React.Fragment>
       <Background>
-        <Header>Juan Ted</Header>
+        <Header>Lokal</Header>
 
         <TextInput
           label="Email"
@@ -97,12 +112,23 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
         <Button mode="contained" onPress={_onLoginPressed}>
           Login
         </Button>
-
         <View style={styles.row}>
           <Text style={styles.label}>Don’t have an account? </Text>
           <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
             <Text style={styles.link}>Sign up</Text>
           </TouchableOpacity>
+        </View>
+        <View style={{ width:'100%' }}>
+          <SocialIcon
+            title='Sign In With Facebook'
+            button
+            type='facebook'
+          />
+          <SocialIcon
+            title='Sign In With Google'
+            button
+            type='google'
+          />
         </View>
         <View style={styles.container}>
           <Loader loading={isLoading} color="#ff66be" />
@@ -152,4 +178,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(connect(null, { customerSignInAction })(LoginScreen));
+export default memo(connect(null, { customerSignInAction, taskerSignInAction })(LoginScreen));

@@ -1,4 +1,4 @@
-import React, { memo, useRef } from 'react';
+import React, { memo } from 'react';
 import { Card, } from 'react-native-elements';
 import {
   SafeAreaView,
@@ -9,10 +9,17 @@ import {
   FlatList,
   TouchableWithoutFeedback
 } from 'react-native';
-import RBSheet from 'react-native-raw-bottom-sheet';
+import { SERVICES } from '../../../../queries';
+import { useQuery } from '@apollo/react-hooks';
 
 const LaundryScreen = ({ navigation }) => {
-  const refRBSheet = useRef();
+  const { loading, error, data } = useQuery(SERVICES, {
+    variables: { service_type_id: parseInt(navigation.state.params["service_type_id"]) },
+    pollInterval: 500,
+  });
+
+  if(loading || error) return null;
+
   return (
     <React.Fragment>
       <SafeAreaView style={styles.container}>
@@ -23,20 +30,31 @@ const LaundryScreen = ({ navigation }) => {
         <View>
           <FlatList
             data={[
-                {key: '0-4 Kilos', id: '1', price: 'P200', },
-                {key: '5-8 Kilos', id: '2', price: 'P150', },
-                {key: '9-12 Kilos', id: '3', price: 'P350', },
-    
+              {
+                key: data['service'][0]["name"], 
+                id: data['service'][0]["id"], 
+                price: `${data['service'][0]["price"]}` 
+              },
+              {
+                key: data['service'][1]["name"], 
+                id: data['service'][1]["id"], 
+                price: `${data['service'][1]["price"]}`
+              },
+              {
+                key: data['service'][2]["name"], 
+                id: data['service'][2]["id"], 
+                price: `${data['service'][2]["price"]}`
+              },
             ]}
             renderItem={({item}) => 
-              <TouchableWithoutFeedback onPress={() => { refRBSheet.current.open() }}>
+              <TouchableWithoutFeedback onPress={() => { navigation.navigate('GoogleMapScreen', { totalPrice: item.price }) }}>
                 <Card>
                   <View style={styles.cardRow}>
                     <View style={styles.row}> 
                       <Image style={styles.iconMd} source={require('../../../../assets/nail2.png')} />
                       <Text style={styles.header3}>{item.key}</Text>
                     </View>
-                    <Text style={styles.header6}>{item.price}</Text>
+                    <Text style={styles.header6}>₱ {item.price}</Text>
                   </View>
                 </Card>
               </TouchableWithoutFeedback>
@@ -45,23 +63,23 @@ const LaundryScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.panel}>
-            <Text style={styles.header6}>Additional Info</Text>
-            <View style={styles.row}> 
-              <Image style={styles.iconSm} source={require('../../../../assets/arrow_back2.png')} />
-              <Text style={styles.p}>Free Pickup</Text>
-            </View>
-            <View style={styles.row}> 
-              <Image style={styles.iconSm} source={require('../../../../assets/nail2.png')} />
-              <Text style={styles.p}>Quality Cleaning</Text>
-            </View>
-            <View style={styles.row}> 
-              <Image style={styles.iconSm} source={require('../../../../assets/arrow_back2.png')} />
-              <Text style={styles.p}>Paywhen</Text>
-            </View>
-            <View style={styles.row}> 
-              <Image style={styles.iconSm} source={require('../../../../assets/nail2.png')} />
-              <Text style={styles.link}>See scope of work</Text>
-            </View>
+          <Text style={styles.header6}>Additional Info</Text>
+          <View style={styles.row}> 
+            <Image style={styles.iconSm} source={require('../../../../assets/arrow_back2.png')} />
+            <Text style={styles.p}>Free Pickup</Text>
+          </View>
+          <View style={styles.row}> 
+            <Image style={styles.iconSm} source={require('../../../../assets/nail2.png')} />
+            <Text style={styles.p}>Quality Cleaning</Text>
+          </View>
+          <View style={styles.row}> 
+            <Image style={styles.iconSm} source={require('../../../../assets/arrow_back2.png')} />
+            <Text style={styles.p}>Paywhen</Text>
+          </View>
+          <View style={styles.row}> 
+            <Image style={styles.iconSm} source={require('../../../../assets/nail2.png')} />
+            <Text style={styles.link}>See scope of work</Text>
+          </View>
         </View>
         <View style={styles.panel}>
           <View style={styles.row}> 
@@ -69,21 +87,6 @@ const LaundryScreen = ({ navigation }) => {
             <Text style={styles.header3}>Learn More About Our Safety</Text>
           </View>
         </View>
-        <RBSheet
-          ref={refRBSheet}
-          closeOnDragDown={true}
-          closeOnPressMask={false}
-          customStyles={{
-            wrapper: {
-              backgroundColor: "transparent"
-            },
-            draggableIcon: {
-              backgroundColor: "#000"
-            }
-          }}
-        >
-        
-        </RBSheet>
       </SafeAreaView>
     </React.Fragment>
   );

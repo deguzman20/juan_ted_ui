@@ -13,7 +13,9 @@ const MessageScreen = ({ navigation, customer_id }) => {
   const [sendMessage] = useMutation(SEND_MESSAGE);
   const [message, setMessage] = useState({ value: '' });
   const _onSendMessagePressed = () => {
-    sendMessage({ variables: { customer_id: parseInt(customer_id), tasker_id: navigation.state.params["tasker_id"], own_by_customer: true, text: message.value } })
+    sendMessage({ variables: { customer_id: parseInt(customer_id), 
+                  tasker_id: navigation.state.params["tasker_id"], 
+                  own_by_customer: true, text: message.value } })
   }
 
   return(
@@ -22,7 +24,7 @@ const MessageScreen = ({ navigation, customer_id }) => {
       variables={{ conversation_id: navigation.state.params["conversation_id"] }}
       pollInterval={700}
     >
-      {props => (
+      {(props) => (
         <React.Fragment>
           <ScrollView
             ref={scrollViewRef}

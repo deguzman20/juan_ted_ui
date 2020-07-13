@@ -54,14 +54,14 @@ const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
           <Card title={`${todo['todoDescription']}`} key={Math.random((1000))}>
             <TodoItemButton
               icon={<Icon name='code' color='#ffffff' />}
-              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+              buttonStyle={styles.book_btn}
               color="white"
               title={'Book'}
               onPress={() => _onAddTodoPressed()}
             />
             <TodoItemButton
               icon={<Icon name='code' color='#ffffff' />}
-              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0, top: 5}}
+              buttonStyle={styles.remove_btn}
               color="white"
               backgroundColor="#f13a59"
               title='Remove'
@@ -80,7 +80,17 @@ const styles = StyleSheet.create({
   },
   add_todo_button: {
     left:15,
-    width:'93%'
+    width:'93%',
+  },
+  book_btn: {
+    margin: 0,
+    backgroundColor: "#009C3C"
+  },
+  remove_btn: {
+    borderRadius: 0, 
+    margin: 0,
+    top: 5, 
+    backgroundColor: "black"
   }
 });
 

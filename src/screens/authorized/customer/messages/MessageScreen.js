@@ -16,6 +16,7 @@ const MessageScreen = ({ navigation, customer_id }) => {
     sendMessage({ variables: { customer_id: parseInt(customer_id), 
                   tasker_id: navigation.state.params["tasker_id"], 
                   own_by_customer: true, text: message.value } })
+    sendMessage({ value: '' })
   }
 
   return(

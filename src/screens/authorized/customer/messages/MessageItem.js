@@ -8,4 +8,3 @@ const Message = ({ text, id }) => (
 )
 
 export default memo(Message);
-// if equal one or less than one it can use lodash _.last

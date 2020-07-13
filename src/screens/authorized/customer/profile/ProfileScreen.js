@@ -3,14 +3,44 @@ import { connect } from 'react-redux';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { ITEM_WIDTH, ITEM_HEIGHT } from './../../../../actions/types';
-import { StyleSheet, SafeAreaView, View, Text, ScrollView } from 'react-native';
-import { ListItem, Avatar } from 'react-native-elements'
+import { customerLogoutAction } from './../../../../actions';
+import {  StyleSheet, 
+          SafeAreaView, 
+          View, 
+          Text, 
+          ScrollView,
+          Alert } from 'react-native';
+import { ListItem, Avatar } from 'react-native-elements';
 
 import Background from '../../../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
+import CurrentLocationScreen from '../map/CurrentLocationScreen';
+import LoginScreen from '../../../unauthorized/LoginScreen';
 
-const ProfileScreen = ({ navigation, image, first_name, last_name }) => {
-  const image_nil = image === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : image
+const ProfileScreen = ({ navigation, image, first_name, last_name, customerLogoutAction }) => {
+  const image_nil = image === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : image;
+  
+  const _onLogoutPressed = () => {
+    Alert.alert(
+      "Are you sure you want to logout",
+      "",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { 
+          text: "Yes", 
+          onPress: () => {
+            // customerLogoutAction();
+            navigation.navigate('LoginScreen');
+          } }
+      ],
+      { cancelable: false }
+    );  
+  }
+
   return (
     <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -38,16 +68,24 @@ const ProfileScreen = ({ navigation, image, first_name, last_name }) => {
                 onPress={() => navigation.navigate('ChangePasswordScreen')}
               />
               <ListItem
-                key={1}
+                key={2}
+                title={'Location'}
+                rightIcon={{ name: 'map' }}
+                bottomDivider
+                onPress={() => navigation.navigate('CurrentLocationScreen')}
+              />
+              <ListItem
+                key={3}
                 title={'Notifications'}
                 rightIcon={{ name: 'notifications-none' }}
                 bottomDivider
                 onPress={() => navigation.navigate('ChangePasswordScreen')}
               />
               <ListItem
-                key={1}
+                key={4}
                 title={'Logout'}
-                rightIcon={{ name: 'dehaze' }}
+                rightIcon={{ name: 'arrow-drop-down' }}
+                onPress={() => { _onLogoutPressed() }}
               />
             </View>
         </Background>
@@ -83,8 +121,17 @@ const mapStateToProps = ({ customerReducer }) => {
 }
 
 const App = createStackNavigator({
-  ProfileScreen: { screen: connect(mapStateToProps, null)(ProfileScreen) },
+  ProfileScreen: { screen: connect(mapStateToProps, { customerLogoutAction })(ProfileScreen) },
   ChangePasswordScreen: { screen: ChangePasswordScreen },
+  CurrentLocationScreen: { 
+    screen: CurrentLocationScreen,
+    navigationOptions: {
+      title: 'profile',
+      headerStyle: {}
+    }
+  },
+  LoginScreen: { screen: LoginScreen }
+
 }, { headerMode:'none' });
 
 export default memo(createAppContainer(App));

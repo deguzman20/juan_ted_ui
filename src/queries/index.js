@@ -126,12 +126,10 @@ export const UPDATE_PASSWORD = gql`
     }
   }`;
 
-export const SUBSCRIPTION_ADD_MESSAGE_TO_CONVERSATION = gql`
-  subscription ($conversation_id: Int!) {
-    messageAddedToConversation(conversationId: $conversation_id) {
-      id
-      text
-      conversationId
+export const UPDATE_CUSTOMER_GEOLOCATION = gql`
+  mutation updateCustomerGeolocation($customer_id: Int!, $lng: String!, $lat: String!, $formatted_address: String!) {
+    updateCustomerGeolocation(customerId: $customer_id, lng: $lng, lat: $lat, formattedAddress: $formatted_address) {
+      response
     }
   }`;
 
@@ -263,5 +261,57 @@ export const TASKER_BY_GEOLOCATION = gql `
         id
         rating
       }
+    }
+  }`;
+
+  export const TASKER_INFO = gql `
+    query tasker($tasker_id: Int!) {
+      tasker(id: $tasker_id) {
+        id
+        firstName
+        lastName
+        image
+        introduction
+        reviews {
+          id
+          rating
+          comment
+          customer {
+            firstName
+            lastName
+            image
+          }
+        }
+        featuredSkills {
+          id
+          serviceType {
+            id
+            name
+          }
+        }
+        reviews {
+          id
+          rating
+          serviceType {
+            id
+            name
+          }
+          customer {
+            id
+            firstName
+            lastName
+            image
+          }
+          comment
+        }
+      }
+    }`; 
+
+export const CUSTOMER_CURRENT_GEOLOCATION = gql `
+  query customer($customer_id: Int!) {
+    customer(id: $customer_id) {
+      lng
+      lat
+      formattedAddress
     }
   }`;

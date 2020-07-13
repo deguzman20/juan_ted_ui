@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import {  
   StyleSheet,
   View,
@@ -6,6 +6,7 @@ import {
   Image,
   FlatList
 } from 'react-native';
+import { useNetInfo } from "@react-native-community/netinfo";
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -25,10 +26,12 @@ import HomeRepairScreen from './services/HomeRepairScreen';
 import NailCareScreen from './services/NailCareScreen';
 import GoogleMapScreen from './map/GoogleMapScreen';
 import TaskersScreen from './geocoded_taskers/TaskersScreen';
+import TaskerInfoScreen from './geocoded_taskers/TaskerInfoScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
 
 const HomeScreen = ({ navigation }) => {
-  const { loading, error, data } = useQuery(ALL_SERVICE_TYPES)
+  const netInfo = useNetInfo();
+  const { loading, error, data } = useQuery(ALL_SERVICE_TYPES);
   if (loading || error) return null;
 
   navigateToService = (id) => {
@@ -51,18 +54,21 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.container_row}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text h4 style={styles.txt_todo_list}>My to-do list</Text>
+          <Text h4 style={styles.welcome_to_lokal_txt}>Welcome to lokal</Text>
           <Card styles={styles.cards}>
             <Text style={{marginBottom: 10}}>
               Tell us what you need help with, and we'll connect you with Taskers to get the job done.
             </Text>
             <Button
-              icon={<Icon name='code' color='#ffffff' />}
+              icon={<Icon name='add' color='#ffffff' />}
               buttonStyle={styles.button_todo_list}
               title='Add to list'
               onPress={() => navigation.navigate('MyTodoListScreen')} 
             />
           </Card>
+          <View>
+            <Text h4 style={styles.txt_services_txt}>Services</Text>
+          </View>
           <FlatList style={{margin:5}}
             numColumns={2}
             columnWrapperStyle={styles.row}
@@ -95,13 +101,17 @@ const styles = StyleSheet.create({
   },
   container_row: {
     height: 100, 
-    flex: 1
+    flex: 1,
   },
   row: {
     flex: 1,
     justifyContent: "space-around"
   },
-  txt_todo_list: {
+  welcome_to_lokal_txt: {
+    left: 20, 
+    marginTop: 20
+  },
+  txt_services_txt: {
     left: 20, 
     marginTop: 20
   },
@@ -114,7 +124,8 @@ const styles = StyleSheet.create({
     marginLeft: 0, 
     marginRight: 0, 
     marginBottom: 0, 
-    backgroundColor: '#009C3C'
+    backgroundColor: '#009C3C',
+    borderRadius: 10
   },
   image: {
     width: (ITEM_WIDTH / 2) - 60,
@@ -132,7 +143,7 @@ const App = createStackNavigator({
   Home: { 
     screen: connect(mapStateToProps, { getAllServiceAction })(HomeScreen),
     navigationOptions: {
-      title: 'Lokal'
+      title: ''
     }
   },
   MyTodoListScreen: { 
@@ -182,6 +193,13 @@ const App = createStackNavigator({
   },
   TaskersScreen: {
     screen: TaskersScreen,
+    navigationOptions: {
+      title: '',
+      headerStyle: {}
+    }
+  },
+  TaskerInfoScreen: {
+    screen: TaskerInfoScreen,
     navigationOptions: {
       title: '',
       headerStyle: {}

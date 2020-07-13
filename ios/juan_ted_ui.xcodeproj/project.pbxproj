@@ -27,6 +27,7 @@
 		6C59421CA80345BCAD4BF3AA /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 582B55FE89034CC388D98A19 /* MaterialIcons.ttf */; };
 		90D17E2CA22B4959B257C2D2 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 657145A2D3D849659FDC4E8A /* MaterialCommunityIcons.ttf */; };
 		93C1FE0007A84BBEB980E84B /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C1043FA83FD34BADAC8F1CDB /* Feather.ttf */; };
+		A11CC2C024B88B5A00C4A1D2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A11CC2BF24B88B5A00C4A1D2 /* Default-568h@2x.png */; };
 		A1FE693424A050DF001CF0C9 /* AIRDummyView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FE68FE24A050DF001CF0C9 /* AIRDummyView.m */; };
 		A1FE693524A050DF001CF0C9 /* AIRGoogleMapUrlTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FE690224A050DF001CF0C9 /* AIRGoogleMapUrlTile.m */; };
 		A1FE693624A050DF001CF0C9 /* AIRGoogleMapPolygonManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FE690524A050DF001CF0C9 /* AIRGoogleMapPolygonManager.m */; };
@@ -112,6 +113,7 @@
 		78C23A11A55B071AEF4E5945 /* libPods-juan_ted_ui.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-juan_ted_ui.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FF02E317CD58CD8525B0798 /* Pods-juan_ted_uiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-juan_ted_uiTests.release.xcconfig"; path = "Target Support Files/Pods-juan_ted_uiTests/Pods-juan_ted_uiTests.release.xcconfig"; sourceTree = "<group>"; };
 		8B723E0568EF45ACBDABB7F9 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		A11CC2BF24B88B5A00C4A1D2 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		A1FE68FE24A050DF001CF0C9 /* AIRDummyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRDummyView.m; sourceTree = "<group>"; };
 		A1FE68FF24A050DF001CF0C9 /* AIRGoogleMapWMSTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGoogleMapWMSTile.h; sourceTree = "<group>"; };
 		A1FE690024A050DF001CF0C9 /* AIRGoogleMapPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGoogleMapPolyline.h; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A11CC2BF24B88B5A00C4A1D2 /* Default-568h@2x.png */,
 				A1FE68FD24A050DF001CF0C9 /* AirGoogleMaps */,
 				13B07FAE1A68108700A75B9A /* juan_ted_ui */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -538,6 +541,7 @@
 				E449B1DF75224DB384D3C0DB /* FontAwesome5_Solid.ttf in Resources */,
 				E4D6B4A984B74916BE42A64B /* Fontisto.ttf in Resources */,
 				2D59FD8D3B2045D085F15E68 /* Foundation.ttf in Resources */,
+				A11CC2C024B88B5A00C4A1D2 /* Default-568h@2x.png in Resources */,
 				E0AB644719AB4C5DA12669C2 /* Ionicons.ttf in Resources */,
 				90D17E2CA22B4959B257C2D2 /* MaterialCommunityIcons.ttf in Resources */,
 				6C59421CA80345BCAD4BF3AA /* MaterialIcons.ttf in Resources */,

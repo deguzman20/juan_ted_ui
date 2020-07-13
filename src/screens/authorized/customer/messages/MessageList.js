@@ -3,8 +3,6 @@ import { View } from 'react-native';
 import OwnByCustomer from './OwnByCustomer';
 import OwnByTasker from './OwnByTasker';
 
-
-
 const MessageList = ({ data, error, loading }) => {
   
   MessageConditionalRendering = ({ message }) => {

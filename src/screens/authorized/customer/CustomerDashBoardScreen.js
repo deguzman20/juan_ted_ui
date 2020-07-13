@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text } from 'react-native';
 import { BottomNavigation } from 'react-native-paper';
 import ProfileScreen from './profile/ProfileScreen';
-import TaskScreen from './tasks/TaskScreen';
+import MyTaskerScreen from './my_tasker/MyTaskerScreen';
 import HomeScreen from './HomeScreen';
 import ConversationsScreen from './conversation/ConversationScreen';
 class CustomerDashBoardScreen extends React.Component {
@@ -10,9 +10,9 @@ class CustomerDashBoardScreen extends React.Component {
     index: 0,
     routes: [
       { key: 'home', title: 'Home', icon: 'home-outline', color: 'white'},
-      { key: 'tasks', title: 'Tasks', icon: 'view-list', color: 'white' },
+      { key: 'my_tasker', title: 'My Tasker', icon: 'account-outline', color: 'white' },
       { key: 'chat', title: 'Chat', icon: 'message-text-outline', color: 'white' },
-      { key: 'profile', title: 'Profile', icon: 'account-outline', color: 'white' },
+      { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' },
     ],
   };
 
@@ -20,7 +20,7 @@ class CustomerDashBoardScreen extends React.Component {
 
   _renderScene = BottomNavigation.SceneMap({
     home: HomeScreen,
-    tasks: TaskScreen,
+    my_tasker: MyTaskerScreen,
     chat: ConversationsScreen,
     profile: ProfileScreen,
   });

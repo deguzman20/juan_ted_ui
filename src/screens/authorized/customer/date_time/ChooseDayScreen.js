@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Card, Text, Button } from 'react-native-elements';
 import { ITEM_WIDTH } from '../../../../actions/types';
 import DatePicker from 'react-native-datepicker';
@@ -18,14 +18,19 @@ const ChooseDayScreen = ({ navigation }) => {
   const [fifthStyle, setFifthStyle] = useState({ color: 'black', backgroundColor: 'white' });
 
   const _onNavigateToAvailableTaskerPressed = () => {
-    navigation.navigate('TaskersScreen',{
-      longitude: String(navigation.state.params["longitude"]), 
-      latitude: String(navigation.state.params["latitude"]),
-      start_from: `${date.date} ${time.from}`,
-      start_to: `${date.date} ${time.to}`,
-      service_type_id: navigation.state.params["service_type_id"],
-      services: navigation.state.params["services"]
-    })
+    if(time.from !== null && time.to !== null){
+      navigation.navigate('TaskersScreen',{
+        longitude: String(navigation.state.params["longitude"]), 
+        latitude: String(navigation.state.params["latitude"]),
+        start_from: `${date.date} ${time.from}`,
+        start_to: `${date.date} ${time.to}`,
+        service_type_id: navigation.state.params["service_type_id"],
+        services: navigation.state.params["services"]
+      });
+    }
+    else{ 
+      Alert.alert("Please select time");
+    }
   }
 
   const hoverizedCard = (data) => {
@@ -147,7 +152,10 @@ const ChooseDayScreen = ({ navigation }) => {
         </Card>
       </TouchableWithoutFeedback>
       <View style={styles.buttonContainer}>
-        <Button title="Next" onPress={() => { _onNavigateToAvailableTaskerPressed() }} buttonStyle={{ backgroundColor: "#009C3C" }}/>
+        <Button title="Next" 
+          onPress={() => { _onNavigateToAvailableTaskerPressed() }} 
+          buttonStyle={{ backgroundColor: "#009C3C" }}
+        />
       </View>
     </React.Fragment>
   )

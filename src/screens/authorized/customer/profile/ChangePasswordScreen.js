@@ -13,7 +13,6 @@ import TextInput from './../../../../components/TextInput';
 import BackButton from './../../../../components/BackButton';
 import Loader from "react-native-modal-loader";
 
-
 const ChangePasswordScreen = ({ navigation, customer_id }) => {
   const [updatePassword, response] = useMutation(UPDATE_PASSWORD);
 
@@ -22,7 +21,6 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
   const [old_password, setOldPassword] = useState({ value: '', error: '' });
   const [new_password, setNewPassword] = useState({ value: '', error: '' });
   const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' });
-
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

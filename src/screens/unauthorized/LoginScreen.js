@@ -2,18 +2,12 @@ import React, { memo, useState } from 'react';
 import { theme } from './../../core/theme';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, Image, Alert } from 'react-native';
 import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from './../../queries';
 import { customerSignInAction, taskerSignInAction } from './../../actions';
 import { emailValidator, passwordValidator } from './../../core/utils';
-import Dialog, { DialogTitle, 
-  DialogFooter, 
-  DialogContent, 
-  DialogButton } from 'react-native-popup-dialog';
-
 import { SocialIcon } from 'react-native-elements';
 
-import Header from './../../components/Header';
 import Button from './../../components/Button';
 import Loader from "react-native-modal-loader";
 import TextInput from './../../components/TextInput';
@@ -27,12 +21,6 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
 
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
-
-  const [isModalVisible, setModalVisible] = useState(false);
-  
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value);
@@ -48,7 +36,7 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
       for(let i = 1; i <= 3; i++){
         setLoading(true)
         customerSignIn({ variables: { email: email.value, password: password.value } }).then((data) =>{
-          if(i == 3 && data.data.customerSignIn !== null){
+          if(i === 3 && data.data.customerSignIn !== null){
             setLoading(false)
             customerSignInAction(data)
             navigation.navigate('CustomerDashBoardScreen')
@@ -62,8 +50,7 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
                 
               }
               else{
-                setLoading(false)
-                // toggleModal()
+                Alert.alert('Incorrect email and password')
                 return false;
               }
             })
@@ -76,8 +63,13 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
   return (
     <React.Fragment>
       <Background>
-        <Header>Lokal</Header>
-
+        <View style={styles.logo_container}>
+          <Image
+            source={require("../../assets/lokal.png")}
+            resizeMode="contain"
+            style={styles.image}
+          ></Image>
+        </View>
         <TextInput
           label="Email"
           returnKeyType="next"
@@ -134,31 +126,22 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
           <Loader loading={isLoading} color="#ff66be" />
         </View>
       </Background>
-      <View style={styles.container}>
-        <Dialog
-          visible={isModalVisible}
-          dialogTitle={<DialogTitle title="Message" />}
-          footer={
-            <DialogFooter>
-              <DialogButton
-                text="Close"
-                onPress={() => {toggleModal()}}
-              />
-            </DialogFooter>
-          }
-        >
-          <DialogContent>
-            <Text>Incorrect username and password</Text>
-          </DialogContent>
-        </Dialog>
-      </View>
     </React.Fragment>
   );
 };
 
 const styles = StyleSheet.create({
-  container:{
-
+  logo_container: {
+    position: 'absolute',
+    top: 80,
+    width: '136%',
+    height: 300,
+    alignItems: 'center',
+    backgroundColor: 'white'
+  },
+  image: {
+    width: 307,
+    height: 220
   },
   forgotPassword: {
     width: '100%',

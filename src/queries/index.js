@@ -257,6 +257,7 @@ export const TASKER_BY_GEOLOCATION = gql `
       firstName
       lastName
       email
+      image
       reviews {
         id
         rating

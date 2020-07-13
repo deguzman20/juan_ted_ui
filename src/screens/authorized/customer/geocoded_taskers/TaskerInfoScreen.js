@@ -7,21 +7,20 @@ import {
   FlatList,
   TouchableWithoutFeedback
 } from 'react-native';
-import { Text, Rating, Button, Divider, ListItem } from 'react-native-elements';
+import { Text, Rating, Button, Divider, ListItem, Avatar } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
 
-import { DEFAULT_URL } from "./../../../../actions/types";
+import { DEFAULT_URL, BACKEND_ASSET_URL } from "./../../../../actions/types";
 import { TASKER_INFO } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
 import axios from 'axios';
 
 const TaskerInfoScreen = ({ navigation }) => {
-  const image_url =  "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg";
   const { loading, error, data } = useQuery(TASKER_INFO, {
     variables: { 
       tasker_id: navigation.state.params["tasker_id"]
     },
-    pollInterval: 500
+    // pollInterval: 2000
   });
 
   const keyExtractor = (item, index) => index.toString()
@@ -30,27 +29,30 @@ const TaskerInfoScreen = ({ navigation }) => {
     <TouchableWithoutFeedback>
       <ListItem
         title={
-          <View style={ styles.fullNameWrapper }>
-            <Text style={ styles.fullNameTxtOnList }>{item.customer.firstName} {item.customer.lastName}</Text>
+          <View style={styles.fullNameWrapper}>
+            <Text style={styles.fullNameTxtOnList}>
+              {item.customer.firstName} {item.customer.lastName}
+            </Text>
           </View>
         }
         subtitle={
           <React.Fragment>
-            <View style={{ marginTop: 10 }}>
+            <View style={{marginTop: 10}}>
               <Text>{item.comment}</Text>
             </View>
-            <View style={{ marginTop: 10 }}>
-              <Chip 
-                width={100} 
-                style={{ alignItems: 'center' }}
+            <View style={{marginTop: 10}}>
+              <Chip
+                style={{alignItems: 'center'}}
               >
-                {item.serviceType.name}
+                <Text>
+                  {item.serviceType.name}
+                </Text>
               </Chip>
             </View>
           </React.Fragment>
         }
         rightTitle={ 
-          <View style={ styles.ratingWrapper }>
+          <View style={styles.ratingWrapper}>
             <Rating
               type="star"
               imageSize={20}
@@ -60,7 +62,7 @@ const TaskerInfoScreen = ({ navigation }) => {
             />
           </View>
         }
-        leftAvatar={{ source: { uri: "../../../../assets/avatar.png" } }}
+        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.customer.image}` } }}
         bottomDivider
       />
     </TouchableWithoutFeedback>
@@ -93,6 +95,7 @@ const TaskerInfoScreen = ({ navigation }) => {
   }
 
   if(loading || error) return null;
+  data.tasker[0].reviews.map(a => console.log(`${BACKEND_ASSET_URL}/${a.customer.image}`))
   return(
     <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -100,17 +103,23 @@ const TaskerInfoScreen = ({ navigation }) => {
           <View style={styles.rectStackStack}>
             <View style={styles.rectStack}>
               <View style={styles.rect}/>
-              <Image
-                source={require("../../../../assets/tasker.png")}
-                resizeMode="contain"
-                style={styles.image2}
+              <Avatar
+                source={{ 
+                  uri: `${BACKEND_ASSET_URL}/${data.tasker[0].image}`
+                }}
+                xlarge
+                rounded
+                size={150}
+                containerStyle={styles.taskerImage}
               />
-              <Text style={styles.fullNameTxt}>{data.tasker[0].firstName} {data.tasker[0].lastName}</Text>
+              <Text style={styles.fullNameTxt}>
+                {data.tasker[0].firstName} {data.tasker[0].lastName}
+              </Text>
             </View>
             <Divider style={styles.firstDivider} />
             <Text style={styles.featuredSkills}>Featured Skills</Text>
           </View>
-          <View style={styles.chipWrapper }>
+          <View style={styles.chipWrapper}>
             <ScrollView 
               showsHorizontalScrollIndicator={false} 
               showsVerticalScrollIndicator={false}
@@ -132,7 +141,7 @@ const TaskerInfoScreen = ({ navigation }) => {
           <Text style={styles.introductionContent}>
             {data.tasker[0].introduction}
           </Text>
-          <View style={styles.reviewWrapper }>
+          <View style={styles.reviewWrapper}>
             <FlatList
               keyExtractor={keyExtractor}
               data={data.tasker[0].reviews}
@@ -141,6 +150,19 @@ const TaskerInfoScreen = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>  
+      <View style={{
+        width: '100%',
+        height: 40,
+        backgroundColor: "white",
+        position: 'relative',
+        top: 0
+      }}>
+        <Button 
+          style={styles.select_button} 
+          title="Next" 
+          onPress={() =>{  }} 
+          buttonStyle={styles.select_button_background_style} />
+      </View>
     </React.Fragment>
   )
 }
@@ -158,11 +180,9 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     backgroundColor: "#E6E6E6"
   },
-  image2: {
-    top: 81,
-    left: 228,
-    width: 200,
-    height: 200,
+  taskerImage: {
+    top: 90,
+    left: '27%',
     position: "absolute"
   },
   fullNameTxt: {
@@ -224,8 +244,8 @@ const styles = StyleSheet.create({
     fontFamily: "verdana",
     color: "#121212",
     fontSize: 15,
-    marginTop: 20,
-    marginLeft: 20
+    marginTop: '5%',
+    marginLeft: '5%'
   },
   firstDivider: {
     backgroundColor: 'silver', 
@@ -241,7 +261,7 @@ const styles = StyleSheet.create({
   },
   fullNameWrapper: {
     position: 'absolute', 
-    top: -10
+    top: -8
   },
   ratingWrapper: {
     position: 'absolute', 
@@ -249,6 +269,17 @@ const styles = StyleSheet.create({
   },
   fullNameTxtOnList: {
     fontWeight: 'bold'
+  },
+  select_button: {
+    width: '100%',
+    height: 150,
+    marginTop: 0,
+    color:'white',
+    paddingLeft:10,
+    paddingRight:10,
+  },
+  select_button_background_style: {
+    backgroundColor: '#009C3C'
   }
 });
 

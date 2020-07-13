@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { StyleSheet, View, Image, ScrollView, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { Text, Rating, ListItem } from 'react-native-elements';
 import { TASKER_BY_GEOLOCATION } from '../../../../queries';
+import { BACKEND_ASSET_URL } from '../../../../actions/types';
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -36,7 +37,7 @@ const TaskersScreen = ({ navigation, customer_id }) => {
     <TouchableWithoutFeedback onPress={() => { _onNavigateToTaskerInfoPressed(item.id) }}>
       <ListItem
         title={
-          <View style={ styles.fullNameWrapper }>
+          <View style={styles.fullNameWrapper}>
             <Text>{item.firstName} {item.lastName}</Text>
           </View>
         }
@@ -51,7 +52,7 @@ const TaskersScreen = ({ navigation, customer_id }) => {
             />
           </View>
         }
-        leftAvatar={{ source: { uri: "../../../../assets/avatar.png" } }}
+        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.image}` } }}
         bottomDivider
         chevron
       />

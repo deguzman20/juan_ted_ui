@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import {  
   StyleSheet,
   View,
@@ -69,7 +69,7 @@ const HomeScreen = ({ navigation }) => {
           <View>
             <Text h4 style={styles.txt_services_txt}>Services</Text>
           </View>
-          <FlatList style={{margin:5}}
+          <FlatList style={{ margin:5 }}
             numColumns={2}
             columnWrapperStyle={styles.row}
             

@@ -15,11 +15,10 @@ import CustomerDashBoardScreen from './src/screens/authorized/customer/CustomerD
 import RegisterScreen from './src/screens/unauthorized/RegisterScreen';
 import ForgotPasswordScreen from './src/screens/unauthorized/ForgotPasswordScreen';
 
-
 const App = createStackNavigator({
   LoginScreen: { screen: LoginScreen },
-  TaskerDashBoardScreen: { screen: TaskerDashBoardScreen },
   CustomerDashBoardScreen: { screen: CustomerDashBoardScreen },
+  TaskerDashBoardScreen: { screen: TaskerDashBoardScreen },
   RegisterScreen: { screen: RegisterScreen },
   ForgotPasswordScreen: { screen: ForgotPasswordScreen }
 }, { headerMode:'none' });

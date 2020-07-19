@@ -7,15 +7,16 @@ import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import MessageList from './MessageList';
 
-
-const MessageScreen = ({ navigation, customer_id }) => {
+const MessageScreen = ({ navigation, tasker_id }) => {
   const scrollViewRef = useRef();
   const [sendMessage] = useMutation(SEND_MESSAGE);
   const [message, setMessage] = useState({ value: '' });
   const _onSendMessagePressed = () => {
-    sendMessage({ variables: { customer_id: parseInt(customer_id), 
-                  tasker_id: navigation.state.params.tasker_id, 
-                  own_by_customer: true, text: message.value } })
+    sendMessage({ variables: { 
+                  customer_id: navigation.state.params.customer_id, 
+                  tasker_id: parseInt(tasker_id), 
+                  own_by_customer: false, 
+                  text: message.value } })
     sendMessage({ value: '' })
   }
 
@@ -62,7 +63,7 @@ const MessageScreen = ({ navigation, customer_id }) => {
 
 const styles = StyleSheet.create({
   messageWrapper:{
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   messageInputWrapper:{
     width: '80%'
@@ -75,9 +76,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ customerReducer }) => {
+const mapStateToProps = ({ taskerReducer }) => {
   return {
-    customer_id: customerReducer.id
+    tasker_id: taskerReducer.id
   }
 }
 

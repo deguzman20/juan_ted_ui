@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
-import Navigation from './Navigation';
 import { SafeAreaView } from 'react-navigation';
+import Navigation from './Navigation';
 
 const MyTaskerScreen = ({ navigation }) => {
   return(

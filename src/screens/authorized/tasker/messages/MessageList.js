@@ -6,7 +6,7 @@ import OwnByTasker from './OwnByTasker';
 const MessageList = ({ data, error, loading }) => {
   
   MessageConditionalRendering = ({ message }) => {
-    if(message.ownByCustomer === true){
+    if(message.ownByCustomer === false){
       return <OwnByCustomer message={message}/>
     }
     else{

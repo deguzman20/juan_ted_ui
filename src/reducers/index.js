@@ -10,7 +10,7 @@ const persistConfig = {
   storage: AsyncStorage
 }
 
-const rootReducer =  combineReducers({
+const rootReducer = combineReducers({
   customerReducer,
   taskerReducer,
   serviceReducer

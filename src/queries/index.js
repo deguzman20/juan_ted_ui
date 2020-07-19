@@ -180,6 +180,7 @@ export const CUSTOMER_CONVERSATION_LIST = gql`
             id
             firstName
             lastName
+            image
           }
           messages {
             id
@@ -192,14 +193,21 @@ export const CUSTOMER_CONVERSATION_LIST = gql`
   }`;
 
 export const TASKER_CONVERSATION_LIST = gql`
-  query conversationList($user_id: Int!, $is_customer: Boolean!) {
-    conversationList(userId: $user_id, isCustomer: $is_customer) {
+  query conversationList($user_id: Int!) {
+    conversationList(userId: $user_id, isCustomer: false) {
       customer {
         conversations {
+          id
           customer {
             id
             firstName
             lastName
+            image
+          }
+          messages {
+            id
+            text
+            createdAt
           }
         }
       }
@@ -316,3 +324,82 @@ export const CUSTOMER_CURRENT_GEOLOCATION = gql `
       formattedAddress
     }
   }`;
+
+export const PAST_TASKER_LIST = gql `
+  query pastTaskerList($customer_id: Int!) {
+    pastTaskerList(customerId: $customer_id) {
+      tasker {
+        firstName
+        lastName
+        image
+      }
+    }
+  }`;
+
+export const FAVORATE_TASKER_LIST = gql `
+  query favorateTasker($customer_id: Int!) {
+    favorateTaskerList(customerId: $customer_id) {
+      tasker {
+        firstName
+        lastName
+        image
+        featuredSkills {
+          id
+          serviceType {
+            id
+            name
+          }
+        }
+        reviews {
+          rating
+        }
+      }
+    }
+  }`;
+
+export const TASKER_APPOINTMENT_LIST = gql `
+  query taskerAppointmentList($tasker_id: Int!) {
+    taskerAppointmentList(taskerId: $tasker_id) {
+      id
+      from
+      to
+      tasker {
+        firstName
+        lastName
+      }
+      customer {
+        firstName
+        lastName
+      }
+    }
+  }`;
+
+  export const TRANSACTION_SERVICE = gql `
+    query transactionService($transaction_id: Int!) {
+      transactionService(transactionId: $transaction_id) {
+        id
+        from
+        to
+        lat
+        lng
+        customer {
+          firstName
+          lastName
+          image
+          lat
+          lng
+        }
+        transactionServices {
+          id
+          quantity
+          service {
+            id
+            name
+            image
+            price
+          }
+        }
+        approved
+        done
+      }
+    }`;

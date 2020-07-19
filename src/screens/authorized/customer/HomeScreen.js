@@ -6,47 +6,39 @@ import {
   Image,
   FlatList
 } from 'react-native';
-import { useNetInfo } from "@react-native-community/netinfo";
+import { Card, Text, Button, Icon } from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useQuery } from '@apollo/react-hooks';
+import { connect } from 'react-redux';
 import { ALL_SERVICE_TYPES } from './../../../queries';
 import { getAllServiceAction } from './../../../actions';
-import { BACKEND_ASSET_URL } from './../../../actions/types';
-import { connect } from 'react-redux';
-import { Card, Text, Button, Icon } from 'react-native-elements';
-import { ITEM_WIDTH } from './../../../actions/types';
+import { BACKEND_ASSET_URL, ITEM_WIDTH } from './../../../actions/types';
 
 import MyTodoListScreen from './todo/MyTodoListScreen';
 import ProfileScreen from './profile/ProfileScreen';
-import HomeCleaningScreen from './services/HomeCleaningScreen';
-import LaundryScreen from './services/LaundryScreen';
-import HomeRepairScreen from './services/HomeRepairScreen';
-import NailCareScreen from './services/NailCareScreen';
+import HairSalonScreen from './services/HairSalonScreen';
+import BarberScreen from './services/BarberScreen';
 import GoogleMapScreen from './map/GoogleMapScreen';
 import TaskersScreen from './geocoded_taskers/TaskersScreen';
 import TaskerInfoScreen from './geocoded_taskers/TaskerInfoScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
 
+
 const HomeScreen = ({ navigation }) => {
-  const netInfo = useNetInfo();
-  const { loading, error, data } = useQuery(ALL_SERVICE_TYPES);
+  const { loading, error, data } = useQuery(ALL_SERVICE_TYPES, {
+    pollInterval: 1000
+  });
+  
   if (loading || error) return null;
 
   navigateToService = (id) => {
     if(id === 1){
-      navigation.navigate('HomeCleaningScreen', { service_type_id: id });
+      navigation.navigate('BarberScreen', { service_type_id: id });
     }
     else if(id === 2){
-      navigation.navigate('HomeRepairScreen', { service_type_id: id });
-    }
-    else if(id === 3){
-      navigation.navigate('LaundryScreen', { service_type_id: id });
-    }
-    else if(id === 4){
-      console.log("")
-      navigation.navigate("NailCareScreen", { service_type_id: id });
+      navigation.navigate('HairSalonScreen', { service_type_id: id });
     }
   }
 
@@ -71,8 +63,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <FlatList style={{ margin:5 }}
             numColumns={2}
-            columnWrapperStyle={styles.row}
-            
+            columnWrapperStyle={styles.row}            
             data={data["allServiceType"]}
             keyExtractor={(item) => item.id }
             renderItem={(item) => (
@@ -156,31 +147,17 @@ const App = createStackNavigator({
   ProfileScreen: {
     screen: ProfileScreen,
   },
-  HomeCleaningScreen: {
-    screen:  HomeCleaningScreen,
+  BarberScreen: {
+    screen:  BarberScreen,
     navigationOptions: {
-      title: 'Home Cleaning',
+      title: 'Barber',
       headerStyle: { backgroundColor: 'white' },
     }
   },
-  LaundryScreen: {
-    screen: LaundryScreen,
+  HairSalonScreen: {
+    screen:  HairSalonScreen,
     navigationOptions: {
-      title: 'Laundry',
-      headerStyle: { backgroundColor: 'white' },
-    }
-  },
-  HomeRepairScreen: {
-    screen: HomeRepairScreen,
-    navigationOptions: {
-      title: 'Home Repair',
-      headerStyle: { backgroundColor: 'white' },
-    }
-  },
-  NailCareScreen: {
-    screen: NailCareScreen,
-    navigationOptions: {
-      title: 'Nail Care',
+      title: 'Hair Salon',
       headerStyle: { backgroundColor: 'white' },
     }
   },
@@ -213,6 +190,5 @@ const App = createStackNavigator({
     }
   }
 });
-
 
 export default memo(createAppContainer(App));

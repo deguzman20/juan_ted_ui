@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Text } from 'react-native';
 import { BottomNavigation } from 'react-native-paper';
 import ProfileScreen from './profile/ProfileScreen';
 import MyTaskerScreen from './my_tasker/MyTaskerScreen';

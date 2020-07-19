@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react';
 import { theme } from './../../core/theme';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { TouchableOpacity, StyleSheet, Text, View, Image, Alert } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, View, Image } from 'react-native';
 import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from './../../queries';
 import { customerSignInAction, taskerSignInAction } from './../../actions';
 import { emailValidator, passwordValidator } from './../../core/utils';
@@ -13,8 +13,7 @@ import Loader from "react-native-modal-loader";
 import TextInput from './../../components/TextInput';
 import Background from './../../components/Background';
 
-
-const LoginScreen = ({ navigation, customerSignInAction }) => {
+const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, customer_id, tasker_id}) => {
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN);
   const [taskerSignIn] = useMutation(TASKER_SIGN_IN);
   const [isLoading, setLoading] = useState(false)
@@ -31,33 +30,24 @@ const LoginScreen = ({ navigation, customerSignInAction }) => {
       setPassword({ ...password, error: passwordError });
       return;
     }
-    
-    setTimeout(() => {
-      for(let i = 1; i <= 3; i++){
-        setLoading(true)
-        customerSignIn({ variables: { email: email.value, password: password.value } }).then((data) =>{
-          if(i === 3 && data.data.customerSignIn !== null){
-            setLoading(false)
-            customerSignInAction(data)
-            navigation.navigate('CustomerDashBoardScreen')
+
+    customerSignIn({ variables: { email: email.value, password: password.value } }).then((customer_data) => {
+      if(customer_data.data.customerSignin !== null){
+        customerSignInAction(customer_data)
+        navigation.navigate('CustomerDashBoardScreen')
+      }
+      else{
+        taskerSignIn({ variables: { email: email.value, password: password.value } }).then((tasker_data) => {
+          if(tasker_data.data.taskerSignin !== null ){
+            taskerSignInAction(tasker_data)
+            navigation.navigate('TaskerDashBoardScreen')
           }
           else{
-            taskerSignIn({ variables: { email: email.value, password: password.value } }).then((data) => {
-              if(data.data.taskerSignin !== null){
-                setLoading(false)
-                taskerSignInAction(data)
-                navigation.navigate('TaskerDashBoardScreen')
-                
-              }
-              else{
-                Alert.alert('Incorrect email and password')
-                return false;
-              }
-            })
+            console.log("null")
           }
         })
       }
-    }, 3000)
+    })
   };
 
   return (
@@ -161,4 +151,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(connect(null, { customerSignInAction, taskerSignInAction })(LoginScreen));
+const mapStateToProps = ({ customerReducer, taskerReducer }) => {
+  return {
+    customer_id: customerReducer.id,
+    tasker_id: taskerReducer.id
+  }
+}
+
+export default memo(connect(mapStateToProps, { customerSignInAction, taskerSignInAction })(LoginScreen));

@@ -1,13 +1,19 @@
 import React, { memo } from 'react';
 import {  
   StyleSheet, 
-  Image,
   View, 
   ScrollView,
   FlatList,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Alert
 } from 'react-native';
-import { Text, Rating, Button, Divider, ListItem, Avatar } from 'react-native-elements';
+import { 
+  Text, 
+  Rating, 
+  Button, 
+  Divider, 
+  ListItem, 
+  Avatar } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
 
 import { DEFAULT_URL, BACKEND_ASSET_URL } from "./../../../../actions/types";
@@ -18,9 +24,9 @@ import axios from 'axios';
 const TaskerInfoScreen = ({ navigation }) => {
   const { loading, error, data } = useQuery(TASKER_INFO, {
     variables: { 
-      tasker_id: navigation.state.params["tasker_id"]
+      tasker_id: navigation.state.params.tasker_id
     },
-    // pollInterval: 2000
+    pollInterval: 2000
   });
 
   const keyExtractor = (item, index) => index.toString()
@@ -71,31 +77,36 @@ const TaskerInfoScreen = ({ navigation }) => {
   const _onNavigateToInfoListAndSaveTransactionPressed = () => {
     axios.get(`${DEFAULT_URL}/customer/create_transaction`,{
       params: {
-        lng: navigation.state.params["longitude"],
-        lat: navigation.state.params["latitude"],
-        service_type_id: navigation.state.params["service_type_id"],
-        start_from: navigation.state.params["start_from"],
-        start_to: navigation.state.params["start_to"],
-        customer_id: navigation.state.params["customer_id"],
-        tasker_id: navigation.state.params["tasker_id"]
+        lng: navigation.state.params.lng,
+        lat: navigation.state.params.lat,
+        service_type_id: navigation.state.params.service_type_id,
+        from: navigation.state.params.start_from,
+        to: navigation.state.params.start_to,
+        customer_id: navigation.state.params.customer_id,
+        tasker_id: navigation.state.params.tasker_id
       }
     })
     .then((response) => {
       axios.get(`${DEFAULT_URL}/customer/create_bulk_of_transaction_service`,{
         params: {
-          services: navigation.state.params["services"].map((service) => {
-            return {...service, transaction_id: parseInt(response.data)}
-          })
+          services: JSON.stringify(navigation.state.params.services.map((service) => {
+            return {
+              ...service, 
+              transaction_id: parseInt(response.data)
+            }
+          }))
         }
       })
       .then((transaction_service_response) => {
-        console.log(transaction_service_response.data)
+        if(transaction_service_response.data === 'Transaction service was created successfuly'){
+          Alert.alert(transaction_service_response.data)
+          navigation.navigate('TaskersScreen')
+        }
       })
     })
   }
 
   if(loading || error) return null;
-  data.tasker[0].reviews.map(a => console.log(`${BACKEND_ASSET_URL}/${a.customer.image}`))
   return(
     <React.Fragment>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -159,8 +170,8 @@ const TaskerInfoScreen = ({ navigation }) => {
       }}>
         <Button 
           style={styles.select_button} 
-          title="Next" 
-          onPress={() =>{  }} 
+          title="Select" 
+          onPress={() =>{ _onNavigateToInfoListAndSaveTransactionPressed() }} 
           buttonStyle={styles.select_button_background_style} />
       </View>
     </React.Fragment>

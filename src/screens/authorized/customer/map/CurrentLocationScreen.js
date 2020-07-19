@@ -25,7 +25,7 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
   const [isLoading, setLoading] = useState(false);
   const [geolocation, setGeolocation] = useState({ lng: 120.8805588, 
                                                   lat: 14.5677544 });
-                                                  
+
   const [formattedAddress, setFormattedAddress] = useState('');
   const [updateCustomerGeolocation, response] = useMutation(UPDATE_CUSTOMER_GEOLOCATION);
 
@@ -34,8 +34,8 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
       _map.current.animateCamera(
         {
           center: {
-            latitude: data.customer[0].lat,
-            longitude: data.customer[0].lng
+            latitude:  data.customer[0].lat === "" ?  geolocation.lat : parseFloat(data.customer[0].lat),   
+            longitude: data.customer[0].lng === "" ?  geolocation.lng : parseFloat(data.customer[0].lng),
           },
           zoom: 10
         },
@@ -77,15 +77,14 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
       <View style={styles.mapViewStack}>
         <MapView
           initialRegion={{
-            latitude: data.customer[0].lat === null ?  geolocation.lat : data.customer[0].lat,
-            longitude: data.customer[0].lng === null ?  geolocation.lng : data.customer[0].lng,
-            latitudeDelta: LATITUDE_DELTA,
+            latitude:  data.customer[0].lat === "" ?  geolocation.lat : parseFloat(data.customer[0].lat),   
+            longitude: data.customer[0].lng === "" ?  geolocation.lng : parseFloat(data.customer[0].lng),
+            latitudeDelta: 0.23,
             longitudeDelta: LONGITUDE_DELTA,
           }}
           customMapStyle={[]}
           style={styles.mapView}
           showsUserLocation={true}
-          zoomEnabled={true}
           ref={_map}
         >
           <GooglePlacesAutocomplete
@@ -130,8 +129,8 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
           />
           <MapView.Marker.Animated
             coordinate={{ 
-              latitude:  data.customer[0].lat === null ?  geolocation.lat : data.customer[0].lat,   
-              longitude: data.customer[0].lng === null ?  geolocation.lng : data.customer[0].lng
+              latitude:  data.customer[0].lat === "" ?  geolocation.lat : parseFloat(data.customer[0].lat),   
+              longitude: data.customer[0].lng === "" ?  geolocation.lng : parseFloat(data.customer[0].lng)
             }}
             title={"Your Location"}
           />

@@ -10,24 +10,25 @@ import _ from 'lodash';
 const TaskersScreen = ({ navigation, customer_id }) => {
   const { loading, error, data } = useQuery(TASKER_BY_GEOLOCATION, {
     variables: { 
-      lng: String(navigation.state.params["longitude"]), 
-      lat: String(navigation.state.params["latitude"]),
-      service_type_id: navigation.state.params["service_type_id"],
-      start_from: navigation.state.params["start_from"],
-      start_to: navigation.state.params["start_to"],
+      lng: String(navigation.state.params.longitude), 
+      lat: String(navigation.state.params.latitude),
+      service_type_id: navigation.state.params.service_type_id,
+      start_from: navigation.state.params.start_from,
+      start_to: navigation.state.params.start_to,
     },
     pollInterval: 500
   });
 
   const _onNavigateToTaskerInfoPressed = (tasker_id) => {
-    navigation.navigate('TaskerInfoScreen',{
-      lng: navigation.state.params["longitude"],
-      lat: navigation.state.params["latitude"],
-      service_type_id: navigation.state.params["service_type_id"],
-      start_from: navigation.state.params["start_from"],
-      start_to: navigation.state.params["start_to"],
+    navigation.navigate('TaskerInfoScreen',{ 
+      lng: navigation.state.params.longitude,
+      lat: navigation.state.params.latitude,
+      service_type_id: navigation.state.params.service_type_id,
+      start_from: navigation.state.params.start_from,
+      start_to: navigation.state.params.start_to,
       customer_id: parseInt(customer_id),
-      tasker_id: parseInt(tasker_id)
+      tasker_id: parseInt(tasker_id),
+      services: navigation.state.params.services
     })
   }
 
@@ -60,6 +61,7 @@ const TaskersScreen = ({ navigation, customer_id }) => {
   )
 
   if(loading || error) return null;
+  console.log(data)
   if(data['taskerByGeolocation'].length >= 1){
     return(
       <React.Fragment>
@@ -83,13 +85,6 @@ const TaskersScreen = ({ navigation, customer_id }) => {
   }
 }
 
-
-const mapStateToProps = ({ customerReducer }) => {
-  return {
-    customer_id: customerReducer.id
-  }
-}
-
 const styles = StyleSheet.create({
   empty_tasker_txt: {
     textAlign: 'center',
@@ -109,5 +104,11 @@ const styles = StyleSheet.create({
     top: 0
   }
 });
+
+const mapStateToProps = ({ customerReducer }) => {
+  return {
+    customer_id: customerReducer.id
+  }
+}
 
 export default memo(connect(mapStateToProps, null)(TaskersScreen))

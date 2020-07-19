@@ -16,8 +16,8 @@ const GoogleMapScreen = ({ navigation }) => {
       navigation.navigate('ChooseDayScreen', { 
         longitude: geolocation.lng,
         latitude: geolocation.lat,
-        service_type_id: navigation.state.params["service_type_id"],
-        services: navigation.state.params["services"]
+        service_type_id: navigation.state.params.service_type_id,
+        services: navigation.state.params.services
       })
     }
     else{

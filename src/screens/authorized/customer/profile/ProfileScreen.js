@@ -1,16 +1,18 @@
 import React, { memo } from 'react';
+import {  StyleSheet, 
+  SafeAreaView, 
+  View, 
+  Text, 
+  ScrollView,
+  Alert } from 'react-native';
+
+import { ListItem, Avatar } from 'react-native-elements';
+import { ITEM_WIDTH, ITEM_HEIGHT, BACKEND_ASSET_URL } from './../../../../actions/types';
+
 import { connect } from 'react-redux';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { ITEM_WIDTH, ITEM_HEIGHT } from './../../../../actions/types';
 import { customerLogoutAction } from './../../../../actions';
-import {  StyleSheet, 
-          SafeAreaView, 
-          View, 
-          Text, 
-          ScrollView,
-          Alert } from 'react-native';
-import { ListItem, Avatar } from 'react-native-elements';
 
 import Background from '../../../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
@@ -18,8 +20,6 @@ import CurrentLocationScreen from '../map/CurrentLocationScreen';
 import LoginScreen from '../../../unauthorized/LoginScreen';
 
 const ProfileScreen = ({ navigation, image, first_name, last_name, customerLogoutAction }) => {
-  const image_nil = image === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : image;
-  
   const _onLogoutPressed = () => {
     Alert.alert(
       "Are you sure you want to logout",
@@ -50,7 +50,7 @@ const ProfileScreen = ({ navigation, image, first_name, last_name, customerLogou
               <Avatar
                 xlarge
                 rounded
-                source={{uri: image_nil}}
+                source={{ uri: `${BACKEND_ASSET_URL}/${image}` }}
                 onPress={() => console.log("Works!")}
                 activeOpacity={0.7}
                 size={150}
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
   }
 });
 
+
 const mapStateToProps = ({ customerReducer }) => {
   return {
     email: customerReducer.email,
@@ -119,6 +120,7 @@ const mapStateToProps = ({ customerReducer }) => {
     last_name: customerReducer.last_name
   }
 }
+
 
 const App = createStackNavigator({
   ProfileScreen: { screen: connect(mapStateToProps, { customerLogoutAction })(ProfileScreen) },

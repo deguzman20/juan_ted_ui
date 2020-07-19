@@ -6,11 +6,9 @@ import {
   Image,
   Dimensions
 } from 'react-native';
+import { ITEM_WIDTH, ITEM_HEIGHT  } from './../../actions/types';
 import { Button } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-
-const ITEM_WIDTH = Dimensions.get('window').width;
-const ITEM_HEIGHT = Dimensions.get('window').height;
 
 class AppSwiperScreen extends Component {
   render(){
@@ -86,7 +84,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-
   image: {
     width: ITEM_WIDTH,
     height: ITEM_HEIGHT,

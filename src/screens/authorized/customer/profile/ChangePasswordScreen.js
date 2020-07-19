@@ -1,11 +1,14 @@
 import React, { memo, useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
-import { UPDATE_PASSWORD } from './../../../../queries';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
-import { theme } from './../../../../core/theme';
+import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
+import { UPDATE_PASSWORD } from './../../../../queries';
+import { theme } from './../../../../core/theme';
+import { 
+  oldPasswordValidator, 
+  newPasswordValidator, 
+  confirmPasswordValidator } from './../../../../core/utils';
 
-import { oldPasswordValidator, newPasswordValidator, confirmPasswordValidator } from './../../../../core/utils';
 import Background from './../../../../components/Background';
 import Header from './../../../../components/Header';
 import Button from './../../../../components/Button';

@@ -6,5 +6,3 @@ const TaskScreen = ({ navigation }) => {
     <Text>TaskScreen</Text>
   )
 }
-
-export default memo(TaskScreen)

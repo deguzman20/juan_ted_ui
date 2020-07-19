@@ -20,12 +20,12 @@ const ChooseDayScreen = ({ navigation }) => {
   const _onNavigateToAvailableTaskerPressed = () => {
     if(time.from !== null && time.to !== null){
       navigation.navigate('TaskersScreen',{
-        longitude: String(navigation.state.params["longitude"]), 
-        latitude: String(navigation.state.params["latitude"]),
+        longitude: String(navigation.state.params.longitude), 
+        latitude: String(navigation.state.params.latitude),
         start_from: `${date.date} ${time.from}`,
         start_to: `${date.date} ${time.to}`,
-        service_type_id: navigation.state.params["service_type_id"],
-        services: navigation.state.params["services"]
+        service_type_id: navigation.state.params.service_type_id,
+        services: navigation.state.params.services
       });
     }
     else{ 
@@ -39,7 +39,7 @@ const ChooseDayScreen = ({ navigation }) => {
       setSecondStyle({ color: 'black', backgroundColor: 'white' });
       setThirdStyle({ color: 'black', backgroundColor: 'white' });
       setFourthStyle({ color: 'black', backgroundColor: 'white' });
-      setFifthStyle({ color: 'black', backgroundColor: 'white' });
+      setFifthStyle({ color : 'black', backgroundColor: 'white' });
       setTimeRange({ from: '07:00:00', to: '10:00:00' })
     }
     else if(data === 2){

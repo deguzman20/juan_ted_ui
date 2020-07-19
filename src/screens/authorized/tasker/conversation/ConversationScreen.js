@@ -5,21 +5,22 @@ import { ScrollView, View, StyleSheet, Image } from 'react-native';
 import { Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
-import { CUSTOMER_CONVERSATION_LIST } from './../../../../queries';
+import { TASKER_CONVERSATION_LIST } from './../../../../queries';
 import ConversationList from './ConversationList';
 import MessageScreen from '../messages/MessageScreen';
 
 const ConversationScreen = ({ user_id, navigation }) => {
-  const { loading, error, data } = useQuery(CUSTOMER_CONVERSATION_LIST, {
+  const { loading, error, data } = useQuery(TASKER_CONVERSATION_LIST, {
     variables: { user_id: parseInt(user_id) },
     pollInterval: 500,
   });
+
 
   if(loading || error) return null;
   if(data["conversationList"].length !== 0){
     return(
       <ScrollView>
-        <ConversationList 
+        <ConversationList
           data={data}
           loading={loading} 
           error={error}
@@ -50,9 +51,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ customerReducer }) => {
+
+const mapStateToProps = ({ taskerReducer }) => {
   return {
-    user_id: customerReducer.id
+    user_id: taskerReducer.id
   }
 }
 

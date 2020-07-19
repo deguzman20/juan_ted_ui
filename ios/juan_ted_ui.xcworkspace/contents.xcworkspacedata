@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../../MyHomeAddress.gpx">
+   </FileRef>
+   <FileRef
+      location = "group:../../../MyHomeAddress.gpx">
+   </FileRef>
+   <FileRef
       location = "group:juan_ted_ui.xcodeproj">
    </FileRef>
    <FileRef

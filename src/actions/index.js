@@ -10,7 +10,7 @@ import {
   DELETE_TODO } from '../actions/types';
 
 export const customerSignInAction = (data) => dispatch => {
-  var data_obj = data.data.customerSignin
+  var data_obj = data.data.customerSignin;
   dispatch({
     type: GET_CURRENT_CUSTOMER_INFO,
     payload: data_obj
@@ -18,9 +18,10 @@ export const customerSignInAction = (data) => dispatch => {
 }
 
 export const taskerSignInAction = (data) => dispatch => {
+  var data_obj = data.data.taskerSignin;
   dispatch({
     type: GET_CURRENT_TASKER_INFO,
-    payload: data
+    payload: data_obj
   })
 }
 

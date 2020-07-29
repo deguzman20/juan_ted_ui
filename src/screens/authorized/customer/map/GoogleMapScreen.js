@@ -6,22 +6,29 @@ import { GOOGLE_PLACE_API_KEY } from '../../../../actions/types';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Button } from 'react-native-elements';
 import { formatMoney } from '../../../../core/utils';
+import { useNetInfo } from "@react-native-community/netinfo";
+
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+
 import axios from 'axios';
 
 const GoogleMapScreen = ({ navigation }) => {
+  const netInfo = useNetInfo();
   const [geolocation, setGeolocation] = useState({ lng: 1100.5680867, lat: 120.8805576 })
 
   const _onNavigateToChooseSchedulePressed = () => {
-    if(geolocation.lng !== 1100.5680867 && geolocation.lat !== 120.8805576){
-      navigation.navigate('ChooseDayScreen', { 
-        longitude: geolocation.lng,
-        latitude: geolocation.lat,
-        service_type_id: navigation.state.params.service_type_id,
-        services: navigation.state.params.services
-      })
-    }
-    else{
-      Alert.alert("Please select address");
+    if(netInfo.isConnected){
+      if(geolocation.lng !== 1100.5680867 && geolocation.lat !== 120.8805576){
+        navigation.navigate('ChooseDayScreen', { 
+          longitude: geolocation.lng,
+          latitude: geolocation.lat,
+          service_type_id: navigation.state.params.service_type_id,
+          services: navigation.state.params.services
+        })
+      }
+      else{
+        Alert.alert("Please select address");
+      }
     }
   } 
   return (
@@ -60,12 +67,12 @@ const GoogleMapScreen = ({ navigation }) => {
             textInputContainer: {
               backgroundColor: 'rgba(0,0,0,0)',
               borderTopWidth: 0,
+              marginTop: -60,
               borderBottomWidth: 0,
             },
             textInput: {
               marginLeft: 10,
               marginRight: 10,
-              marginTop: -50,
               height: 38,
               color: '#5d5d5d',
               fontSize: 16,
@@ -92,6 +99,7 @@ const GoogleMapScreen = ({ navigation }) => {
           onPress={() =>{  _onNavigateToChooseSchedulePressed() }} 
           buttonStyle={styles.next_button_background_color} />
       </View>
+      <InternetConnectionChecker />
     </View>
   );
 };

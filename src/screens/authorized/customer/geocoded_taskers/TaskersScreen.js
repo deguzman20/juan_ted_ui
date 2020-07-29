@@ -7,7 +7,12 @@ import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
+import { useNetInfo } from "@react-native-community/netinfo";
+
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+
 const TaskersScreen = ({ navigation, customer_id }) => {
+  const netInfo = useNetInfo();
   const { loading, error, data } = useQuery(TASKER_BY_GEOLOCATION, {
     variables: { 
       lng: String(navigation.state.params.longitude), 
@@ -20,16 +25,18 @@ const TaskersScreen = ({ navigation, customer_id }) => {
   });
 
   const _onNavigateToTaskerInfoPressed = (tasker_id) => {
-    navigation.navigate('TaskerInfoScreen',{ 
-      lng: navigation.state.params.longitude,
-      lat: navigation.state.params.latitude,
-      service_type_id: navigation.state.params.service_type_id,
-      start_from: navigation.state.params.start_from,
-      start_to: navigation.state.params.start_to,
-      customer_id: parseInt(customer_id),
-      tasker_id: parseInt(tasker_id),
-      services: navigation.state.params.services
-    })
+    if(netInfo.isConnected){
+      navigation.navigate('TaskerInfoScreen',{ 
+        lng: navigation.state.params.longitude,
+        lat: navigation.state.params.latitude,
+        service_type_id: navigation.state.params.service_type_id,
+        start_from: navigation.state.params.start_from,
+        start_to: navigation.state.params.start_to,
+        customer_id: parseInt(customer_id),
+        tasker_id: parseInt(tasker_id),
+        services: navigation.state.params.services
+      })
+    }
   }
 
   const keyExtractor = (item, index) => index.toString()
@@ -61,7 +68,6 @@ const TaskersScreen = ({ navigation, customer_id }) => {
   )
 
   if(loading || error) return null;
-  console.log(data)
   if(data['taskerByGeolocation'].length >= 1){
     return(
       <React.Fragment>
@@ -72,6 +78,7 @@ const TaskersScreen = ({ navigation, customer_id }) => {
             renderItem={renderItem}
           />
         </ScrollView>
+        <InternetConnectionChecker />
       </React.Fragment>
     )
   }

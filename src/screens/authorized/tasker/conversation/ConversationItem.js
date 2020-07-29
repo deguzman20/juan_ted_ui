@@ -2,14 +2,17 @@ import React, { memo } from 'react';
 import { ListItem } from 'react-native-elements';
 import { TouchableWithoutFeedback } from 'react-native';
 import { BACKEND_ASSET_URL } from '../../../../actions/types';
+import { useNetInfo } from '@react-native-community/netinfo';
 import _ from 'lodash';
 const ConversationItem = ({ l, i, navigation }) => {
+  const netInfo = useNetInfo();
   return(
     <TouchableWithoutFeedback onPress={() =>{
-      navigation.navigate('MessageScreen',{ 
+      netInfo.isConnected ? navigation.navigate('MessageScreen',{ 
                             conversation_id: parseInt(l.id),
                             customer_id: parseInt(l['customer'].id)
-                          })}}
+                          }) : null 
+      }}
     >
       <ListItem
         key={i}

@@ -15,6 +15,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
+import { NetworkProvider } from 'react-native-offline';
 import ActionCable from 'actioncable';
 import ActionCableLink from 'graphql-ruby-client/dist/subscriptions/ActionCableLink';
 
@@ -54,15 +55,19 @@ const client = new ApolloClient({
 if(__DEV__) {
   import('./reactotron-config').then(() => console.log('Reactotron Configured'))
 }
-
-const Application = () => (
-  <ApolloProvider client={client}>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider>
-  </ApolloProvider>
-  );
+const Application = () => {
+  console.disableYellowBox = true;
+  return(
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <NetworkProvider>
+            <App />
+          </NetworkProvider>
+        </PersistGate>
+      </Provider>
+    </ApolloProvider>
+  )
+}
 
 AppRegistry.registerComponent(appName, () => Application);

@@ -15,6 +15,9 @@ import { connect } from 'react-redux';
 import { ALL_SERVICE_TYPES } from './../../../queries';
 import { getAllServiceAction } from './../../../actions';
 import { BACKEND_ASSET_URL, ITEM_WIDTH } from './../../../actions/types';
+import { useNetInfo } from "@react-native-community/netinfo";
+
+import InternetConnectionChecker from '../../../components/InternetConnectionChecker';
 
 import MyTodoListScreen from './todo/MyTodoListScreen';
 import ProfileScreen from './profile/ProfileScreen';
@@ -25,20 +28,28 @@ import TaskersScreen from './geocoded_taskers/TaskersScreen';
 import TaskerInfoScreen from './geocoded_taskers/TaskerInfoScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
 
-
 const HomeScreen = ({ navigation }) => {
+  const netInfo = useNetInfo();
   const { loading, error, data } = useQuery(ALL_SERVICE_TYPES, {
     pollInterval: 1000
   });
   
   if (loading || error) return null;
 
-  navigateToService = (id) => {
-    if(id === 1){
-      navigation.navigate('BarberScreen', { service_type_id: id });
+  _onNavigateToServiceTypePress = (id) => {
+    if(netInfo.isConnected){
+      if(id === 1){
+        navigation.navigate('BarberScreen', { service_type_id: id });
+      }
+      else if(id === 2){
+        navigation.navigate('HairSalonScreen', { service_type_id: id });
+      }
     }
-    else if(id === 2){
-      navigation.navigate('HairSalonScreen', { service_type_id: id });
+  }
+
+  _onNavigateToTodoListPress = () => {
+    if(netInfo.isConnected){
+      navigation.navigate('MyTodoListScreen')
     }
   }
 
@@ -55,7 +66,7 @@ const HomeScreen = ({ navigation }) => {
               icon={<Icon name='add' color='#ffffff' />}
               buttonStyle={styles.button_todo_list}
               title='Add to list'
-              onPress={() => navigation.navigate('MyTodoListScreen')} 
+              onPress={() => { _onNavigateToTodoListPress() }} 
             />
           </Card>
           <View>
@@ -67,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
             data={data["allServiceType"]}
             keyExtractor={(item) => item.id }
             renderItem={(item) => (
-              <TouchableWithoutFeedback onPress={() => { navigateToService(parseInt(item.item.id))}}>
+              <TouchableWithoutFeedback onPress={() => { _onNavigateToServiceTypePress(parseInt(item.item.id))}}>
                 <Card
                   title={item.item.name} 
                   key={item.item.id}
@@ -78,6 +89,7 @@ const HomeScreen = ({ navigation }) => {
             )}
           />       
         </ScrollView> 
+        <InternetConnectionChecker/>
       </View>
     </View>
   )
@@ -134,7 +146,8 @@ const App = createStackNavigator({
   Home: { 
     screen: connect(mapStateToProps, { getAllServiceAction })(HomeScreen),
     navigationOptions: {
-      title: ''
+      title: '',
+      headerLeft: null
     }
   },
   MyTodoListScreen: { 
@@ -171,7 +184,7 @@ const App = createStackNavigator({
   TaskersScreen: {
     screen: TaskersScreen,
     navigationOptions: {
-      title: '',
+      title: 'Available Tasker',
       headerStyle: {}
     }
   },

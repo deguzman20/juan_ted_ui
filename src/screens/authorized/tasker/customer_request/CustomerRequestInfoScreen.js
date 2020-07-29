@@ -3,72 +3,86 @@ import { View, FlatList, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Text, ListItem, Avatar, Button } from 'react-native-elements';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { TRANSACTION_SERVICE, UPDATE_TRANSACTION_STATUS_TO_DONE } from '../../../../queries';
+import { 
+  PENDING_TRANSACTION_SERVICE_INFO, 
+  UPDATE_TRANSACTION_STATUS, 
+  SEND_MESSAGE } from '../../../../queries';
 import { BACKEND_ASSET_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
 import { formatMoney } from '../../../../core/utils';
 import MapView from 'react-native-maps';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
 import _ from 'lodash';
 
-const TransactionInfoScreen = ({ navigation }) => {
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+
+const CustomerRequestInfoScreen = ({ navigation }) => {
   const total_cost_arr = [];
   const netInfo = useNetInfo();
   const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
   const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
   const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO;
-  const [update_transaction_status_to_done] = useMutation(UPDATE_TRANSACTION_STATUS_TO_DONE);
-  const { loading, error, data } = useQuery(TRANSACTION_SERVICE, {
+  const [approveRequest] = useMutation(UPDATE_TRANSACTION_STATUS)
+  const [createRoom] = useMutation(SEND_MESSAGE)
+  const { loading, error, data } = useQuery(PENDING_TRANSACTION_SERVICE_INFO, {
     variables: {
       transaction_id: parseInt(navigation.state.params.transaction_id)
     },
-    // pollInterval: 1000
+    pollInterval: 1000
   });
 
-  _onMarkAsDonePressed = () => {
+  _onApproveRequestPressed = () => { 
     if(netInfo.isConnected){
-      update_transaction_status_to_done({ 
-        variables: {
-          transaction_id: parseInt(navigation.state.params.transaction_id)
-        }
-      }).then(({ data }) => {
-        if(data.updateTransactionStatusToDone.response === 'Update was successfully') {
-          Alert.alert("Mark as done");
-          navigation.navigate('AppointmentScreen');
+      approveRequest({ variables: { transaction_id: parseInt(navigation.state.params.transaction_id) } }).then(({ data }) => {
+        if(data.updateTransactionStatus.response === 'Update was successfully') {
+          createRoom({ 
+            variables: {
+              customer_id: navigation.state.params.customer_id,
+              tasker_id: navigation.state.params.tasker_id,
+              own_by_customer: false,
+              text: 'Hello'
+            } 
+          })
+          navigation.navigate('CustomerRequestScreen')
+          Alert.alert("Approved")
         }
       })
     }
-  } 
+  }
 
-  if(loading || error) return null; 
-  if([data.transactionService].length >= 1){
-    const { firstName, lastName, image } = data.transactionService.customer;
-    keyExtractor = (item, index) => index.toString()    
-    renderItem = ({ item }) => {
-      const { name, price, image } = item.service;
-      return(
-        <ListItem
-          title={    
-            <View style={styles.serviceWrapper}>
-              <Text>
-                {name}
-              </Text>
-            </View>
-          }
-          subtitle={
-            <View style={styles.priceWrapper}>
-              <Text>
-                ₱ {formatMoney(price)} X {item.quantity}
-              </Text>
-            </View>
-          }
-          leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${image}` } }}
-          bottomDivider
-        />
-      )
-    }
+  console.log(navigation.state.params)
+
+  keyExtractor = (item, index) => index.toString()
   
-    [data.transactionService].map((ts) => {
-      for(var i = 0; i <= (ts.transactionServices.length - 1); i++){
+  renderItem = ({ item }) => {
+    const { name, price, image } = item.service;
+    return(
+      <ListItem
+        title={    
+          <View style={styles.serviceWrapper}>
+            <Text>
+              {name}
+            </Text>
+          </View>
+        }
+        subtitle={
+          <View style={styles.priceWrapper}>
+            <Text>
+              ₱ {formatMoney(price)} X {item.quantity}
+            </Text>
+          </View>
+        }
+        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${image}` } }}
+        bottomDivider
+      />
+    )
+  }
+
+
+  if(loading || error) return null;
+  const { firstName, lastName, image } = data.pendingTransactionServiceInfo.customer;
+
+  if([data.pendingTransactionServiceInfo].length >= 1){
+    [data.pendingTransactionServiceInfo].map((ts) => {
+      for(var i = 0; i <= ([ts.pendingTransactionServiceInfo].length - 1); i++){
         total_cost_arr.push(ts.transactionServices[i].quantity * ts.transactionServices[i].service.price)
       }
     })
@@ -96,7 +110,7 @@ const TransactionInfoScreen = ({ navigation }) => {
             <View style={styles.serviceTypeWrapper}>
               <FlatList
                 keyExtractor={keyExtractor}
-                data={data.transactionService.transactionServices}
+                data={data.pendingTransactionServiceInfo.transactionServices}
                 renderItem={renderItem}
               />
             </View>
@@ -104,8 +118,8 @@ const TransactionInfoScreen = ({ navigation }) => {
           <View style={styles.mapViewStack}>
             <MapView
               initialRegion={{
-                latitude: parseFloat(data.transactionService.lat),
-                longitude: parseFloat(data.transactionService.lng),
+                latitude: parseFloat(data.pendingTransactionServiceInfo.lat),
+                longitude: parseFloat(data.pendingTransactionServiceInfo.lng),
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
               }}
@@ -115,42 +129,30 @@ const TransactionInfoScreen = ({ navigation }) => {
               >
               <MapView.Marker
                 coordinate={{
-                  latitude: parseFloat(data.transactionService.lat),
-                  longitude: parseFloat(data.transactionService.lng)
+                  latitude: parseFloat(data.pendingTransactionServiceInfo.lat),
+                  longitude: parseFloat(data.pendingTransactionServiceInfo.lng)
                 }}
-                title={"Info"}
+                title={"title"}
                 description={"description"}
               />
             </MapView>
           </View>
         </ScrollView>
-        {
-          data.transactionService.done ?
-          (
-            <View style={styles.unDoneTotalCostWrapper}>
-              <Text style={styles.totalCost}>Total Cost</Text>
-              <Text style={styles.cost}>P {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
-            </View>  
-          ): 
-          (
-            <View style={styles.doneTotalCostWrapper}>
-              <Text style={styles.totalCost}>Total Cost</Text>
-              <Text style={styles.cost}>P {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
-              <View style={styles.buttonContainer}>
-                <Button title="Mark as done" 
-                  onPress={() => { _onMarkAsDonePressed() }} 
-                  buttonStyle={{ backgroundColor: "#009C3C" }}
-                />
-              </View>
-            </View>  
-          )
-        }
+        <View style={styles.totalCostWrapper}>
+          <Text style={styles.totalCost}>Total Cost</Text>
+          <Text style={styles.cost}>₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
+          <View style={styles.buttonContainer}>
+            <Button title="Approve" 
+              onPress={() => { _onApproveRequestPressed() }} 
+              buttonStyle={{ backgroundColor: "#009C3C" }}
+            />
+          </View>
+        </View>  
         <InternetConnectionChecker />
       </React.Fragment>
     )
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -204,15 +206,9 @@ const styles = StyleSheet.create({
     position: 'absolute', 
     top: -8
   },
-  doneTotalCostWrapper: {
+  totalCostWrapper: {
     width: '100%',
     height: 100,
-    backgroundColor: "white",
-    position: 'relative',
-  },
-  unDoneTotalCostWrapper: {
-    width: '100%',
-    height: 50,
     backgroundColor: "white",
     position: 'relative'
   },
@@ -228,7 +224,7 @@ const styles = StyleSheet.create({
     fontFamily: "verdana",
     color: "#121212",
     fontSize: 25,
-    marginLeft: '65%',
+    marginLeft: '55%',
     position: 'absolute',
     marginTop: '2%'
   },
@@ -253,4 +249,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default memo(TransactionInfoScreen);
+export default memo(CustomerRequestInfoScreen);

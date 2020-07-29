@@ -10,14 +10,19 @@ import {
   TextInput,
   Button,
 } from 'react-native';
+import { Button as ButtonElement } from 'react-native-elements';
 import { formatMoney } from '../../../../core/utils';
 import {  BACKEND_ASSET_URL } from './../../../../actions/types';
 import { SERVICES } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
 
-import { Button as ButtonElement } from 'react-native-elements';
+import { useNetInfo } from "@react-native-community/netinfo";
+
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+
 
 const NailCareScreen = ({ navigation }) => {
+  const netInfo = useNetInfo();
   const { loading, error, data } = useQuery(SERVICES, {
     variables: { service_type_id: parseInt(navigation.state.params["service_type_id"]) },
     pollInterval: 500,
@@ -30,18 +35,22 @@ const NailCareScreen = ({ navigation }) => {
   const totalPrice = (rebond.quantity * rebond.price) + (keratin.quantity * keratin.price) + (hair_cut.quantity * hair_cut.price);
 
   increaseQuantity = (item) => {
-    item.setQuantity({ quantity: item.quantity += 1, price: item.price })
-    setContainerVisibility("")
+    if(netInfo.isConnected){
+      item.setQuantity({ quantity: item.quantity += 1, price: item.price })
+      setContainerVisibility("")
+    }
   }
 
   decreaseQuantity = (item) => {
-    if(item.quantity === 0) return false;
-    item.setQuantity({ quantity: item.quantity -= 1, price: item.price })
-    if(((rebond.quantity + keratin.quantity + hair_cut.quantity) - 1) >= 1) {
-      setContainerVisibility("")
-    }
-    else{
-      setContainerVisibility("none")
+    if(netInfo.isConnected){
+      if(item.quantity === 0) return false;
+      item.setQuantity({ quantity: item.quantity -= 1, price: item.price })
+      if(((rebond.quantity + keratin.quantity + hair_cut.quantity) - 1) >= 1) {
+        setContainerVisibility("")
+      }
+      else{
+        setContainerVisibility("none")
+      }
     }
   }
 
@@ -154,6 +163,7 @@ const NailCareScreen = ({ navigation }) => {
           />
         </View>
       </SafeAreaView>
+      <InternetConnectionChecker />
     </React.Fragment>
   );
 

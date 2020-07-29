@@ -5,38 +5,29 @@ import {
   ScrollView,
   FlatList,
   TouchableWithoutFeedback,
-  Alert
 } from 'react-native';
 import { 
   Text, 
   Rating, 
-  Button, 
   Divider, 
   ListItem, 
   Avatar } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
 
-import { DEFAULT_URL, BACKEND_ASSET_URL } from "./../../../../actions/types";
+import { BACKEND_ASSET_URL } from "../../../../actions/types";
 import { TASKER_INFO } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
-import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
-
-import axios from 'axios';
-
-const TaskerInfoScreen = ({ navigation }) => {
-  const netInfo = useNetInfo();
+const MyTaskerInfoScreen = ({ navigation }) => {
   const { loading, error, data } = useQuery(TASKER_INFO, {
     variables: { 
       tasker_id: navigation.state.params.tasker_id
     },
-    pollInterval: 2000
   });
 
-  const keyExtractor = (item, index) => index.toString()
+  keyExtractor = (item, index) => index.toString()
 
-  const renderItem = ({ item }) => (
+  renderItem = ({ item }) => (
     <TouchableWithoutFeedback>
       <ListItem
         title={
@@ -78,40 +69,6 @@ const TaskerInfoScreen = ({ navigation }) => {
       />
     </TouchableWithoutFeedback>
   )
-  
-  const _onNavigateToInfoListAndSaveTransactionPressed = () => {
-    if(netInfo.isConnected){
-      axios.get(`${DEFAULT_URL}/customer/create_transaction`,{
-        params: {
-          lng: navigation.state.params.lng,
-          lat: navigation.state.params.lat,
-          service_type_id: navigation.state.params.service_type_id,
-          from: navigation.state.params.start_from,
-          to: navigation.state.params.start_to,
-          customer_id: navigation.state.params.customer_id,
-          tasker_id: navigation.state.params.tasker_id
-        }
-      })
-      .then((response) => {
-        axios.get(`${DEFAULT_URL}/customer/create_bulk_of_transaction_service`,{
-          params: {
-            services: JSON.stringify(navigation.state.params.services.map((service) => {
-              return {
-                ...service, 
-                transaction_id: parseInt(response.data)
-              }
-            }))
-          }
-        })
-        .then((transaction_service_response) => {
-          if(transaction_service_response.data === 'Transaction service was created successfuly'){
-            Alert.alert(transaction_service_response.data)
-            navigation.navigate('TaskersScreen')
-          }
-        })
-      })
-    }
-  }
 
   if(loading || error) return null;
   return(
@@ -168,20 +125,6 @@ const TaskerInfoScreen = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>  
-      <View style={{
-        width: '100%',
-        height: 40,
-        backgroundColor: "white",
-        position: 'relative',
-        top: 0
-      }}>
-        <Button 
-          style={styles.select_button} 
-          title="Select" 
-          onPress={() =>{ _onNavigateToInfoListAndSaveTransactionPressed() }} 
-          buttonStyle={styles.select_button_background_style} />
-      </View>
-      <InternetConnectionChecker />
     </React.Fragment>
   )
 }
@@ -288,18 +231,7 @@ const styles = StyleSheet.create({
   },
   fullNameTxtOnList: {
     fontWeight: 'bold'
-  },
-  select_button: {
-    width: '100%',
-    height: 150,
-    marginTop: 0,
-    color:'white',
-    paddingLeft:10,
-    paddingRight:10,
-  },
-  select_button_background_style: {
-    backgroundColor: '#009C3C'
   }
 });
 
-export default memo(TaskerInfoScreen);
+export default memo(MyTaskerInfoScreen);

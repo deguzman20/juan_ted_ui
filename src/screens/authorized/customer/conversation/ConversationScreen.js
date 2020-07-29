@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { CUSTOMER_CONVERSATION_LIST } from './../../../../queries';
 import ConversationList from './ConversationList';
 import MessageScreen from '../messages/MessageScreen';
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
 
 const ConversationScreen = ({ user_id, navigation }) => {
   const { loading, error, data } = useQuery(CUSTOMER_CONVERSATION_LIST, {
@@ -25,6 +26,7 @@ const ConversationScreen = ({ user_id, navigation }) => {
           error={error}
           navigation={navigation}
         />
+        <InternetConnectionChecker />
       </ScrollView>
     )
   }
@@ -33,6 +35,7 @@ const ConversationScreen = ({ user_id, navigation }) => {
       <View style={styles.empty_converation_container}>
         <Image source={require('../../../../assets/conversation.png')} />
         <Text h3 style={styles.empty_converation_txt}>No Conversation yet</Text>
+        <InternetConnectionChecker />
       </View>
     );
   }
@@ -60,7 +63,8 @@ const App = createStackNavigator({
   ConversationScreen: { 
     screen: connect(mapStateToProps, null)(ConversationScreen),
     navigationOptions: {
-      title: ''
+      title: 'Coversation List',
+      headerLeft: null
     }
   },
   MessageScreen: { 

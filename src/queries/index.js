@@ -44,6 +44,7 @@ export const TASKER_SIGN_IN = gql`
       email
       firstName
       lastName
+      image
       mobileNumber
       zipCode
       hourlyRate
@@ -273,48 +274,61 @@ export const TASKER_BY_GEOLOCATION = gql `
     }
   }`;
 
-  export const TASKER_INFO = gql `
-    query tasker($tasker_id: Int!) {
-      tasker(id: $tasker_id) {
+export const CUSTOMER_INFO = gql `
+  query customer($customer_id: Int!) {
+    customer(id: $customer_id) {
+      id
+      firstName
+      lastName
+      image
+      email
+      mobileNumber
+    }
+  }`; 
+
+
+export const TASKER_INFO = gql `
+  query tasker($tasker_id: Int!) {
+    tasker(id: $tasker_id) {
+      id
+      firstName
+      lastName
+      image
+      introduction
+      reviews {
         id
-        firstName
-        lastName
-        image
-        introduction
-        reviews {
-          id
-          rating
-          comment
-          customer {
-            firstName
-            lastName
-            image
-          }
-        }
-        featuredSkills {
-          id
-          serviceType {
-            id
-            name
-          }
-        }
-        reviews {
-          id
-          rating
-          serviceType {
-            id
-            name
-          }
-          customer {
-            id
-            firstName
-            lastName
-            image
-          }
-          comment
+        rating
+        comment
+        customer {
+          firstName
+          lastName
+          image
         }
       }
-    }`; 
+      featuredSkills {
+        id
+        serviceType {
+          id
+          name
+        }
+      }
+      reviews {
+        id
+        rating
+        serviceType {
+          id
+          name
+        }
+        customer {
+          id
+          firstName
+          lastName
+          image
+        }
+        comment
+      }
+    }
+  }`; 
 
 export const CUSTOMER_CURRENT_GEOLOCATION = gql `
   query customer($customer_id: Int!) {
@@ -328,6 +342,8 @@ export const CUSTOMER_CURRENT_GEOLOCATION = gql `
 export const PAST_TASKER_LIST = gql `
   query pastTaskerList($customer_id: Int!) {
     pastTaskerList(customerId: $customer_id) {
+      id
+      favorate
       tasker {
         firstName
         lastName
@@ -335,6 +351,23 @@ export const PAST_TASKER_LIST = gql `
       }
     }
   }`;
+
+export const ADD_TO_FAVORATE_TASKER = gql `
+  mutation addToFavorateTasker($transaction_id: Int!) {
+    addToFavorateTasker(transactionId: $transaction_id) {
+      response
+      statusCode
+    }
+  }`;
+
+export const REMOVE_TO_FAVORATE_TASKER = gql `
+  mutation removeToFavorateTasker($transaction_id: Int!) {
+    removeToFavorateTasker(transactionId: $transaction_id) {
+      response
+      statusCode
+    }
+}`;
+
 
 export const FAVORATE_TASKER_LIST = gql `
   query favorateTasker($customer_id: Int!) {
@@ -361,6 +394,7 @@ export const TASKER_APPOINTMENT_LIST = gql `
   query taskerAppointmentList($tasker_id: Int!) {
     taskerAppointmentList(taskerId: $tasker_id) {
       id
+      done
       from
       to
       tasker {
@@ -374,32 +408,110 @@ export const TASKER_APPOINTMENT_LIST = gql `
     }
   }`;
 
-  export const TRANSACTION_SERVICE = gql `
-    query transactionService($transaction_id: Int!) {
-      transactionService(transactionId: $transaction_id) {
-        id
-        from
-        to
+export const TRANSACTION_SERVICE = gql `
+  query transactionService($transaction_id: Int!) {
+    transactionService(transactionId: $transaction_id) {
+      id
+      from
+      to
+      lat
+      lng
+      done
+      customer {
+        firstName
+        lastName
+        image
         lat
         lng
-        customer {
-          firstName
-          lastName
-          image
-          lat
-          lng
-        }
-        transactionServices {
-          id
-          quantity
-          service {
-            id
-            name
-            image
-            price
-          }
-        }
-        approved
-        done
       }
-    }`;
+      transactionServices {
+        id
+        quantity
+        service {
+          id
+          name
+          image
+          price
+        }
+      }
+      approved
+      done
+    }
+  }`;
+
+export const PENDING_TRANSACTION_LIST = gql `
+  query pendingTransactionList($tasker_id: Int!) {
+    pendingTransactionList(taskerId: $tasker_id) {
+      id
+      customer {
+        id
+        firstName
+        lastName
+        image
+      }
+      transactionServices {
+        id
+        service {
+          id
+          name
+        }
+      }
+    }
+  }`;
+
+export const PENDING_TRANSACTION_SERVICE_INFO = gql `
+  query pendingTransactionServiceInfo($transaction_id: Int!) {
+    pendingTransactionServiceInfo(transactionId: $transaction_id) {
+      lat
+      lng
+      from
+      to
+      customer {
+        id
+        firstName
+        lastName
+        image
+      }
+      transactionServices {
+        id
+        quantity
+        service {
+          id
+          name
+          price
+        }
+      }
+    }
+  }`;
+
+export const UPDATE_CUSTOMER_INFO = gql`
+  mutation updateCustomerInfo($customer_id: Int!, $first_name: String!, $last_name: String!, $email: String, $mobile_number: String!) {
+    updateCustomerInfo(customerId: $customer_id, firstName: $first_name, lastName: $last_name, email: $email, mobileNumber: $mobile_number) {
+      response
+      statusCode
+    }
+  }`;
+
+export const UPDATE_TASKER_INFO = gql `
+  mutation updateTaskerInfo($tasker_id: Int!, $first_name: String!, $last_name: String!, $email: String, $mobile_number: String!) {
+    updateTaskerInfo(taskerId: $tasker_id, firstName: $first_name, lastName: $last_name, email: $email, mobileNumber: $mobile_number) {
+      response
+      statusCode
+    }
+  }`;
+
+export const UPDATE_TRANSACTION_STATUS = gql `
+  mutation updateTransactionStatus($transaction_id: Int!) {
+    updateTransactionStatus(transactionId: $transaction_id) {
+      response
+      statusCode
+    }
+  }`;
+
+export const UPDATE_TRANSACTION_STATUS_TO_DONE = gql `
+  mutation updateTransactionStatusToDone($transaction_id: Int!) {
+    updateTransactionStatusToDone(transactionId: $transaction_id) {
+      response
+      statusCode
+    }
+  }`;

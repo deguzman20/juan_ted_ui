@@ -2,10 +2,14 @@ import React, { memo, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Card, Text, Button } from 'react-native-elements';
 import { ITEM_WIDTH } from '../../../../actions/types';
+import { useNetInfo } from "@react-native-community/netinfo";
+
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
 import DatePicker from 'react-native-datepicker';
 
 const ChooseDayScreen = ({ navigation }) => {
   const today = new Date();
+  const netInfo = useNetInfo();
   const dateToday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
   const maxDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 6);
   const [time, setTimeRange] = useState({ from: null, to: null });
@@ -18,18 +22,20 @@ const ChooseDayScreen = ({ navigation }) => {
   const [fifthStyle, setFifthStyle] = useState({ color: 'black', backgroundColor: 'white' });
 
   const _onNavigateToAvailableTaskerPressed = () => {
-    if(time.from !== null && time.to !== null){
-      navigation.navigate('TaskersScreen',{
-        longitude: String(navigation.state.params.longitude), 
-        latitude: String(navigation.state.params.latitude),
-        start_from: `${date.date} ${time.from}`,
-        start_to: `${date.date} ${time.to}`,
-        service_type_id: navigation.state.params.service_type_id,
-        services: navigation.state.params.services
-      });
-    }
-    else{ 
-      Alert.alert("Please select time");
+    if(netInfo.isConnected){
+      if(time.from !== null && time.to !== null){
+        navigation.navigate('TaskersScreen',{
+          longitude: String(navigation.state.params.longitude), 
+          latitude: String(navigation.state.params.latitude),
+          start_from: `${date.date} ${time.from}`,
+          start_to: `${date.date} ${time.to}`,
+          service_type_id: navigation.state.params.service_type_id,
+          services: navigation.state.params.services
+        });
+      }
+      else{ 
+        Alert.alert("Please select time");
+      }
     }
   }
 
@@ -157,6 +163,7 @@ const ChooseDayScreen = ({ navigation }) => {
           buttonStyle={{ backgroundColor: "#009C3C" }}
         />
       </View>
+      <InternetConnectionChecker />
     </React.Fragment>
   )
 }

@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { BottomNavigation } from 'react-native-paper';
-import AppointmentScreen from './AppointmentScreen';
-import ProfileScreen from '../customer/profile/ProfileScreen';
-import MyTaskerScreen from '../customer/my_tasker/MyTaskerScreen';
+import AppointmentScreen from '../tasker/appointment/AppointmentScreen';
+import ProfileScreen from '../tasker/profile/ProfileScreen';
+import CustomerRequestScreen from '../tasker/customer_request/CustomerRequestScreen';
 import ConversationsScreen from './conversation/ConversationScreen';
 class TaskerDashBoardScreen extends React.Component {
   state = {
     index: 0,
     routes: [
       { key: 'tasks', title: 'Tasks', icon: 'folder-multiple-outline', color: 'white'},
-      { key: 'my_tasker', title: 'My Tasker', icon: 'account-outline', color: 'white' },
+      { key: 'customer_request', title: 'Request', icon: 'account-outline', color: 'white' },
       { key: 'chat', title: 'Chat', icon: 'message-text-outline', color: 'white' },
       { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' },
     ],
@@ -19,7 +19,7 @@ class TaskerDashBoardScreen extends React.Component {
 
   _renderScene = BottomNavigation.SceneMap({
     tasks: AppointmentScreen,
-    my_tasker: MyTaskerScreen,
+    customer_request: CustomerRequestScreen,
     chat: ConversationsScreen,
     profile: ProfileScreen,
   });

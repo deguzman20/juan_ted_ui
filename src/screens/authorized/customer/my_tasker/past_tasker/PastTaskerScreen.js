@@ -1,48 +1,100 @@
 import React, { memo } from 'react';
-import { View, FlatList, StyleSheet, ScrollView, Image } from 'react-native';
-import { Text, ListItem, Rating } from 'react-native-elements';
+import { View, FlatList, StyleSheet, ScrollView, Image, Alert } from 'react-native';
+import { Text, ListItem, Button } from 'react-native-elements';
 import { BACKEND_ASSET_URL } from '../../../../../actions/types';
-import { PAST_TASKER_LIST } from '../../../../../queries';
-import { useQuery } from '@apollo/react-hooks';
+import { 
+  PAST_TASKER_LIST, 
+  ADD_TO_FAVORATE_TASKER, 
+  REMOVE_TO_FAVORATE_TASKER } from '../../../../../queries';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
+import { useNetInfo } from "@react-native-community/netinfo";
 import _ from 'lodash';
 
 const PastTaskerScreen = ({ customer_id }) => {
+  const netInfo = useNetInfo();
+  const [addToFavorateTasker] = useMutation(ADD_TO_FAVORATE_TASKER)
+  const [removeToFavorateTasker] = useMutation(REMOVE_TO_FAVORATE_TASKER)
   const { loading, error, data } = useQuery(PAST_TASKER_LIST, {
     variables: {
       customer_id: parseInt(customer_id)
     },
-    pollInterval: 1000
+    pollInterval: 300
   });
   
   keyExtractor = (item, index) => index.toString()
 
-  renderItem = ({ item }) => (
-    <ListItem
-      title={
-        <View style={styles.fullNameWrapper}>
-          <Text>
-            {item.tasker.firstName} {item.tasker.lastName}
-          </Text>
-        </View>
-      }
-      subtitle={
-        <View style={ styles.ratingWrapper }>
-          <Rating
-            type="star"
-            imageSize={20}
-            readonly
-            startingValue={_.sumBy(item.tasker.reviews, 'rating') / item.tasker.reviews.length }
-          />
-        </View>
-      }
-      leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.tasker.image}` } }}
-      bottomDivider
-      chevron
-    />
-  )
+  renderItem = ({ item }) => {
+    return(
+      <ListItem
+        title={
+          <View style={styles.fullNameWrapper}>
+            <Text>
+              {item.tasker.firstName} {item.tasker.lastName}
+            </Text>
+          </View>
+        }
+        rightElement={
+          <Button 
+            buttonStyle={{ backgroundColor: '#009C3C' }}
+            title={`${item.favorate ? 'Remove': 'Add'} to favorate`}
+            onPress={() => { item.favorate ?  _onRemoveToFavorateTaskerPressed(item.id) :  _onAddToFavorateTaskerPressed(item.id) }}
+          /> 
+        }
+        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.tasker.image}` } }}
+        bottomDivider
+        chevron
+      />
+    )
+  }
 
   if(loading || error) return null;
+  _onAddToFavorateTaskerPressed = (id) => {
+    if(netInfo.isConnected){
+      Alert.alert(
+        "Are you sure you want to add this tasker to your favorate tasker",
+        "",
+        [
+          {
+            text: "No",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { 
+            text: "Yes", 
+            onPress: () => {
+              addToFavorateTasker({ variables: { transaction_id: parseInt(id) } })
+            } 
+          }
+        ],
+        { cancelable: false }
+      );  
+    }
+  }
+
+  _onRemoveToFavorateTaskerPressed = (id) => {
+    if(netInfo.isConnected){
+      Alert.alert(
+        "Are you sure you want to remove this tasker to your favorate tasker",
+        "",
+        [
+          {
+            text: "No",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { 
+            text: "Yes", 
+            onPress: () => {
+              removeToFavorateTasker({ variables: { transaction_id: parseInt(id) } })
+            } 
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+  
   if(data.pastTaskerList.length >= 1){
     return(
       <React.Fragment>

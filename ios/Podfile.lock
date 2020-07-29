@@ -191,7 +191,7 @@ PODS:
     - React
   - react-native-maps (0.27.1):
     - React
-  - react-native-netinfo (5.9.4):
+  - react-native-netinfo (5.9.5):
     - React
   - react-native-safe-area-context (0.7.3):
     - React
@@ -254,21 +254,21 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
     - ReactCommon/callinvoker (= 0.62.2)
-  - RNCAsyncStorage (1.8.0):
+  - RNCAsyncStorage (1.11.0):
     - React
-  - RNCMaskedView (0.1.6):
+  - RNCMaskedView (0.1.10):
     - React
   - RNFS (2.16.6):
     - React
-  - RNGestureHandler (1.6.0):
+  - RNGestureHandler (1.7.0):
     - React
-  - RNReanimated (1.7.0):
+  - RNReanimated (1.10.1):
     - React
-  - RNScreens (2.0.0-beta.10):
+  - RNScreens (2.9.0):
     - React
   - RNSVG (12.1.0):
     - React
-  - RNVectorIcons (6.6.0):
+  - RNVectorIcons (6.7.0):
     - React
   - Yoga (1.14.0)
 
@@ -415,7 +415,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
-  react-native-netinfo: cd479ab1b67cdd1cb1403a99ecdb24190a6dd7ef
+  react-native-netinfo: a53b00d949b6456913aaf507d9dba90c4008c611
   react-native-safe-area-context: e200d4433aba6b7e60b52da5f37af11f7a0b0392
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
@@ -427,16 +427,16 @@ SPEC CHECKSUMS:
   React-RCTText: fae545b10cfdb3d247c36c56f61a94cfd6dba41d
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
-  RNCAsyncStorage: 5d83b49070d41fd72906a116c5e7bdac4ea3a814
-  RNCMaskedView: a88953beefbd347a29072d9eba90e42945fe291e
+  RNCAsyncStorage: d059c3ee71738c39834a627476322a5a8cd5bf36
+  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
-  RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
-  RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: c596b54c3ab63b0390aa3cb081edd438147d40ae
+  RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
+  RNReanimated: c2bb7438b57a3d987bb2e4e6e4bca94787e30b02
+  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
+  RNVectorIcons: 368d6d8b8301224e5ffb6254191f4f8876c2be0d
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
 
-PODFILE CHECKSUM: c25b451b6e3494002cbf143ba631a368fa704b70
+PODFILE CHECKSUM: df27af5fb305ac8ba47a757d4d0e7631811dd6f6
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0.beta.1

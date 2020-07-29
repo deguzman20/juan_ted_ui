@@ -1,22 +1,33 @@
 import React, { memo, useState, useRef } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet, Alert } from 'react-native';
 import { CONVERSATION_MESSAGES, SEND_MESSAGE } from './../../../../queries';
 import { Input, Button } from 'react-native-elements';
+import { useNetInfo } from "@react-native-community/netinfo";
 import { Query } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import MessageList from './MessageList';
 
-
 const MessageScreen = ({ navigation, customer_id }) => {
+  const netInfo = useNetInfo();
   const scrollViewRef = useRef();
   const [sendMessage] = useMutation(SEND_MESSAGE);
   const [message, setMessage] = useState({ value: '' });
-  const _onSendMessagePressed = () => {
-    sendMessage({ variables: { customer_id: parseInt(customer_id), 
-                  tasker_id: navigation.state.params.tasker_id, 
-                  own_by_customer: true, text: message.value } })
-    sendMessage({ value: '' })
+  
+  _onSendMessagePressed = () => {
+    if(netInfo.isConnected){
+      sendMessage({ 
+        variables: { 
+          customer_id: parseInt(customer_id), 
+          tasker_id: navigation.state.params.tasker_id, 
+          own_by_customer: true, text: message.value 
+        } 
+      })
+      sendMessage({ value: '' })
+    }
+    else{
+      Alert.alert("You are currently offline, some features may be disabled")
+    }
   }
 
   return(

@@ -2,7 +2,10 @@ import React, { memo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+
 import Navigation from './Navigation';
+
 
 const MyTaskerScreen = ({ navigation }) => {
   return(
@@ -14,6 +17,7 @@ const MyTaskerScreen = ({ navigation }) => {
       <View style={styles.second_row_container}>
         <Navigation/>
       </View>  
+      <InternetConnectionChecker />
     </React.Fragment>
   )
 }

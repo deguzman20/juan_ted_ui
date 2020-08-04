@@ -19,15 +19,17 @@ const ConversationScreen = ({ user_id, navigation }) => {
   if(loading || error) return null;
   if(data["conversationList"].length !== 0){
     return(
-      <ScrollView>
-        <ConversationList 
-          data={data}
-          loading={loading} 
-          error={error}
-          navigation={navigation}
-        />
+      <React.Fragment>
+        <ScrollView>
+          <ConversationList 
+            data={data}
+            loading={loading} 
+            error={error}
+            navigation={navigation}
+          />
+        </ScrollView>
         <InternetConnectionChecker />
-      </ScrollView>
+      </React.Fragment>
     )
   }
   else{

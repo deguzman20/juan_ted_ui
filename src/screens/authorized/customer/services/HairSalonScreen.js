@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Button as ButtonElement } from 'react-native-elements';
 import { formatMoney } from '../../../../core/utils';
-import {  BACKEND_ASSET_URL } from './../../../../actions/types';
+import {  DEFAULT_URL } from './../../../../actions/types';
 import { SERVICES } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -96,7 +96,7 @@ const NailCareScreen = ({ navigation }) => {
             <Card>
               <View style={styles.containerRows}>
                 <Image style={styles.imageServiceItem} 
-                  source={{  uri: `${BACKEND_ASSET_URL}/${item.image}` }} 
+                  source={{  uri: `${DEFAULT_URL}/${item.image}` }} 
                 />
                 <View style={styles.containerDetails}>
                   <View style={styles.containerRow}>
@@ -144,7 +144,8 @@ const NailCareScreen = ({ navigation }) => {
             onPress={() => { 
               navigation.navigate('GoogleMapScreen', { 
               totalPrice, 
-              service_type_id: 2, 
+              service_type_id: 2,
+              tasker_id: navigation.state.params.tasker_id,  
               services: [
                 { 
                   quantity: rebond.quantity,

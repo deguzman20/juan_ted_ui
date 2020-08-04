@@ -23,7 +23,8 @@ const GoogleMapScreen = ({ navigation }) => {
           longitude: geolocation.lng,
           latitude: geolocation.lat,
           service_type_id: navigation.state.params.service_type_id,
-          services: navigation.state.params.services
+          services: navigation.state.params.services,
+          tasker_id: navigation.state.params.tasker_id
         })
       }
       else{

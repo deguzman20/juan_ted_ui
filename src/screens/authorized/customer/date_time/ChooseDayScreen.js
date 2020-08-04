@@ -2,12 +2,15 @@ import React, { memo, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Card, Text, Button } from 'react-native-elements';
 import { ITEM_WIDTH } from '../../../../actions/types';
+import { connect } from 'react-redux';
+import { FAVORATE_TASKER_BY_GEOLOCATION } from '../../../../queries';
 import { useNetInfo } from "@react-native-community/netinfo";
 
 import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
 import DatePicker from 'react-native-datepicker';
+import { useQuery } from 'react-apollo';
 
-const ChooseDayScreen = ({ navigation }) => {
+const ChooseDayScreen = ({ navigation, customer_id }) => {
   const today = new Date();
   const netInfo = useNetInfo();
   const dateToday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -21,17 +24,48 @@ const ChooseDayScreen = ({ navigation }) => {
   const [fourthStyle, setFourthStyle] = useState({ color: 'black', backgroundColor: 'white' });
   const [fifthStyle, setFifthStyle] = useState({ color: 'black', backgroundColor: 'white' });
 
+  const favorate_tasker_by_geolocation = useQuery(FAVORATE_TASKER_BY_GEOLOCATION, {
+    variables: {
+      tasker_id: parseInt(navigation.state.params.tasker_id),
+      lng: String(navigation.state.params.longitude),
+      lat: String(navigation.state.params.latitude),
+      service_type_id:  navigation.state.params.service_type_id,
+      start_from: `${date.date} ${time.from}`,
+      start_to: `${date.date} ${time.to}`
+    },
+    pollInterval: 700
+  })
+
   const _onNavigateToAvailableTaskerPressed = () => {
     if(netInfo.isConnected){
       if(time.from !== null && time.to !== null){
-        navigation.navigate('TaskersScreen',{
-          longitude: String(navigation.state.params.longitude), 
-          latitude: String(navigation.state.params.latitude),
-          start_from: `${date.date} ${time.from}`,
-          start_to: `${date.date} ${time.to}`,
-          service_type_id: navigation.state.params.service_type_id,
-          services: navigation.state.params.services
-        });
+        if(navigation.state.params.tasker_id === ""){
+          navigation.navigate('TaskersScreen',{
+            longitude: String(navigation.state.params.longitude), 
+            latitude: String(navigation.state.params.latitude),
+            start_from: `${date.date} ${time.from}`,
+            start_to: `${date.date} ${time.to}`,
+            service_type_id: navigation.state.params.service_type_id,
+            services: navigation.state.params.services
+          });
+        }
+        else{
+          if(favorate_tasker_by_geolocation.data.favorateTaskerByGeolocation.length === 0){
+            navigation.navigate('TaskerInfoScreen',{ 
+              lng: String(navigation.state.params.longitude),
+              lat: String(navigation.state.params.latitude),
+              start_from: `${date.date} ${time.from}`,
+              start_to: `${date.date} ${time.to}`,
+              service_type_id: navigation.state.params.service_type_id,
+              customer_id: parseInt(customer_id),
+              tasker_id: parseInt(navigation.state.params.tasker_id),
+              services: navigation.state.params.services
+            })
+          }
+          else{
+            Alert.alert("Please select different date and time")
+          }
+        }
       }
       else{ 
         Alert.alert("Please select time");
@@ -91,7 +125,6 @@ const ChooseDayScreen = ({ navigation }) => {
         placeholder="select date"
         format="YYYY-MM-DD"
         minDate={`${dateToday}`}
-        maxDate={`${maxDate}`}
         confirmBtnText="Confirm"
         cancelBtnText="Cancel"
         customStyles={{
@@ -102,7 +135,7 @@ const ChooseDayScreen = ({ navigation }) => {
             marginLeft: 0
           },
           dateInput: {
-            marginLeft: 36,
+            marginLeft: 36
           }
         }}
         onDateChange={(date) => {setDate({ date: date })}}
@@ -168,6 +201,12 @@ const ChooseDayScreen = ({ navigation }) => {
   )
 }
 
+const mapStateToProps = ({ customerReducer }) => {
+  return {
+    customer_id: customerReducer.id
+  }
+}
+
 const styles = StyleSheet.create({
   containerRows: {
     flexDirection: 'row',
@@ -188,4 +227,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default memo(ChooseDayScreen);
+export default memo(connect(mapStateToProps, null)(ChooseDayScreen));

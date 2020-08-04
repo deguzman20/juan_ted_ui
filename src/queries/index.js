@@ -134,6 +134,13 @@ export const UPDATE_CUSTOMER_GEOLOCATION = gql`
     }
   }`;
 
+export const UPDATE_TASKER_GEOLOCATION = gql`
+  mutation updateTaskerGeolocation($tasker_id: Int!, $lng: String!, $lat: String!, $formatted_address: String!) {
+    updateTaskerGeolocation(taskerId: $tasker_id, lng: $lng, lat: $lat, formattedAddress: $formatted_address) {
+      response
+    }
+  }`;
+
 export const CONVERSATION_MESSAGES = gql`
   query ($conversation_id: Int!){
     conversationMessages(conversationId: $conversation_id) {
@@ -274,6 +281,21 @@ export const TASKER_BY_GEOLOCATION = gql `
     }
   }`;
 
+export const FAVORATE_TASKER_BY_GEOLOCATION = gql `
+  query favorateTaskerByGeolocation($tasker_id: Int!, $lng: String!, $lat: String!, $service_type_id: Int!, $start_from: String!, $start_to: String!) {
+    favorateTaskerByGeolocation(taskerId: $tasker_id, lng: $lng, lat: $lat, serviceTypeId: $service_type_id, startFrom: $start_from, startTo: $start_to) {
+      id
+      firstName
+      lastName
+      email
+      image
+      reviews {
+        id
+        rating
+      }
+    }
+  }`;
+
 export const CUSTOMER_INFO = gql `
   query customer($customer_id: Int!) {
     customer(id: $customer_id) {
@@ -339,15 +361,29 @@ export const CUSTOMER_CURRENT_GEOLOCATION = gql `
     }
   }`;
 
+export const TASKER_CURRENT_GEOLOCATION = gql `
+  query tasker($tasker_id: Int!) {
+    tasker(id: $tasker_id) {
+      lng
+      lat
+      formattedAddress
+    }
+  }`;
+
 export const PAST_TASKER_LIST = gql `
   query pastTaskerList($customer_id: Int!) {
     pastTaskerList(customerId: $customer_id) {
       id
       favorate
       tasker {
+        id
         firstName
         lastName
         image
+        reviews {
+          id
+          rating
+        }
       }
     }
   }`;
@@ -373,6 +409,7 @@ export const FAVORATE_TASKER_LIST = gql `
   query favorateTasker($customer_id: Int!) {
     favorateTaskerList(customerId: $customer_id) {
       tasker {
+        id
         firstName
         lastName
         image
@@ -398,10 +435,12 @@ export const TASKER_APPOINTMENT_LIST = gql `
       from
       to
       tasker {
+        id
         firstName
         lastName
       }
       customer {
+        id
         firstName
         lastName
       }
@@ -418,6 +457,7 @@ export const TRANSACTION_SERVICE = gql `
       lng
       done
       customer {
+        id
         firstName
         lastName
         image
@@ -478,8 +518,21 @@ export const PENDING_TRANSACTION_SERVICE_INFO = gql `
         service {
           id
           name
+          image
           price
         }
+      }
+    }
+  }`;
+
+export const CUSTOMER_SERVICE_TYPE_LIST = gql `
+  query taskerServiceTypeList($tasker_id: Int!) {
+    taskerServiceTypeList(taskerId: $tasker_id) {
+      id
+      serviceType {
+        id
+        image
+        name
       }
     }
   }`;

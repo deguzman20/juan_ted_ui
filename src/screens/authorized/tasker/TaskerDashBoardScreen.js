@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { BottomNavigation } from 'react-native-paper';
+import { connect } from 'react-redux';
 import AppointmentScreen from '../tasker/appointment/AppointmentScreen';
 import ProfileScreen from '../tasker/profile/ProfileScreen';
 import CustomerRequestScreen from '../tasker/customer_request/CustomerRequestScreen';
@@ -37,4 +38,11 @@ class TaskerDashBoardScreen extends React.Component {
   }
 }
 
-export default TaskerDashBoardScreen;
+const mapStateToProps = ({ customerReducer, taskerReducer }) => {
+  return {
+    customer_id: customerReducer.id,
+    tasker_id: taskerReducer.id
+  }
+}
+
+export default connect(mapStateToProps, null)(TaskerDashBoardScreen);

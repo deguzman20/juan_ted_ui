@@ -14,7 +14,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { ALL_SERVICE_TYPES } from './../../../queries';
 import { getAllServiceAction } from './../../../actions';
-import { BACKEND_ASSET_URL, ITEM_WIDTH } from './../../../actions/types';
+import { DEFAULT_URL, ITEM_WIDTH } from './../../../actions/types';
 import { useNetInfo } from "@react-native-community/netinfo";
 
 import InternetConnectionChecker from '../../../components/InternetConnectionChecker';
@@ -36,13 +36,23 @@ const HomeScreen = ({ navigation }) => {
   
   if (loading || error) return null;
 
+  console.log(data)
+
   _onNavigateToServiceTypePress = (id) => {
     if(netInfo.isConnected){
       if(id === 1){
-        navigation.navigate('BarberScreen', { service_type_id: id });
+        navigation.navigate('BarberScreen', 
+        { 
+          service_type_id: id,
+          tasker_id: ""
+        });
       }
       else if(id === 2){
-        navigation.navigate('HairSalonScreen', { service_type_id: id });
+        navigation.navigate('HairSalonScreen', 
+        { 
+          service_type_id: id,
+          tasker_id: ""
+        });
       }
     }
   }
@@ -83,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
                   title={item.item.name} 
                   key={item.item.id}
                 >
-                  <Image style={styles.image} source={{  uri: `${BACKEND_ASSET_URL}/${item.item.image}` }}  />
+                  <Image style={styles.image} source={{  uri: `${DEFAULT_URL}/${item.item.image}` }}  />
                 </Card>
               </TouchableWithoutFeedback>
             )}

@@ -2,6 +2,7 @@ platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'juan_ted_ui' do
+  use_frameworks!
   # Pods for juan_ted_ui
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
@@ -36,18 +37,12 @@ target 'juan_ted_ui' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-
-
-
-
-
-
-
-
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'react-native-maps', path: '../node_modules/react-native-maps'
+  pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
+  pod 'Google-Maps-iOS-Utils'
+  
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
 
 

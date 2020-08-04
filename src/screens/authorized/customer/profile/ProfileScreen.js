@@ -11,7 +11,7 @@ import { CUSTOMER_INFO } from '../../../../queries';
 import { 
   ITEM_WIDTH, 
   ITEM_HEIGHT, 
-  BACKEND_ASSET_URL } from './../../../../actions/types';
+  DEFAULT_URL } from './../../../../actions/types';
 
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
@@ -26,8 +26,9 @@ import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
 import CurrentLocationScreen from '../map/CurrentLocationScreen';
 import LoginScreen from '../../../unauthorized/LoginScreen';
+import EditProfilePicScreen from './EditProfilePicScreen';
 
-const ProfileScreen = ({ navigation, image, customer_id, customerLogoutAction }) => {
+const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
   const netInfo = useNetInfo();
   const { loading, error, data } = useQuery(CUSTOMER_INFO, {
     variables: { customer_id: parseInt(customer_id) },
@@ -66,8 +67,10 @@ const ProfileScreen = ({ navigation, image, customer_id, customerLogoutAction })
               <Avatar
                 xlarge
                 rounded
-                source={{ uri: `${BACKEND_ASSET_URL}/${data.customer[0].image}` }}
-                onPress={() => console.log("Works!")}
+                source={{ uri: `${DEFAULT_URL}/${data.customer[0].image}` }}
+                onPress={() => {
+                  navigation.navigate('EditProfilePicScreen')
+                }}
                 activeOpacity={0.7}
                 size={150}
               />
@@ -99,13 +102,6 @@ const ProfileScreen = ({ navigation, image, customer_id, customerLogoutAction })
               />
               <ListItem
                 key={4}
-                title={'Notifications'}
-                rightIcon={{ name: 'notifications-none' }}
-                bottomDivider
-                onPress={() => netInfo.isConnected ? navigation.navigate('ChangePasswordScreen') : null }
-              />
-              <ListItem
-                key={5}
                 title={'Logout'}
                 rightIcon={{ name: 'arrow-drop-down' }}
                 onPress={() => { _onLogoutPressed() }}
@@ -135,27 +131,42 @@ const styles = StyleSheet.create({
   }
 });
 
-
 const mapStateToProps = ({ customerReducer }) => {
   return {
     customer_id: customerReducer.id,
   }
 }
 
-
 const App = createStackNavigator({
-  ProfileScreen: { screen: connect(mapStateToProps, { customerLogoutAction })(ProfileScreen) },
-  EditProfileScreen: {  screen: EditProfileScreen },
-  ChangePasswordScreen: { screen: ChangePasswordScreen },
+  ProfileScreen: { 
+    screen: connect(mapStateToProps, { customerLogoutAction })(ProfileScreen),
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+  EditProfileScreen: {  
+    screen: EditProfileScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+  ChangePasswordScreen: { 
+    screen: ChangePasswordScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+  },
   CurrentLocationScreen: { 
     screen: CurrentLocationScreen,
     navigationOptions: {
-      title: 'profile',
-      headerStyle: {}
+      headerTitle: 'My Current Location'
     }
+  },
+  EditProfilePicScreen: {
+    screen: EditProfilePicScreen
   },
   LoginScreen: { screen: LoginScreen }
 
-}, { headerMode:'none' });
+});
 
 export default memo(createAppContainer(App));

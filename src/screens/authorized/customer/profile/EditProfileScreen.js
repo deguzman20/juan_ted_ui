@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
   }
 });
 
-
 const mapStateToProps = ({ customerReducer }) => {
   return {
     customer_id: customerReducer.id

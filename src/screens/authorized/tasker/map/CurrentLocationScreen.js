@@ -2,8 +2,8 @@ import React, { memo, useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Alert, Platform } from 'react-native';
 import { Button } from 'react-native-elements';
 import { 
-  UPDATE_CUSTOMER_GEOLOCATION, 
-  CUSTOMER_CURRENT_GEOLOCATION } from '../../../../queries';
+  UPDATE_TASKER_GEOLOCATION, 
+  TASKER_CURRENT_GEOLOCATION } from '../../../../queries';
 import { 
   GOOGLE_GEOCODE_URL, 
   GOOGLE_PLACE_API_KEY, 
@@ -17,7 +17,7 @@ import Geolocation from '@react-native-community/geolocation';
 import Loader from "react-native-modal-loader";
 import axios from 'axios';
 
-const CurrentLocationScreen = ({ customer_id, navigation }) => {
+const CurrentLocationScreen = ({ tasker_id, navigation }) => {
   const _map = useRef(null);
   const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
   const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
@@ -25,10 +25,9 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
   const [geolocation, setGeolocation] = useState({ lng: 120.9979456, lat: 14.6821022});
   const [isLoading, setLoading] = useState(false);
   const [formattedAddress, setFormattedAddress] = useState('');
-  const [updateCustomerGeolocation, response] = useMutation(UPDATE_CUSTOMER_GEOLOCATION);
+  const [updateTaskerGeolocation, response] = useMutation(UPDATE_TASKER_GEOLOCATION);
 
-  
-  const { loading, error } = useQuery(CUSTOMER_CURRENT_GEOLOCATION, {
+  const { loading, error } = useQuery(TASKER_CURRENT_GEOLOCATION, {
     onCompleted: (data) => {
       Geolocation.getCurrentPosition(
         //Will give you the current location
@@ -37,9 +36,10 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
           //getting the Longitude from the location json
           const currentLatitude = JSON.stringify(position.coords.latitude);
           //getting the Latitude from the location json
+
           setGeolocation({ 
-            lng: data.customer[0].lng !== null ? parseFloat(data.customer[0].lng) : currentLongitude,
-            lat: data.customer[0].lat !== null ? parseFloat(data.customer[0].lat) : currentLatitude
+            lng: data.tasker[0].lng !== "" ? parseFloat(data.tasker[0].lng) : currentLongitude,
+            lat: data.tasker[0].lat !== "" ? parseFloat(data.tasker[0].lat) : currentLatitude
           })
         },
         (error) => alert(error.message),
@@ -48,12 +48,12 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
         }
       );
     },
-    variables: { customer_id: parseInt(customer_id) },
-    pollInterval: 500
+    variables: { tasker_id: parseInt(tasker_id) },
+    pollInterval: 500,
   });
 
   useEffect(() =>{
-    if(_map.current && data.customer !== null) {
+    if(_map.current && data.tasker !== null) {
       _map.current.animateCamera(
         {
           center: {
@@ -67,20 +67,19 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
     }
   },[])
   
-  
   const _onChangeGeolocationPressed = () => {
     if(formattedAddress !== ""){
       setTimeout(() => {
         for(let i = 1; i <= 3; i++){
           setLoading(true)
-          updateCustomerGeolocation({ 
+          updateTaskerGeolocation({ 
             variables: { 
-              customer_id: parseInt(customer_id), 
+              tasker_id: parseInt(tasker_id), 
               lng: geolocation.lng.toString(), 
               lat: geolocation.lat.toString(),
               formatted_address: formattedAddress.toString() } 
             }).then((data) => {
-              if(i == 3 && data.data.updateCustomerGeolocation.response !== null){
+              if(i == 3 && data.data.updateTaskerGeolocation.response !== null){
                 Alert.alert("Your geolocation info was successfuly updated");
                 navigation.navigate('ProfileScreen')
               }
@@ -94,9 +93,10 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
     }
 
   }
+  console.log(error)
 
   if(error || loading) return null;
-   return (
+  return (
     <View style={styles.container}>
       <View style={styles.mapViewStack}>
         <MapView
@@ -132,7 +132,8 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
               textInputContainer: {
                 backgroundColor: 'rgba(0,0,0,0)',
                 borderTopWidth: 0,
-                borderBottomWidth: 0
+                borderBottomWidth: 0,
+                marginTop: 20
               },
               textInput: {
                 marginLeft: 10,
@@ -175,9 +176,9 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
 }
   
 
-const mapStateToProps = ({ customerReducer }) => {
+const mapStateToProps = ({ taskerReducer }) => {
   return {
-    customer_id: customerReducer.id
+    tasker_id: taskerReducer.id
   }
 }
 

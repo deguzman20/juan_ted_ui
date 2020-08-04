@@ -11,7 +11,7 @@ import { TASKER_INFO } from '../../../../queries';
 import {
   ITEM_WIDTH, 
   ITEM_HEIGHT, 
-  BACKEND_ASSET_URL } from './../../../../actions/types';
+  DEFAULT_URL } from './../../../../actions/types';
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { createAppContainer } from 'react-navigation';
@@ -24,6 +24,7 @@ import Background from '../../../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
 import LoginScreen from '../../../unauthorized/LoginScreen';
+import CurrentLocationScreen from '../../tasker/map/CurrentLocationScreen';
 
 const ProfileScreen = ({ navigation, tasker_id, customerLogoutAction }) => {
   const netInfo = useNetInfo();
@@ -45,8 +46,9 @@ const ProfileScreen = ({ navigation, tasker_id, customerLogoutAction }) => {
         { 
           text: "Yes", 
           onPress: () => {
-            // customerLogoutAction();
-            navigation.navigate('LoginScreen');
+            customerLogoutAction();
+            navigation.popToTop()
+            // navigation.navigate('LoginScreen');
           } }
       ],
       { cancelable: false }
@@ -64,7 +66,7 @@ const ProfileScreen = ({ navigation, tasker_id, customerLogoutAction }) => {
               <Avatar
                 xlarge
                 rounded
-                source={{ uri: `${BACKEND_ASSET_URL}/${data.tasker[0].image }` }}
+                source={{ uri: `${DEFAULT_URL}/${data.tasker[0].image }` }}
                 onPress={() => console.log("Works!")}
                 activeOpacity={0.7}
                 size={150}
@@ -90,10 +92,10 @@ const ProfileScreen = ({ navigation, tasker_id, customerLogoutAction }) => {
               />
               <ListItem
                 key={3}
-                title={'Notifications'}
-                rightIcon={{ name: 'notifications-none' }}
+                title={'Location'}
+                rightIcon={{ name: 'map' }}
                 bottomDivider
-                onPress={() => { netInfo.isConnected ? navigation.navigate('ChangePasswordScreen') : null }}
+                onPress={() => netInfo.isConnected ? navigation.navigate('CurrentLocationScreen') : null }
               />
               <ListItem
                 key={4}
@@ -130,19 +132,34 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ taskerReducer }) => {
   return {
     tasker_id: taskerReducer.id
-    // image: taskerReducer.image,
-    // first_name: taskerReducer.first_name,
-    // last_name: taskerReducer.last_name
   }
 }
 
-
 const App = createStackNavigator({
-  ProfileScreen: { screen: connect(mapStateToProps, { taskerLogoutAction })(ProfileScreen) },
-  EditProfileScreen: { screen: EditProfileScreen },
-  ChangePasswordScreen: { screen: ChangePasswordScreen },
-  LoginScreen: { screen: LoginScreen }
-
-}, { headerMode:'none' });
+  ProfileScreen: {
+    screen: connect(mapStateToProps, { taskerLogoutAction })(ProfileScreen),
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+  EditProfileScreen: { 
+    screen: EditProfileScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+  ChangePasswordScreen: { 
+    screen: ChangePasswordScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+  CurrentLocationScreen: { 
+    screen: CurrentLocationScreen,
+    navigationOptions: {
+      headerTitle: 'My Current Location'
+    }
+  }
+});
 
 export default memo(createAppContainer(App));

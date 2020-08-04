@@ -1,7 +1,9 @@
 import React, { memo } from 'react';
 import { View, FlatList, StyleSheet, ScrollView, Image, Alert } from 'react-native';
-import { Text, ListItem, Button } from 'react-native-elements';
-import { BACKEND_ASSET_URL } from '../../../../../actions/types';
+import { Text, ListItem, Button, Rating } from 'react-native-elements';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { DEFAULT_URL } from '../../../../../actions/types';
 import { 
   PAST_TASKER_LIST, 
   ADD_TO_FAVORATE_TASKER, 
@@ -9,9 +11,12 @@ import {
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
+import { SafeAreaView } from 'react-navigation';
+import InternetConnectionChecker from '../../../../../components/InternetConnectionChecker';
+import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
 import _ from 'lodash';
 
-const PastTaskerScreen = ({ customer_id }) => {
+const PastTaskerScreen = ({ customer_id, navigation }) => {
   const netInfo = useNetInfo();
   const [addToFavorateTasker] = useMutation(ADD_TO_FAVORATE_TASKER)
   const [removeToFavorateTasker] = useMutation(REMOVE_TO_FAVORATE_TASKER)
@@ -27,11 +32,24 @@ const PastTaskerScreen = ({ customer_id }) => {
   renderItem = ({ item }) => {
     return(
       <ListItem
+        onPress={() => { 
+          navigation.navigate('MyTaskerInfoScreen', { tasker_id: parseInt(item.tasker.id) }) 
+        }}
         title={
           <View style={styles.fullNameWrapper}>
             <Text>
               {item.tasker.firstName} {item.tasker.lastName}
             </Text>
+          </View>
+        }
+        subtitle={
+          <View style={ styles.ratingWrapper }>
+            <Rating
+              type="star"
+              imageSize={20}
+              readonly
+              startingValue={_.sumBy(item.tasker.reviews, 'rating') / item.tasker.reviews.length }       
+            />
           </View>
         }
         rightElement={
@@ -41,9 +59,8 @@ const PastTaskerScreen = ({ customer_id }) => {
             onPress={() => { item.favorate ?  _onRemoveToFavorateTaskerPressed(item.id) :  _onAddToFavorateTaskerPressed(item.id) }}
           /> 
         }
-        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.tasker.image}` } }}
+        leftAvatar={{ source: { uri: `${DEFAULT_URL}/${item.tasker.image}` } }}
         bottomDivider
-        chevron
       />
     )
   }
@@ -98,15 +115,22 @@ const PastTaskerScreen = ({ customer_id }) => {
   if(data.pastTaskerList.length >= 1){
     return(
       <React.Fragment>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.container}>
-            <FlatList
-              keyExtractor={keyExtractor}
-              data={data.pastTaskerList}
-              renderItem={renderItem}
-            />
-          </View>
-        </ScrollView>
+        <SafeAreaView />
+        <View style={styles.first_row_container}>
+          <Text h4 style={styles.my_tasker_txt}>My Past Tasker</Text> 
+        </View>
+        <View style={styles.second_row_container}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.container}>
+              <FlatList
+                keyExtractor={keyExtractor}
+                data={data.pastTaskerList}
+                renderItem={renderItem}
+              />
+            </View>
+          </ScrollView>
+        </View>  
+        <InternetConnectionChecker />
       </React.Fragment>
     )
   }
@@ -115,6 +139,7 @@ const PastTaskerScreen = ({ customer_id }) => {
       <View style={styles.empty_tasker_container}>
         <Image source={require('../../../../../assets/tasker.png')} />
         <Text h4 style={styles.empty_tasker_txt}>No Past Tasker Available yet</Text>
+        <InternetConnectionChecker />
       </View>
     )
   }
@@ -141,6 +166,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1
+  },
+  first_row_container: {
+    flexDirection: 'row',
+    height: 70,
+  },
+  second_row_container: {
+    flex: 2, 
+    flexDirection: 'row'
+  },
+  my_tasker_txt: {
+    paddingLeft: 30,
+    paddingTop: 20
   }
 });
 
@@ -150,4 +187,21 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(PastTaskerScreen));
+
+const App = createStackNavigator({
+  PastTaskerScreen: { 
+    screen: connect(mapStateToProps, null)(PastTaskerScreen),
+    navigationOptions: {
+      header: null
+    }
+  },
+  MyTaskerInfoScreen: { 
+    screen: MyTaskerInfoScreen, 
+    navigationOptions: {
+      header: null
+    } 
+  }
+});
+
+export default memo(createAppContainer(App));
+

@@ -13,10 +13,12 @@ import {
   ListItem, 
   Avatar } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { BACKEND_ASSET_URL } from "../../../../actions/types";
+import { DEFAULT_URL } from "../../../../actions/types";
 import { TASKER_INFO } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
 
 const MyTaskerInfoScreen = ({ navigation }) => {
   const { loading, error, data } = useQuery(TASKER_INFO, {
@@ -64,7 +66,7 @@ const MyTaskerInfoScreen = ({ navigation }) => {
             />
           </View>
         }
-        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.customer.image}` } }}
+        leftAvatar={{ source: { uri: `${DEFAULT_URL}/${item.customer.image}` } }}
         bottomDivider
       />
     </TouchableWithoutFeedback>
@@ -77,10 +79,20 @@ const MyTaskerInfoScreen = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.rectStackStack}>
             <View style={styles.rectStack}>
-              <View style={styles.rect}/>
+              <View style={styles.rect}>
+                <TouchableWithoutFeedback 
+                  onPress={() => { navigation.goBack() }}
+                >
+                  <Icon
+                    name="arrow-left"
+                    size={20}
+                    style={styles.back}
+                  />
+                </TouchableWithoutFeedback>
+              </View>
               <Avatar
                 source={{ 
-                  uri: `${BACKEND_ASSET_URL}/${data.tasker[0].image}`
+                  uri: `${DEFAULT_URL}/${data.tasker[0].image}`
                 }}
                 xlarge
                 rounded
@@ -124,7 +136,8 @@ const MyTaskerInfoScreen = ({ navigation }) => {
             />
           </View>
         </View>
-      </ScrollView>  
+      </ScrollView>
+      <InternetConnectionChecker />  
     </React.Fragment>
   )
 }
@@ -231,6 +244,12 @@ const styles = StyleSheet.create({
   },
   fullNameTxtOnList: {
     fontWeight: 'bold'
+  },
+  back: {
+    fontFamily: "verdana",
+    color: "#121212",
+    marginTop: 65,
+    marginLeft: 35
   }
 });
 

@@ -4,7 +4,7 @@ import { Text, ListItem, Avatar, Button } from 'react-native-elements';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { TRANSACTION_SERVICE, UPDATE_TRANSACTION_STATUS_TO_DONE } from '../../../../queries';
-import { BACKEND_ASSET_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
+import { DEFAULT_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
 import { formatMoney } from '../../../../core/utils';
 import MapView from 'react-native-maps';
 import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
@@ -20,8 +20,7 @@ const TransactionInfoScreen = ({ navigation }) => {
   const { loading, error, data } = useQuery(TRANSACTION_SERVICE, {
     variables: {
       transaction_id: parseInt(navigation.state.params.transaction_id)
-    },
-    // pollInterval: 1000
+    }
   });
 
   _onMarkAsDonePressed = () => {
@@ -61,7 +60,7 @@ const TransactionInfoScreen = ({ navigation }) => {
               </Text>
             </View>
           }
-          leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${image}` } }}
+          leftAvatar={{ source: { uri: `${DEFAULT_URL}/${image}` } }}
           bottomDivider
         />
       )
@@ -81,7 +80,7 @@ const TransactionInfoScreen = ({ navigation }) => {
                 <View style={styles.rect}/>
                 <Avatar
                   source={{ 
-                    uri: `${BACKEND_ASSET_URL}/${image}`
+                    uri: `${DEFAULT_URL}/${image}`
                   }}
                   xlarge
                   rounded

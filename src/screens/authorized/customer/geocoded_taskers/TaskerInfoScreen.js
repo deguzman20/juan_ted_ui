@@ -15,8 +15,10 @@ import {
   ListItem, 
   Avatar } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { DEFAULT_URL, BACKEND_ASSET_URL } from "./../../../../actions/types";
+
+import { DEFAULT_URL } from "./../../../../actions/types";
 import { TASKER_INFO } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
 import { useNetInfo } from "@react-native-community/netinfo";
@@ -73,7 +75,7 @@ const TaskerInfoScreen = ({ navigation }) => {
             />
           </View>
         }
-        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.customer.image}` } }}
+        leftAvatar={{ source: { uri: `${DEFAULT_URL}/${item.customer.image}` } }}
         bottomDivider
       />
     </TouchableWithoutFeedback>
@@ -106,7 +108,7 @@ const TaskerInfoScreen = ({ navigation }) => {
         .then((transaction_service_response) => {
           if(transaction_service_response.data === 'Transaction service was created successfuly'){
             Alert.alert(transaction_service_response.data)
-            navigation.navigate('TaskersScreen')
+            navigation.navigate('HomeScreen')
           }
         })
       })
@@ -123,7 +125,7 @@ const TaskerInfoScreen = ({ navigation }) => {
               <View style={styles.rect}/>
               <Avatar
                 source={{ 
-                  uri: `${BACKEND_ASSET_URL}/${data.tasker[0].image}`
+                  uri: `${DEFAULT_URL}/${data.tasker[0].image}`
                 }}
                 xlarge
                 rounded

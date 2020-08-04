@@ -3,17 +3,14 @@ import ImagePicker from 'react-native-image-picker';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
   Image,
-  Button,
   Dimensions,
   TouchableOpacity
 } from 'react-native';
 import { DEFAULT_URL } from '../../../../actions/types';
-import {decode as atob, encode as btoa} from 'base-64'
 import axios from 'axios';
 
 export default class EditProfilePictureScreen extends Component {
@@ -52,11 +49,6 @@ export default class EditProfilePictureScreen extends Component {
         alert(response.customButton);
       } else {
         const source = { uri: response.uri };
-
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-        // alert(JSON.stringify(response));s
-        console.log('response', JSON.stringify(response));
         this.setState({
           filePath: response,
           fileData: response.data,
@@ -98,29 +90,9 @@ export default class EditProfilePictureScreen extends Component {
 
 
   updateImage = () => {
-   // helper function: generate a new file from base64 String
-
-    dataURLtoFile = (dataurl, filename) => {
-      const arr = dataurl.split(',')
-      const mime = arr[0].match(/:(.*?);/)[1]
-      const bstr = atob(arr[1])
-      let n = bstr.length
-      const u8arr = new Uint8Array(n)
-      while (n) {
-        u8arr[n - 1] = bstr.charCodeAt(n - 1)
-        n -= 1 // to make eslint happy
-      }
-      return new File([u8arr], filename, { type: mime })
-    }
-    const file = dataURLtoFile(`data:image/jpeg;base64,${this.state.fileData}`, this.state.fileUri)
-    
-    const data = new FormData()
-    data.append('image', file, file.name)
-
-   console.log("dar")
     axios.get(`${DEFAULT_URL}/customer/update_customer_image`, {
       params: {
-        image: data
+        image: `data:image/jpeg;base64, ${this.state.fileData}`
       },
       headers: { 
         'Content-Type': 'multipart/form-data',
@@ -151,9 +123,6 @@ export default class EditProfilePictureScreen extends Component {
         alert(response.customButton);
       } else {
         const source = { uri: response.uri };
-        // console.log("=====")
-        // console.log('response', JSON.stringify(response.data));
-        // console.log("====")
         this.setState({
           filePath: response,
           fileData: response.data,
@@ -233,10 +202,6 @@ export default class EditProfilePictureScreen extends Component {
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    // backgroundColor: Colors.lighter,
-  },
-
   body: {
     backgroundColor: 'white',
     justifyContent: 'center',

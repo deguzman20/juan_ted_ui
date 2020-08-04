@@ -8,7 +8,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { PENDING_TRANSACTION_LIST } from '../../../../queries'
-import { BACKEND_ASSET_URL } from '../../../../actions/types';
+import { DEFAULT_URL } from '../../../../actions/types';
 
 import CustomerRequestInfoScreen from './CustomerRequestInfoScreen';
 import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
@@ -54,13 +54,19 @@ const CustomerRequestScreen = ({ tasker_id, navigation }) => {
               showsVertþicalScrollIndicator={false}
               horizontal={true}
             >
-              <Chip style={{alignItems: 'center'}}>
-                <Text>Cleaning</Text>
-              </Chip>
+              {
+                item.transactionServices.map((s) => {
+                  if(s.service !== null){
+                    return(
+                      <Chip>{s.service.name}</Chip>
+                    )
+                  }
+                })
+              }
             </ScrollView>
           </View>
         }
-        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${image}` } }}
+        leftAvatar={{ source: { uri: `${DEFAULT_URL}/${image}` } }}
         bottomDivider
         chevron
       />

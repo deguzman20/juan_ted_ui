@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { StyleSheet, View, Image, ScrollView, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { Text, Rating, ListItem } from 'react-native-elements';
 import { TASKER_BY_GEOLOCATION } from '../../../../queries';
-import { BACKEND_ASSET_URL } from '../../../../actions/types';
+import { DEFAULT_URL } from '../../../../actions/types';
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -60,7 +60,7 @@ const TaskersScreen = ({ navigation, customer_id }) => {
             />
           </View>
         }
-        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.image}` } }}
+        leftAvatar={{ source: { uri: `${DEFAULT_URL}/${item.image}` } }}
         bottomDivider
         chevron
       />

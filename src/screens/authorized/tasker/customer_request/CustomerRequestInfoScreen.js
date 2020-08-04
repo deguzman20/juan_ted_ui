@@ -7,12 +7,12 @@ import {
   PENDING_TRANSACTION_SERVICE_INFO, 
   UPDATE_TRANSACTION_STATUS, 
   SEND_MESSAGE } from '../../../../queries';
-import { BACKEND_ASSET_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
+import { DEFAULT_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
 import { formatMoney } from '../../../../core/utils';
 import MapView from 'react-native-maps';
+import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
 import _ from 'lodash';
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
 
 const CustomerRequestInfoScreen = ({ navigation }) => {
   const total_cost_arr = [];
@@ -48,12 +48,11 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
     }
   }
 
-  console.log(navigation.state.params)
-
   keyExtractor = (item, index) => index.toString()
   
   renderItem = ({ item }) => {
     const { name, price, image } = item.service;
+    console.log(item.service)
     return(
       <ListItem
         title={    
@@ -70,7 +69,7 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
             </Text>
           </View>
         }
-        leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${image}` } }}
+        leftAvatar={{ source: { uri: `${DEFAULT_URL}/${image}` } }}
         bottomDivider
       />
     )
@@ -95,7 +94,7 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
                 <View style={styles.rect}/>
                 <Avatar
                   source={{ 
-                    uri: `${BACKEND_ASSET_URL}/${image}`
+                    uri: `${DEFAULT_URL}/${image}`
                   }}
                   xlarge
                   rounded

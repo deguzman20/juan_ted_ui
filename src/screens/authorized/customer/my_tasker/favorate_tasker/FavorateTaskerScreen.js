@@ -1,13 +1,28 @@
 import React, { memo } from 'react';
 import { View, FlatList, StyleSheet, ScrollView, Image } from 'react-native';
-import { Text, ListItem, Rating } from 'react-native-elements';
-import { BACKEND_ASSET_URL } from '../../../../../actions/types';
+import { Text, ListItem, Rating, Button } from 'react-native-elements';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { DEFAULT_URL } from '../../../../../actions/types';
 import { FAVORATE_TASKER_LIST } from '../../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
+import { useNetInfo } from "@react-native-community/netinfo";
+import { SafeAreaView } from 'react-navigation';
+import TaskerServiceScreen from '../../my_tasker/TaskerServiceScreen';
+import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
+import GoogleMapScreen from '../../map/GoogleMapScreen';
+import BarberScreen from '../../services/BarberScreen';
+import HairSalonScreen from '../../services/HairSalonScreen';
+import ChooseDayScreen from '../../date_time/ChooseDayScreen';
+import TaskersScreen from '../../geocoded_taskers/TaskersScreen';
+import TaskerInfoScreen from '../../geocoded_taskers/TaskerInfoScreen';
+
+import InternetConnectionChecker from '../../../../../components/InternetConnectionChecker';
 import _ from 'lodash';
 
-const FavorateTaskerScreen = ({ customer_id }) => {
+const FavorateTaskerScreen = ({ customer_id, navigation }) => {
+  const netInfo = useNetInfo();
   const { loading, error, data } = useQuery(FAVORATE_TASKER_LIST, {
     variables: {
       customer_id: parseInt(customer_id)
@@ -19,12 +34,24 @@ const FavorateTaskerScreen = ({ customer_id }) => {
 
   renderItem = ({ item }) => (
     <ListItem
+      onPress={() => {
+        netInfo.isConnected ? navigation.navigate('MyTaskerInfoScreen', { tasker_id: parseInt(item.tasker.id) }) : null 
+      }}
       title={
         <View style={styles.fullNameWrapper}>
           <Text>
             {item.tasker.firstName} {item.tasker.lastName}
           </Text>
         </View>
+      }
+      rightElement={
+        <Button 
+          buttonStyle={{ backgroundColor: '#009C3C' }}
+          title={'Select'}
+          onPress={() => {  
+            netInfo.isConnected ? navigation.navigate('TaskerServiceScreen', { tasker_id: parseInt(item.tasker.id) }) : null 
+          }}
+        /> 
       }
       subtitle={
         <View style={ styles.ratingWrapper }>
@@ -36,7 +63,7 @@ const FavorateTaskerScreen = ({ customer_id }) => {
           />
         </View>
       }
-      leftAvatar={{ source: { uri: `${BACKEND_ASSET_URL}/${item.tasker.image}` } }}
+      leftAvatar={{ source: { uri: `${DEFAULT_URL}/${item.tasker.image}` } }}
       bottomDivider
       chevron
     />
@@ -47,17 +74,24 @@ const FavorateTaskerScreen = ({ customer_id }) => {
   if(data.favorateTaskerList.length >= 1){
     return(
       <React.Fragment>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.container}>
-            <View style={styles.taskerWrapper}>
-              <FlatList
-                keyExtractor={keyExtractor}
-                data={data.favorateTaskerList}
-                renderItem={renderItem}
-              />
+        <SafeAreaView />
+        <View style={styles.first_row_container}>
+          <Text h4 style={styles.my_tasker_txt}>My Favorate Tasker</Text> 
+        </View>
+        <View style={styles.second_row_container}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.container}>
+              <View style={styles.taskerWrapper}>
+                <FlatList
+                  keyExtractor={keyExtractor}
+                  data={data.favorateTaskerList}
+                  renderItem={renderItem}
+                />
+              </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+          <InternetConnectionChecker />
+        </View>  
       </React.Fragment>
     )
   }
@@ -66,6 +100,7 @@ const FavorateTaskerScreen = ({ customer_id }) => {
       <View style={styles.empty_tasker_container}>
         <Image source={require('../../../../../assets/tasker.png')} />
         <Text h4 style={styles.empty_tasker_txt}>No Favorate Tasker yet</Text>
+        <InternetConnectionChecker />
       </View>
     )
   }
@@ -92,6 +127,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1
+  },
+  first_row_container: {
+    flexDirection: 'row',
+    height: 70,
+  },
+  second_row_container: {
+    flex: 2, 
+    flexDirection: 'row'
+  },
+  my_tasker_txt: {
+    paddingLeft: 30,
+    paddingTop: 20
   }
 });
 
@@ -101,4 +148,65 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(FavorateTaskerScreen));
+const App = createStackNavigator({
+  FavorateTaskerScreen: { 
+    screen: connect(mapStateToProps, null)(FavorateTaskerScreen),
+    navigationOptions: {
+      header: null
+    }
+  },
+  MyTaskerInfoScreen: { 
+    screen: MyTaskerInfoScreen, 
+    navigationOptions: {
+      header: null
+    } 
+  },
+  TaskerServiceScreen: {
+    screen: TaskerServiceScreen,
+    navigationOptions: {
+      title: 'Tasker Available Service'
+    } 
+  },
+  BarberScreen: {
+    screen: BarberScreen,
+    navigationOptions: {
+      title: 'Barber'
+    }
+  },
+  HairSalonScreen: {
+    screen: HairSalonScreen,
+    navigationOptions: {
+      title: 'Hair Salon'
+    }
+  },
+  GoogleMapScreen: {
+    screen: GoogleMapScreen,
+    navigationOptions: {
+      title: '',
+      headerStyle: {}
+    }
+  },
+  ChooseDayScreen: {
+    screen: ChooseDayScreen,
+    navigationOptions: {
+      title: '',
+      headerStyle: {}
+    }
+  },
+  TaskersScreen: {
+    screen: TaskersScreen,
+    navigationOptions: {
+      title: '',
+      headerStyle: {}
+    }
+  },
+  TaskerInfoScreen: {
+    screen: TaskerInfoScreen,
+    navigationOptions: {
+      title: '',
+      headerStyle: {}
+    }
+  }
+});
+
+export default memo(createAppContainer(App));

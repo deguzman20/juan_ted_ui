@@ -1,85 +1,49 @@
-import React, { Component } from 'react';
+import React, {  memo, useEffect } from 'react';
 import {
   StyleSheet,
   View,
-  StatusBar,
-  Image,
-  Dimensions
+  Image
 } from 'react-native';
 import { ITEM_WIDTH, ITEM_HEIGHT  } from './../../actions/types';
-import { Button } from 'react-native-elements';
+import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 
-class AppSwiperScreen extends Component {
-  render(){
-    return (
-      <React.Fragment>
-        <View style={styles.container}>
-          <StatusBar barStyle="light-content" />
-          <Swiper
-            style={styles.wrapper}
-            dot={
-              <View
-                style={{
-                  backgroundColor: 'rgba(255,255,255,.3)',
-                  width: 13,
-                  height: 13,
-                  borderRadius: 7,
-                  marginLeft: 7,
-                  marginRight: 7
-                }}
-              />
-            }
-            activeDot={
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                  width: 20,
-                  height: 20,
-                  borderRadius: 7,
-                  marginLeft: 7,
-                  marginRight: 7
-                }}
-              />
-            }
-            paginationStyle={{
-              bottom: 70
-            }}
-            loop={false}
-          >
-            <View style={styles.slide}>
-              <Image
-                style={styles.image}
-                source={require('./../../assets/house-cleaning.jpg')}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={styles.slide}>
-              <Image
-                style={styles.image}
-                source={require('./../../assets/repairing.jpg')}
-                resizeMode="cover"
-              />
-            </View>
-            <View style={styles.slide}>
-              <Image style={styles.image} source={require('./../../assets/plumbing.jpg')} />
-              <Button
-                title="Next"
-                style={styles.button}
-                onPress={() => this.props.navigation.navigate('LoginScreen')}
-              />
-            </View>
-          </Swiper>
-        </View>
-      </React.Fragment>
-    );
-  }
+const AppSwiperScreen = ({ customer_id, tasker_id, navigation }) => {
+
+  useEffect(() => {
+    navigation.navigate('CustomerDashBoardScreen');
+    if(customer_id !== null && tasker_id === null){
+      navigation.navigate('CustomerDashBoardScreen');
+    }
+    else if(customer_id === null && tasker_id !== null){
+      navigation.navigate('TaskerDashBoardScreen');
+    }
+  },[])
+
+  return(
+    <React.Fragment>
+      <View style={styles.container}>
+        <Swiper
+          style={styles.wrapper}
+        >
+          <View style={styles.slide}>
+            <Image
+              style={styles.image}
+              source={require('./../../assets/lokal.png')}
+              resizeMode="center"
+            />
+          </View>
+        </Swiper>
+      </View>
+    </React.Fragment>
+  )
 }
+
 
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: 'white'
   },
   container: {
     flex: 1
@@ -97,5 +61,11 @@ const styles = StyleSheet.create({
   }
 })
 
+const mapStateToProps = ({ customerReducer, taskerReducer }) => {
+  return {
+    customer_id: customerReducer.id,
+    tasker_id: taskerReducer.id
+  }
+}
 
-export default AppSwiperScreen;
+export default memo(connect(mapStateToProps, null)(AppSwiperScreen));

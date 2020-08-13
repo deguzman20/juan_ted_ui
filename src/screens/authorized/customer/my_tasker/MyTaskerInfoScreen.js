@@ -11,7 +11,8 @@ import {
   Rating, 
   Divider, 
   ListItem, 
-  Avatar } from 'react-native-elements';
+  Avatar,
+  Button } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -131,9 +132,23 @@ const MyTaskerInfoScreen = ({ navigation }) => {
           <View style={styles.reviewWrapper}>
             <FlatList
               keyExtractor={keyExtractor}
-              data={data.tasker[0].reviews}
+              data={data.tasker[0].reviews.filter((i, index) => (index < 5))}
               renderItem={renderItem}
             />
+          </View>
+          <View>
+            {
+              data.tasker[0].reviews.length > 5 ? (
+                <Button                   
+                  title="show more"
+                  titleStyle={{ color: "#009C3C" }}
+                  buttonStyle={{ backgroundColor: 'transparent' }}
+                  onPress={() => { 
+                    navigation.navigate('ReviewsScreen', { reviews:  data.tasker[0].reviews }) 
+                  }}
+                />
+              ) : null
+            }
           </View>
         </View>
       </ScrollView>

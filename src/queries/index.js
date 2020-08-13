@@ -96,6 +96,14 @@ export const CREATE_TODO = gql `
     }  
   }`;
 
+export const CREATE_REVIEW = gql `
+  mutation createReview($rating: Int!, $comment: String!, $customer_id: Int!, $tasker_id: Int!, $service_type_id: Int!){
+    createReview(rating: $rating, comment: $comment, customerId: $customer_id, taskerId: $tasker_id, serviceTypeId: $service_type_id){
+      response
+      statusCode
+    }
+  }`;
+
 export const SEND_MESSAGE = gql`
   mutation createMessage($customer_id: Int!, $tasker_id: Int!, $own_by_customer: Boolean!, $text: String!) {
     createMessage(customerId: $customer_id, taskerId: $tasker_id, ownByCustomer: $own_by_customer, text: $text) {
@@ -396,6 +404,14 @@ export const ADD_TO_FAVORATE_TASKER = gql `
     }
   }`;
 
+export const ADD_FEATURED_SKILL = gql `
+  mutation createFeaturedSkill($tasker_id: Int!, $service_type_id: Int!) {
+    createFeaturedSkill(taskerId: $tasker_id, serviceTypeId: $service_type_id) {
+      response
+      statusCode
+    }
+  }`;
+
 export const REMOVE_TO_FAVORATE_TASKER = gql `
   mutation removeToFavorateTasker($transaction_id: Int!) {
     removeToFavorateTasker(transactionId: $transaction_id) {
@@ -404,6 +420,22 @@ export const REMOVE_TO_FAVORATE_TASKER = gql `
     }
 }`;
 
+export const REMOVE_TO_FEATURED_SKILL = gql `
+  mutation removeFeaturedSkill($tasker_id: Int!, $service_type_id: Int!) {
+    removeFeaturedSkill(taskerId: $tasker_id, serviceTypeId: $service_type_id) {
+      response
+      statusCode
+    }
+  }`;
+
+export const UNSELECTED_SERVICE_TYPE_LIST = gql `
+  query unselectedServiceType($tasker_id: Int!) {
+    unselectedServiceType(taskerId: $tasker_id) {
+      id
+      name
+      image
+    }
+  }`;
 
 export const FAVORATE_TASKER_LIST = gql `
   query favorateTasker($customer_id: Int!) {
@@ -463,6 +495,18 @@ export const TRANSACTION_SERVICE = gql `
         image
         lat
         lng
+      }
+      tasker {
+        id
+        firstName
+        lastName
+        image
+        lat
+        lng
+      }
+      serviceType {
+        id
+        name
       }
       transactionServices {
         id
@@ -566,5 +610,67 @@ export const UPDATE_TRANSACTION_STATUS_TO_DONE = gql `
     updateTransactionStatusToDone(transactionId: $transaction_id) {
       response
       statusCode
+    }
+  }`;
+
+export const CUSTOMER_COMPLETED_TRANSACTION_LIST = gql `
+  query customerCompletedTransactionList($customer_id: Int!) {
+    customerCompletedTransactionList(customerId: $customer_id) {
+      id
+      from
+      to
+      lat
+      to
+      done
+      tasker {
+        id
+        firstName
+        lastName
+        image
+        reviews {
+          id
+          rating
+        }
+      }
+      transactionServices {
+        id
+        quantity
+        service {
+          id
+          name
+          price
+        }
+      }
+    }
+  }`;
+
+export const CUSTOMER_SCHEDULED_TRANSACTION_LIST = gql `
+  query customerScheduledTransactionList($customer_id: Int!) {
+    customerScheduledTransactionList(customerId: $customer_id) {
+      id
+      from
+      to
+      lat
+      to
+      done
+      tasker {
+        id
+        firstName
+        lastName
+        image
+        reviews {
+          id
+          rating
+        }
+      }
+      transactionServices {
+        id
+        quantity
+        service {
+          id
+          name
+          price
+        }
+      }
     }
   }`;

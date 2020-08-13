@@ -4,7 +4,6 @@ import {
   SafeAreaView, 
   View, 
   Text, 
-  ScrollView,
   Alert } from 'react-native';
 import { ListItem, Avatar } from 'react-native-elements';
 import { TASKER_INFO } from '../../../../queries';
@@ -23,10 +22,10 @@ import InternetConnectionChecker from '../../../../components/InternetConnection
 import Background from '../../../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
-import LoginScreen from '../../../unauthorized/LoginScreen';
+import MySkillsScreen from './MySkillsScreen';
 import CurrentLocationScreen from '../../tasker/map/CurrentLocationScreen';
 
-const ProfileScreen = ({ navigation, tasker_id, customerLogoutAction }) => {
+const ProfileScreen = ({ navigation, tasker_id, taskerLogoutAction }) => {
   const netInfo = useNetInfo();
   const { loading, error, data } = useQuery(TASKER_INFO, {
     variables: { tasker_id: parseInt(tasker_id) },
@@ -46,10 +45,10 @@ const ProfileScreen = ({ navigation, tasker_id, customerLogoutAction }) => {
         { 
           text: "Yes", 
           onPress: () => {
-            customerLogoutAction();
-            navigation.popToTop()
-            // navigation.navigate('LoginScreen');
-          } }
+            taskerLogoutAction()
+            navigation.navigate('LoginScreen');
+          } 
+        }
       ],
       { cancelable: false }
     );  
@@ -59,54 +58,59 @@ const ProfileScreen = ({ navigation, tasker_id, customerLogoutAction }) => {
 
   return (
     <React.Fragment>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Background>
-          <SafeAreaView style={{ marginBottom: 25 }}/>
-            <View>
-              <Avatar
-                xlarge
-                rounded
-                source={{ uri: `${DEFAULT_URL}/${data.tasker[0].image }` }}
-                onPress={() => console.log("Works!")}
-                activeOpacity={0.7}
-                size={150}
-              />
-            </View>
-            <View>
-              <Text style={styles.fullName}>{data.tasker[0].firstName } {data.tasker[0].lastName }</Text>
-            </View>
-            <View style={styles.container}>
-              <ListItem
-                key={1}
-                title={'Edit Profile'}
-                rightIcon={{ name: 'account-circle' }}
-                bottomDivider
-                onPress={() => { netInfo.isConnected ? navigation.navigate('EditProfileScreen') : null } }
-              />
-              <ListItem
-                key={2}
-                title={'Change Password'}
-                rightIcon={{ name: 'ac-unit' }}
-                bottomDivider
-                onPress={() => { netInfo.isConnected ? navigation.navigate('ChangePasswordScreen') : null }}
-              />
-              <ListItem
-                key={3}
-                title={'Location'}
-                rightIcon={{ name: 'map' }}
-                bottomDivider
-                onPress={() => netInfo.isConnected ? navigation.navigate('CurrentLocationScreen') : null }
-              />
-              <ListItem
-                key={4}
-                title={'Logout'}
-                rightIcon={{ name: 'arrow-drop-down' }}
-                onPress={() => { _onLogoutPressed() }}
-              />
-            </View>
-        </Background>
-        <InternetConnectionChecker />
-      </ScrollView>
+      <Background>
+        <SafeAreaView style={{ marginBottom: 25 }}/>
+          <View>
+            <Avatar
+              xlarge
+              rounded
+              source={{ uri: `${DEFAULT_URL}/${data.tasker[0].image }` }}
+              onPress={() => console.log("Works!")}
+              activeOpacity={0.7}
+              size={150}
+            />
+          </View>
+          <View>
+            <Text style={styles.fullName}>{data.tasker[0].firstName } {data.tasker[0].lastName }</Text>
+          </View>
+          <View style={styles.container}>
+            <ListItem
+              key={1}
+              title={'Edit Profile'}
+              rightIcon={{ name: 'account-circle' }}
+              bottomDivider
+              onPress={() => { netInfo.isConnected ? navigation.navigate('EditProfileScreen') : null } }
+            />
+            <ListItem
+              key={2}
+              title={'My Skills'}
+              rightIcon={{ name: 'work' }}
+              bottomDivider
+              onPress={() => { netInfo.isConnected ? navigation.navigate('MySkillsScreen') : null } }
+            />
+            <ListItem
+              key={3}
+              title={'Change Password'}
+              rightIcon={{ name: 'ac-unit' }}
+              bottomDivider
+              onPress={() => { netInfo.isConnected ? navigation.navigate('ChangePasswordScreen') : null }}
+            />
+            <ListItem
+              key={4}
+              title={'Location'}
+              rightIcon={{ name: 'map' }}
+              bottomDivider
+              onPress={() => netInfo.isConnected ? navigation.navigate('CurrentLocationScreen') : null }
+            />
+            <ListItem
+              key={5}
+              title={'Logout'}
+              rightIcon={{ name: 'arrow-drop-down' }}
+              onPress={() => { _onLogoutPressed() }}
+            />
+          </View>
+      </Background>
+      <InternetConnectionChecker />
     </React.Fragment>
   );
 };
@@ -138,6 +142,12 @@ const mapStateToProps = ({ taskerReducer }) => {
 const App = createStackNavigator({
   ProfileScreen: {
     screen: connect(mapStateToProps, { taskerLogoutAction })(ProfileScreen),
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+  MySkillsScreen: { 
+    screen: MySkillsScreen,
     navigationOptions: {
       headerShown: false
     }

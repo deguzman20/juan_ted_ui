@@ -28,7 +28,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
     variables: {
       tasker_id: parseInt(navigation.state.params.tasker_id),
       lng: String(navigation.state.params.longitude),
-      lat: String(navigation.state.params.latitude),
+      lat: String(navigation.state.params.latitude),  
       service_type_id:  navigation.state.params.service_type_id,
       start_from: `${date.date} ${time.from}`,
       start_to: `${date.date} ${time.to}`
@@ -50,7 +50,8 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
           });
         }
         else{
-          if(favorate_tasker_by_geolocation.data.favorateTaskerByGeolocation.length === 0){
+          console.log(favorate_tasker_by_geolocation.data.favorateTaskerByGeolocation)
+          if(favorate_tasker_by_geolocation.data.favorateTaskerByGeolocation.length !== 0){
             navigation.navigate('TaskerInfoScreen',{ 
               lng: String(navigation.state.params.longitude),
               lat: String(navigation.state.params.latitude),

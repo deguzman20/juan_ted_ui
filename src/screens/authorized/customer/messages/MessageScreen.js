@@ -23,7 +23,7 @@ const MessageScreen = ({ navigation, customer_id }) => {
           own_by_customer: true, text: message.value 
         } 
       })
-      sendMessage({ value: '' })
+      setMessage({ value: '' })
     }
     else{
       Alert.alert("You are currently offline, some features may be disabled")

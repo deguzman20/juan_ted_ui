@@ -23,7 +23,7 @@ const EditProfileScreen = ({ navigation, tasker_id }) => {
   const netInfo = useNetInfo();
   const [first_name, setFirstName] = useState({ value: '', error: '' });
   const [last_name, setLastName] = useState({ value: '', error: '' });
-  const [email, setEmail] = useState({ value: '', error: '' });
+  const [email, setEmail] = useState({ valu: '', error: '' });
   const [mobile_number, setMobileNumber] = useState({ value: '', error: '' });
 
   const { loading, error } = useQuery(TASKER_INFO, {

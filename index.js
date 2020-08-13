@@ -55,14 +55,18 @@ const client = new ApolloClient({
 if(__DEV__) {
   import('./reactotron-config').then(() => console.log('Reactotron Configured'))
 }
+
 const Application = () => {
   console.disableYellowBox = true;
   return(
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        <PersistGate 
+          loading={null} 
+          persistor={persistor}
+        >
           <NetworkProvider>
-            <App />
+            <App/>
           </NetworkProvider>
         </PersistGate>
       </Provider>

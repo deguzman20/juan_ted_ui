@@ -66,7 +66,7 @@ const App = createStackNavigator({
   ConversationScreen: { 
     screen: connect(mapStateToProps, null)(ConversationScreen),
     navigationOptions: {
-      title: 'Conversation List',
+      title: 'Messages',
       headerLeft: null
     }
   },

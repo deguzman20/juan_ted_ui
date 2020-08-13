@@ -4,7 +4,8 @@ import {
   View,
   ScrollView,
   Image,
-  FlatList
+  FlatList,
+  SafeAreaView
 } from 'react-native';
 import { Card, Text, Button, Icon } from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
@@ -26,17 +27,16 @@ import BarberScreen from './services/BarberScreen';
 import GoogleMapScreen from './map/GoogleMapScreen';
 import TaskersScreen from './geocoded_taskers/TaskersScreen';
 import TaskerInfoScreen from './geocoded_taskers/TaskerInfoScreen';
+import ReviewsScreen from './geocoded_taskers/ReviewsScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, customer_first_name }) => {
   const netInfo = useNetInfo();
   const { loading, error, data } = useQuery(ALL_SERVICE_TYPES, {
     pollInterval: 1000
   });
   
   if (loading || error) return null;
-
-  console.log(data)
 
   _onNavigateToServiceTypePress = (id) => {
     if(netInfo.isConnected){
@@ -64,21 +64,14 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return(
-    <View style={styles.container}>
-      <View style={styles.container_row}>
+    <View style={{ flex: 1 }}>
+      <View style={{ flex: 0.5, backgroundColor: '#009C3C', width: '100%' }}>
+        <SafeAreaView/>
+        <Text h4 style={styles.hi_txt}>Hi {customer_first_name}</Text>
+        <Text h2   style={styles.wallet_ammount_txt}>PHP 1000.00</Text>
+      </View>
+      <View style={{ flex: 1, width: '100%' }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text h4 style={styles.welcome_to_lokal_txt}>Welcome to lokal</Text>
-          <Card styles={styles.cards}>
-            <Text style={{marginBottom: 10}}>
-              Tell us what you need help with, and we'll connect you with Taskers to get the job done.
-            </Text>
-            <Button
-              icon={<Icon name='add' color='#ffffff' />}
-              buttonStyle={styles.button_todo_list}
-              title='Add to list'
-              onPress={() => { _onNavigateToTodoListPress() }} 
-            />
-          </Card>
           <View>
             <Text h4 style={styles.txt_services_txt}>Services</Text>
           </View>
@@ -98,57 +91,44 @@ const HomeScreen = ({ navigation }) => {
               </TouchableWithoutFeedback>
             )}
           />       
-        </ScrollView> 
-        <InternetConnectionChecker/>
+        </ScrollView>
+        <InternetConnectionChecker 
+          navigation={navigation}
+        />
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'stretch'
-  },
-  container_row: {
-    height: 100, 
-    flex: 1,
-  },
   row: {
     flex: 1,
     justifyContent: "space-around"
   },
-  welcome_to_lokal_txt: {
+  hi_txt: {
     left: 20, 
-    marginTop: 20
+    marginTop: 20,
+    color: 'white'
+  },
+  wallet_ammount_txt: {
+    marginTop: 40,
+    textAlign: 'center',
+    color: 'white'
   },
   txt_services_txt: {
     left: 20, 
     marginTop: 20
-  },
-  cards: {
-    width: ITEM_WIDTH, 
-    top: 10 
-  },
-  button_todo_list: {
-    borderRadius: 0, 
-    marginLeft: 0, 
-    marginRight: 0, 
-    marginBottom: 0, 
-    backgroundColor: '#009C3C',
-    borderRadius: 10
   },
   image: {
     width: (ITEM_WIDTH / 2) - 60,
     height: 100
   }
 });
-
-const mapStateToProps = ({ serviceReducer }) => {
+  
+const mapStateToProps = ({ serviceReducer, customerReducer }) => {
   return {
-    services: serviceReducer
+    services: serviceReducer,
+    customer_first_name: customerReducer.first_name
   }
 }
 
@@ -156,8 +136,7 @@ const App = createStackNavigator({
   Home: { 
     screen: connect(mapStateToProps, { getAllServiceAction })(HomeScreen),
     navigationOptions: {
-      title: '',
-      headerLeft: null
+      headerShown: false,
     }
   },
   MyTodoListScreen: { 
@@ -211,7 +190,16 @@ const App = createStackNavigator({
       title: '',
       headerStyle: {}
     }
-  }
+  },
+  ReviewsScreen: {
+    screen: ReviewsScreen,
+    navigationOptions: {
+      title: 'Reviews',
+      headerStyle: {}
+    }
+  },
+},{
+  initialRouteName: 'Home'
 });
 
 export default memo(createAppContainer(App));

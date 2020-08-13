@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { theme } from './../../core/theme';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
@@ -105,7 +105,7 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
             title='Sign In With Facebook'
             button
             type='facebook'
-          />
+        />
           <SocialIcon
             title='Sign In With Google'
             button

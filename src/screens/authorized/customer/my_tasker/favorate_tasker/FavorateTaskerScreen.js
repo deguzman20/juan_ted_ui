@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { SafeAreaView } from 'react-navigation';
+
 import TaskerServiceScreen from '../../my_tasker/TaskerServiceScreen';
 import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
 import GoogleMapScreen from '../../map/GoogleMapScreen';
@@ -17,6 +18,7 @@ import HairSalonScreen from '../../services/HairSalonScreen';
 import ChooseDayScreen from '../../date_time/ChooseDayScreen';
 import TaskersScreen from '../../geocoded_taskers/TaskersScreen';
 import TaskerInfoScreen from '../../geocoded_taskers/TaskerInfoScreen';
+import ReviewsScreen from '../ReviewsScreen';
 
 import InternetConnectionChecker from '../../../../../components/InternetConnectionChecker';
 import _ from 'lodash';
@@ -59,7 +61,7 @@ const FavorateTaskerScreen = ({ customer_id, navigation }) => {
             type="star"
             imageSize={20}
             readonly
-            startingValue={_.sumBy(item.tasker.reviews, 'rating') / item.tasker.reviews.length }       
+            startingValue={item.tasker.reviews.length >= 1 ? _.sumBy(item.tasker.reviews, 'rating') / item.tasker.reviews.length : 0 }       
           />
         </View>
       }
@@ -165,6 +167,13 @@ const App = createStackNavigator({
     screen: TaskerServiceScreen,
     navigationOptions: {
       title: 'Tasker Available Service'
+    } 
+  },
+  ReviewsScreen: {
+    screen: ReviewsScreen,
+    navigationOptions: {
+      title: 'Reviews',
+      headerShown: true
     } 
   },
   BarberScreen: {

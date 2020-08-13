@@ -65,17 +65,17 @@ const App = createStackNavigator({
   ConversationScreen: { 
     screen: connect(mapStateToProps, null)(ConversationScreen),
     navigationOptions: {
-      title: 'Coversation List',
+      title: 'Messages',
       headerLeft: null
     }
   },
   MessageScreen: { 
-    screen: MessageScreen, 
-    navigationOptions: {
-      title: 'Message',
-      headerStyle: { backgroundColor: 'white' }
-    } 
+    screen: MessageScreen,
   }
 });
+
+MessageScreen['navigationOptions'] = screenProps => ({
+  title: 'Home'
+})
 
 export default memo(createAppContainer(App));

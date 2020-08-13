@@ -55,7 +55,6 @@ const GoogleMapScreen = ({ navigation }) => {
               const lng = data[0]["geometry"]["location"]["lng"]
               const lat = data[0]["geometry"]["location"]["lat"]
               setGeolocation(({ lng, lat }))
-              console.log(geolocation)
             })
             .catch((error) => console.log(error))
           }}

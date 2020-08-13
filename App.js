@@ -17,13 +17,29 @@ import RegisterScreen from './src/screens/unauthorized/RegisterScreen';
 import ForgotPasswordScreen from './src/screens/unauthorized/ForgotPasswordScreen';
 
 const App = createStackNavigator({
-  AppSwiperScreen: { screen: AppSwiperScreen },
-  LoginScreen: { screen: LoginScreen },
-  CustomerDashBoardScreen: { screen: CustomerDashBoardScreen },
-  TaskerDashBoardScreen: { screen: TaskerDashBoardScreen },
-  RegisterScreen: { screen: RegisterScreen },
-  ForgotPasswordScreen: { screen: ForgotPasswordScreen }
-}, { headerMode:'none' });
+  // AppSwiperScreen: { screen: AppSwiperScreen },
+  LoginScreen: { 
+    screen: LoginScreen 
+  },
+  CustomerDashBoardScreen: { 
+    screen: CustomerDashBoardScreen 
+  },
+  TaskerDashBoardScreen: { 
+    screen: TaskerDashBoardScreen 
+  },
+  RegisterScreen: { 
+    screen: RegisterScreen 
+  },
+  ForgotPasswordScreen: { 
+    screen: ForgotPasswordScreen 
+  }
+}, { 
+    initialRouteName: 'LoginScreen',
+    headerMode:'none', 
+    // defaultNavigationOptions: {
+    //   gestureEnabled: false
+    // }
+});
 
 
 export default createAppContainer(App);

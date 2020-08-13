@@ -16,7 +16,11 @@ export default InternetConnectionChecker = ({ navigation }) => {
               </View>
             )}
             action={(
-              <TouchableWithoutFeedback onPress={() => { }}>
+              <TouchableWithoutFeedback 
+                onPress={() => { 
+                  console.log(navigation.navigate)
+                }}
+              >
                 <Text 
                   style={styles.txt_retry}
                 >

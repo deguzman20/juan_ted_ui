@@ -112,6 +112,7 @@ const NailCareScreen = ({ navigation }) => {
                         />
                       </View>
                       <TextInput
+                        editable={false}
                         style={styles.quantityInput}
                         onChangeText={text => onChangeText(text)}
                         value={`${item.quantity}`}
@@ -144,7 +145,7 @@ const NailCareScreen = ({ navigation }) => {
             onPress={() => { 
               navigation.navigate('GoogleMapScreen', { 
               totalPrice, 
-              service_type_id: 2,
+              service_type_id: parseInt(navigation.state.params.service_type_id),
               tasker_id: navigation.state.params.tasker_id,  
               services: [
                 { 

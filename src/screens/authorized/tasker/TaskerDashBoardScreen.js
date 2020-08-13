@@ -5,6 +5,7 @@ import AppointmentScreen from '../tasker/appointment/AppointmentScreen';
 import ProfileScreen from '../tasker/profile/ProfileScreen';
 import CustomerRequestScreen from '../tasker/customer_request/CustomerRequestScreen';
 import ConversationsScreen from './conversation/ConversationScreen';
+
 class TaskerDashBoardScreen extends React.Component {
   state = {
     index: 0,
@@ -26,21 +27,25 @@ class TaskerDashBoardScreen extends React.Component {
   });
 
   render() {
-    return (
-      <BottomNavigation
-        navigationState={this.state}
-        onIndexChange={this._handleIndexChange}
-        renderScene={this._renderScene}
-        inactiveColor="silver"
-        activeColor="#009C3C"
-      />
-    );
+    if(this.props.tasker_id !== ""){
+      return (
+        <BottomNavigation
+          navigationState={this.state}
+          onIndexChange={this._handleIndexChange}
+          renderScene={this._renderScene}
+          inactiveColor="silver"
+          activeColor="#009C3C"
+        />
+      );
+    }
+    else {
+      return null;
+    }
   }
 }
 
-const mapStateToProps = ({ customerReducer, taskerReducer }) => {
+const mapStateToProps = ({ taskerReducer }) => {
   return {
-    customer_id: customerReducer.id,
     tasker_id: taskerReducer.id
   }
 }

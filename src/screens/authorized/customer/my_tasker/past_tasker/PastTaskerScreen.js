@@ -14,6 +14,7 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { SafeAreaView } from 'react-navigation';
 import InternetConnectionChecker from '../../../../../components/InternetConnectionChecker';
 import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
+import ReviewsScreen from '../../my_tasker/ReviewsScreen';
 import _ from 'lodash';
 
 const PastTaskerScreen = ({ customer_id, navigation }) => {
@@ -26,46 +27,7 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
     },
     pollInterval: 300
   });
-  
-  keyExtractor = (item, index) => index.toString()
 
-  renderItem = ({ item }) => {
-    return(
-      <ListItem
-        onPress={() => { 
-          navigation.navigate('MyTaskerInfoScreen', { tasker_id: parseInt(item.tasker.id) }) 
-        }}
-        title={
-          <View style={styles.fullNameWrapper}>
-            <Text>
-              {item.tasker.firstName} {item.tasker.lastName}
-            </Text>
-          </View>
-        }
-        subtitle={
-          <View style={ styles.ratingWrapper }>
-            <Rating
-              type="star"
-              imageSize={20}
-              readonly
-              startingValue={_.sumBy(item.tasker.reviews, 'rating') / item.tasker.reviews.length }       
-            />
-          </View>
-        }
-        rightElement={
-          <Button 
-            buttonStyle={{ backgroundColor: '#009C3C' }}
-            title={`${item.favorate ? 'Remove': 'Add'} to favorate`}
-            onPress={() => { item.favorate ?  _onRemoveToFavorateTaskerPressed(item.id) :  _onAddToFavorateTaskerPressed(item.id) }}
-          /> 
-        }
-        leftAvatar={{ source: { uri: `${DEFAULT_URL}/${item.tasker.image}` } }}
-        bottomDivider
-      />
-    )
-  }
-
-  if(loading || error) return null;
   _onAddToFavorateTaskerPressed = (id) => {
     if(netInfo.isConnected){
       Alert.alert(
@@ -111,6 +73,50 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
       );
     }
   }
+
+  _onNavigateToTaskerInfoPressed = (tasker_id) => {
+    if(netInfo.isConnected){
+      navigation.navigate('MyTaskerInfoScreen', { tasker_id: parseInt(tasker_id) })  
+    }
+  }
+  
+  keyExtractor = (item, index) => index.toString()
+
+  renderItem = ({ item }) => {
+    return(
+      <ListItem
+        onPress={() => { _onNavigateToTaskerInfoPressed(item.tasker.id)} }
+        title={
+          <View style={styles.fullNameWrapper}>
+            <Text>
+              {item.tasker.firstName} {item.tasker.lastName}
+            </Text>
+          </View>
+        }
+        subtitle={
+          <View style={ styles.ratingWrapper }>
+            <Rating
+              type="star"
+              imageSize={20}
+              readonly
+              startingValue={item.tasker.reviews.length >= 1 ?  _.sumBy(item.tasker.reviews, 'rating') / item.tasker.reviews.length : 0 }       
+            />
+          </View>
+        }
+        rightElement={
+          <Button 
+            buttonStyle={{ backgroundColor: '#009C3C' }}
+            title={`${item.favorate ? 'Remove': 'Add'} to favorate`}
+            onPress={() => { item.favorate ?  _onRemoveToFavorateTaskerPressed(item.id) :  _onAddToFavorateTaskerPressed(item.id) }}
+          /> 
+        }
+        leftAvatar={{ source: { uri: `${DEFAULT_URL}/${item.tasker.image}` } }}
+        bottomDivider
+      />
+    )
+  }
+
+  if(loading || error) return null;
   
   if(data.pastTaskerList.length >= 1){
     return(
@@ -187,7 +193,6 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-
 const App = createStackNavigator({
   PastTaskerScreen: { 
     screen: connect(mapStateToProps, null)(PastTaskerScreen),
@@ -200,6 +205,12 @@ const App = createStackNavigator({
     navigationOptions: {
       header: null
     } 
+  },
+  ReviewsScreen: {
+    screen: ReviewsScreen,
+    navigationOptions: {
+      title: 'Reviews'
+    }
   }
 });
 

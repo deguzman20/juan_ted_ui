@@ -7,6 +7,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import MessageList from './MessageList';
 
+
 const MessageScreen = ({ navigation, tasker_id }) => {
   const scrollViewRef = useRef();
   const [sendMessage] = useMutation(SEND_MESSAGE);
@@ -17,7 +18,7 @@ const MessageScreen = ({ navigation, tasker_id }) => {
                   tasker_id: parseInt(tasker_id), 
                   own_by_customer: false, 
                   text: message.value } })
-    sendMessage({ value: '' })
+    setMessage({ value: '' })
   }
 
   return(

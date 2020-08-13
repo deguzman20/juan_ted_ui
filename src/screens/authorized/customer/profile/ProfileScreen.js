@@ -25,7 +25,6 @@ import Background from '../../../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
 import CurrentLocationScreen from '../map/CurrentLocationScreen';
-import LoginScreen from '../../../unauthorized/LoginScreen';
 import EditProfilePicScreen from './EditProfilePicScreen';
 
 const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
@@ -48,9 +47,10 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
         { 
           text: "Yes", 
           onPress: () => {
-            // customerLogoutAction();
+            customerLogoutAction();
             navigation.navigate('LoginScreen');
-          } }
+          } 
+        }
       ],
       { cancelable: false }
     );  
@@ -60,55 +60,53 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
 
   return (
     <React.Fragment>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Background>
-          <SafeAreaView style={{ marginBottom: 25 }}/>
-            <View>
-              <Avatar
-                xlarge
-                rounded
-                source={{ uri: `${DEFAULT_URL}/${data.customer[0].image}` }}
-                onPress={() => {
-                  navigation.navigate('EditProfilePicScreen')
-                }}
-                activeOpacity={0.7}
-                size={150}
-              />
-            </View>
-            <View>
-              <Text style={styles.fullName}>{data.customer[0].firstName} {data.customer[0].lastName}</Text>
-            </View>
-            <View style={styles.container}>
-              <ListItem
-                key={1}
-                title={'Change Password'}
-                rightIcon={{ name: 'ac-unit' }}
-                bottomDivider
-                onPress={() => netInfo.isConnected ? navigation.navigate('ChangePasswordScreen') : null }
-              />
-              <ListItem
-                key={2}
-                title={'Edit Profile'}
-                rightIcon={{ name: 'account-circle' }}
-                bottomDivider
-                onPress={() => netInfo.isConnected ? navigation.navigate('EditProfileScreen') : null }
-              />
-              <ListItem
-                key={3}
-                title={'Location'}
-                rightIcon={{ name: 'map' }}
-                bottomDivider
-                onPress={() => netInfo.isConnected ? navigation.navigate('CurrentLocationScreen') : null }
-              />
-              <ListItem
-                key={4}
-                title={'Logout'}
-                rightIcon={{ name: 'arrow-drop-down' }}
-                onPress={() => { _onLogoutPressed() }}
-              />
-            </View>
-        </Background>
-      </ScrollView>
+      <Background>
+        <SafeAreaView style={{ marginBottom: 25 }}/>
+          <View>
+            <Avatar
+              xlarge
+              rounded
+              source={{ uri: `${DEFAULT_URL}/${data.customer[0].image}` }}
+              onPress={() => {
+                navigation.navigate('EditProfilePicScreen')
+              }}
+              activeOpacity={0.7}
+              size={150}
+            />
+          </View>
+          <View>
+            <Text style={styles.fullName}>{data.customer[0].firstName} {data.customer[0].lastName}</Text>
+          </View>
+          <View style={styles.container}>
+            <ListItem
+              key={1}
+              title={'Change Password'}
+              rightIcon={{ name: 'ac-unit' }}
+              bottomDivider
+              onPress={() => netInfo.isConnected ? navigation.navigate('ChangePasswordScreen') : null }
+            />
+            <ListItem
+              key={2}
+              title={'Edit Profile'}
+              rightIcon={{ name: 'account-circle' }}
+              bottomDivider
+              onPress={() => netInfo.isConnected ? navigation.navigate('EditProfileScreen') : null }
+            />
+            <ListItem
+              key={3}
+              title={'Location'}
+              rightIcon={{ name: 'map' }}
+              bottomDivider
+              onPress={() => netInfo.isConnected ? navigation.navigate('CurrentLocationScreen') : null }
+            />
+            <ListItem
+              key={4}
+              title={'Logout'}
+              rightIcon={{ name: 'arrow-drop-down' }}
+              onPress={() => { _onLogoutPressed() }}
+            />
+          </View>
+      </Background>
       <InternetConnectionChecker />
     </React.Fragment>
   );
@@ -164,9 +162,7 @@ const App = createStackNavigator({
   },
   EditProfilePicScreen: {
     screen: EditProfilePicScreen
-  },
-  LoginScreen: { screen: LoginScreen }
-
+  }
 });
 
 export default memo(createAppContainer(App));

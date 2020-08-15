@@ -945,7 +945,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/juan_ted_ui.app/juan_ted_ui";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/lokal.app/lokal";
 			};
 			name = Debug;
 		};
@@ -965,7 +965,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/juan_ted_ui.app/juan_ted_ui";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/lokal.app/lokal";
 			};
 			name = Release;
 		};

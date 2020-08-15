@@ -9,6 +9,24 @@ import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 
 const AppSwiperScreen = ({ customer_id, tasker_id, navigation }) => {
+  useEffect(() => {
+    if(customer_id !== '' && tasker_id === ''){
+      setTimeout(() => {
+        navigation.navigate('CustomerDashBoardScreen')
+      }, 2000)
+    }
+    else if(customer_id === '' && tasker_id !== ''){
+      setTimeout(() => {
+        navigation.navigate('TaskerDashBoardScreen')
+      }, 2000)
+    }
+    else{
+      setTimeout(() => {
+        navigation.navigate('LoginScreen')
+      }, 2000)
+    }
+  },[])
+
   return(
     <React.Fragment>
       <View style={styles.container}>

@@ -4,17 +4,19 @@ import { useMutation } from '@apollo/react-hooks';
 import { theme } from './../../core/theme';
 import { emailValidator } from './../../core/utils';
 import { FORGOT_PASSWORD } from './../../queries';
+import { useNetInfo } from "@react-native-community/netinfo";
 
 import Header from './../../components/Header';
 import TextInput from './../../components/TextInput';
 import Button from './../../components/Button';
 import Background from './../../components/Background';
 import BackButton from './../../components/BackButton';
+import InternetConnectionChecker from './../../components/InternetConnectionChecker';
 
 const ForgotPasswordScreen = ({ navigation }) => {
-  const [forgotPassword] = useMutation(FORGOT_PASSWORD);
-
-  const [email, setEmail] = useState({ value: '', error: '' });
+  const netInfo = useNetInfo()
+  const [forgotPassword] = useMutation(FORGOT_PASSWORD)
+  const [email, setEmail] = useState({ value: '', error: '' })
 
   const _onSendPressed = () => {
     const emailError = emailValidator(email.value);
@@ -24,40 +26,45 @@ const ForgotPasswordScreen = ({ navigation }) => {
       return;
     }
 
-    forgotPassword({ variables: { email: email.value } })
-    navigation.navigate('LoginScreen');
+    if(netInfo.isConnected){
+      forgotPassword({ variables: { email: email.value } })
+      navigation.navigate('LoginScreen')
+    }
   };
 
   return (
-    <Background>
-      <BackButton goBack={() => navigation.navigate('LoginScreen')} />
+    <React.Fragment>
+      <Background>
+        <BackButton goBack={() => navigation.navigate('LoginScreen')} />
 
-      <Header>Restore Password</Header>
+        <Header>Restore Password</Header>
 
-      <TextInput
-        label="E-mail address"
-        returnKeyType="done"
-        value={email.value}
-        onChangeText={text => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-      />
+        <TextInput
+          label="E-mail address"
+          returnKeyType="done"
+          value={email.value}
+          onChangeText={text => setEmail({ value: text, error: '' })}
+          error={!!email.error}
+          errorText={email.error}
+          autoCapitalize="none"
+          autoCompleteType="email"
+          textContentType="emailAddress"
+          keyboardType="email-address"
+        />
 
-      <Button mode="contained" onPress={_onSendPressed} style={styles.button}>
-        Send Reset Instructions
-      </Button>
+        <Button mode="contained" onPress={_onSendPressed} style={styles.button}>
+          Send Reset Instructions
+        </Button>
 
-      <TouchableOpacity
-        style={styles.back}
-        onPress={() => navigation.navigate('LoginScreen')}
-      >
-        <Text style={styles.label}>← Back to login</Text>
-      </TouchableOpacity>
-    </Background>
+        <TouchableOpacity
+          style={styles.back}
+          onPress={() => navigation.navigate('LoginScreen')}
+        >
+          <Text style={styles.label}>← Back to login</Text>
+        </TouchableOpacity>
+      </Background>
+      <InternetConnectionChecker />
+    </React.Fragment>
   );
 };
 

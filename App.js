@@ -17,7 +17,7 @@ import RegisterScreen from './src/screens/unauthorized/RegisterScreen';
 import ForgotPasswordScreen from './src/screens/unauthorized/ForgotPasswordScreen';
 
 const App = createStackNavigator({
-  // AppSwiperScreen: { screen: AppSwiperScreen },
+  AppSwiperScreen: { screen: AppSwiperScreen },
   LoginScreen: { 
     screen: LoginScreen 
   },

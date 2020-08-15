@@ -5,6 +5,7 @@ import AppointmentScreen from '../tasker/appointment/AppointmentScreen';
 import ProfileScreen from '../tasker/profile/ProfileScreen';
 import CustomerRequestScreen from '../tasker/customer_request/CustomerRequestScreen';
 import ConversationsScreen from './conversation/ConversationScreen';
+import LoginScreen from './../../unauthorized/LoginScreen';
 
 class TaskerDashBoardScreen extends React.Component {
   state = {
@@ -27,7 +28,7 @@ class TaskerDashBoardScreen extends React.Component {
   });
 
   render() {
-    if(this.props.tasker_id !== ""){
+    if(this.props.tasker_id !== ''){
       return (
         <BottomNavigation
           navigationState={this.state}
@@ -39,7 +40,7 @@ class TaskerDashBoardScreen extends React.Component {
       );
     }
     else {
-      return null;
+      return <LoginScreen navigation={this.props.navigation}/>;
     }
   }
 }

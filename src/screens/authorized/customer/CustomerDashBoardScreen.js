@@ -8,6 +8,7 @@ import FavorateTaskerScreen from  './my_tasker/favorate_tasker/FavorateTaskerScr
 import ProfileScreen from './profile/ProfileScreen';
 import HomeScreen from './HomeScreen';
 import ConversationsScreen from './conversation/ConversationScreen';
+import LoginScreen from './../../unauthorized/LoginScreen';
 
 class CustomerDashBoardScreen extends React.Component {
   state = {
@@ -32,10 +33,9 @@ class CustomerDashBoardScreen extends React.Component {
     chat: ConversationsScreen,
     profile: ProfileScreen,
   });
-  
 
   render() {
-    if(this.props.customer_id !== ""){
+    if(this.props.customer_id !== ''){
       return (
         <BottomNavigation
           navigationState={this.state}
@@ -46,13 +46,13 @@ class CustomerDashBoardScreen extends React.Component {
         />
       );
     }
-    else {
-      return null;
+    else{
+      return <LoginScreen navigation={this.props.navigation}/>;
     }
   }
 }
 
-const mapStateToProps = ({ customerReducer, taskerReducer }) => {
+const mapStateToProps = ({ customerReducer }) => {
   return {
     customer_id: customerReducer.id,
   }

@@ -14,7 +14,7 @@ import { DEFAULT_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types'
 import { formatMoney } from '../../../../core/utils';
 import MapView from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import _ from 'lodash';
 
 const ScheduledTransactionInfoScreen = ({ navigation }) => {

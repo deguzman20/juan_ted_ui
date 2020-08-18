@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { View, FlatList, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Text, ListItem, Avatar, Button } from 'react-native-elements';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -7,12 +7,14 @@ import { TRANSACTION_SERVICE, UPDATE_TRANSACTION_STATUS_TO_DONE } from '../../..
 import { DEFAULT_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
 import { formatMoney } from '../../../../core/utils';
 import MapView from 'react-native-maps';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import Loader from "react-native-modal-loader";
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import _ from 'lodash';
 
 const TransactionInfoScreen = ({ navigation }) => {
   const total_cost_arr = [];
   const netInfo = useNetInfo();
+  const [isLoading, setLoading] = useState(false);
   const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
   const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
   const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO;
@@ -25,16 +27,22 @@ const TransactionInfoScreen = ({ navigation }) => {
 
   _onMarkAsDonePressed = () => {
     if(netInfo.isConnected){
-      update_transaction_status_to_done({ 
-        variables: {
-          transaction_id: parseInt(navigation.state.params.transaction_id)
+      setTimeout(() => {
+        for(let i = 1; i <= 3; i++){
+          setLoading(true)
+          update_transaction_status_to_done({ 
+            variables: {
+              transaction_id: parseInt(navigation.state.params.transaction_id)
+            }
+          }).then(({ data }) => {
+            if(i === 3 && data.updateTransactionStatusToDone.response === 'Update was successfully') {
+              setLoading(false)
+              // Alert.alert("Mark as completed");
+              navigation.navigate('AppointmentScreen');
+            }
+          })
         }
-      }).then(({ data }) => {
-        if(data.updateTransactionStatusToDone.response === 'Update was successfully') {
-          Alert.alert("Mark as done");
-          navigation.navigate('AppointmentScreen');
-        }
-      })
+      },3000)
     }
   } 
 
@@ -128,15 +136,15 @@ const TransactionInfoScreen = ({ navigation }) => {
           (
             <View style={styles.unDoneTotalCostWrapper}>
               <Text style={styles.totalCost}>Total Cost</Text>
-              <Text style={styles.cost}>P {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
+              <Text style={styles.cost}>₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
             </View>  
           ): 
           (
             <View style={styles.doneTotalCostWrapper}>
               <Text style={styles.totalCost}>Total Cost</Text>
-              <Text style={styles.cost}>P {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
+              <Text style={styles.cost}>₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
               <View style={styles.buttonContainer}>
-                <Button title="Mark as done" 
+                <Button title="Mark as completed" 
                   onPress={() => { _onMarkAsDonePressed() }} 
                   buttonStyle={{ backgroundColor: "#009C3C" }}
                 />
@@ -144,6 +152,7 @@ const TransactionInfoScreen = ({ navigation }) => {
             </View>  
           )
         }
+        <Loader loading={isLoading} color="#ff66be" />
         <InternetConnectionChecker />
       </React.Fragment>
     )

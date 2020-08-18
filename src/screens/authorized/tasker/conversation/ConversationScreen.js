@@ -9,14 +9,13 @@ import { TASKER_CONVERSATION_LIST } from './../../../../queries';
 
 import ConversationList from './ConversationList';
 import MessageScreen from '../messages/MessageScreen';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const ConversationScreen = ({ user_id, navigation }) => {
   const { loading, error, data } = useQuery(TASKER_CONVERSATION_LIST, {
     variables: { user_id: parseInt(user_id) },
     pollInterval: 500,
   });
-
 
   if(loading || error) return null;
   if(data["conversationList"].length !== 0){

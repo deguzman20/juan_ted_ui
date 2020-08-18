@@ -6,12 +6,12 @@ import { emailValidator } from './../../core/utils';
 import { FORGOT_PASSWORD } from './../../queries';
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import Header from './../../components/Header';
-import TextInput from './../../components/TextInput';
-import Button from './../../components/Button';
-import Background from './../../components/Background';
-import BackButton from './../../components/BackButton';
-import InternetConnectionChecker from './../../components/InternetConnectionChecker';
+import Header from './../../components/atoms/header/Header';
+import TextInput from './../../components/atoms/text_input/TextInput';
+import Button from './../../components/atoms/button/Button';
+import Background from './../../components/atoms/background/Background';
+import BackButton from './../../components/atoms/button/BackButton';
+import InternetConnectionChecker from './../../components/atoms/snackbar/InternetConnectionChecker';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const netInfo = useNetInfo()

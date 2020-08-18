@@ -10,8 +10,8 @@ import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { SafeAreaView } from 'react-navigation';
 
-import TaskerServiceScreen from '../../my_tasker/TaskerServiceScreen';
-import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
+import TaskerServiceScreen from '../TaskerServiceScreen';
+import MyTaskerInfoScreen from '../MyTaskerInfoScreen';
 import GoogleMapScreen from '../../map/GoogleMapScreen';
 import BarberScreen from '../../services/BarberScreen';
 import HairSalonScreen from '../../services/HairSalonScreen';
@@ -20,10 +20,10 @@ import TaskersScreen from '../../geocoded_taskers/TaskersScreen';
 import TaskerInfoScreen from '../../geocoded_taskers/TaskerInfoScreen';
 import ReviewsScreen from '../ReviewsScreen';
 
-import InternetConnectionChecker from '../../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../../components/atoms/snackbar/InternetConnectionChecker';
 import _ from 'lodash';
 
-const FavorateTaskerScreen = ({ customer_id, navigation }) => {
+const FavoriteTaskerScreen = ({ customer_id, navigation }) => {
   const netInfo = useNetInfo();
   const { loading, error, data } = useQuery(FAVORATE_TASKER_LIST, {
     variables: {
@@ -78,7 +78,7 @@ const FavorateTaskerScreen = ({ customer_id, navigation }) => {
       <React.Fragment>
         <SafeAreaView />
         <View style={styles.first_row_container}>
-          <Text h4 style={styles.my_tasker_txt}>My Favorate Tasker</Text> 
+          <Text h4 style={styles.my_tasker_txt}>My Favorite Tasker</Text> 
         </View>
         <View style={styles.second_row_container}>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -151,8 +151,8 @@ const mapStateToProps = ({ customerReducer }) => {
 }
 
 const App = createStackNavigator({
-  FavorateTaskerScreen: { 
-    screen: connect(mapStateToProps, null)(FavorateTaskerScreen),
+  FavoriteTaskerScreen: { 
+    screen: connect(mapStateToProps, null)(FavoriteTaskerScreen),
     navigationOptions: {
       header: null
     }

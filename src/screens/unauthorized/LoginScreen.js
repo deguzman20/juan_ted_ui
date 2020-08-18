@@ -1,23 +1,33 @@
-import React, { memo, useState, useEffect } from 'react';
-import { theme } from './../../core/theme';
+import React, { memo, useState } from 'react';
+import { Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { TouchableOpacity, StyleSheet, Text, View, Image } from 'react-native';
 import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from './../../queries';
 import { customerSignInAction, taskerSignInAction } from './../../actions';
 import { emailValidator, passwordValidator } from './../../core/utils';
-import { SocialIcon } from 'react-native-elements';
 
-import Button from './../../components/Button';
 import Loader from "react-native-modal-loader";
-import TextInput from './../../components/TextInput';
-import Background from './../../components/Background';
+
+// atoms
+import Logo from './../../components/atoms/logo/Logo';
+import Button from './../../components/atoms/button/Button';
+import TextInput from './../../components/atoms/text_input/TextInput';
+import Background from './../../components/atoms/background/Background';
+import ForgotPasswordlinkButton from './../../components/atoms/button/ForgotPasswordLinkButton';
+
+// molecules
+import SocialMediaButtons from '../../components/molecules/social_media_button/SocialMediaButtons';
+import TextWithLinkSection from '../../components/molecules/login_text_with_link_section/TextWithLinkSection';
+
+// screen
+import CustomerDashBoardScreen from '../authorized/customer/CustomerDashBoardScreen';
+import TaskerDashBoardScreen from '../authorized/tasker/TaskerDashBoardScreen';
 
 const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, customer_id, tasker_id}) => {
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN);
   const [taskerSignIn] = useMutation(TASKER_SIGN_IN);
-  const [isLoading, setLoading] = useState(false)
 
+  const [isLoading, setLoading] = useState(false);
   const [email, setEmail] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
 
@@ -31,35 +41,46 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
       return;
     }
 
-    customerSignIn({ variables: { email: email.value, password: password.value } }).then((customer_data) => {
-      if(customer_data.data.customerSignin !== null){
-        customerSignInAction(customer_data)
-        navigation.navigate('CustomerDashBoardScreen')
+    setTimeout(() => {
+      for(let i = 1; i <= 3; i++){
+        setLoading(true)
+        if(i === 3){
+          customerSignIn({ variables: { email: email.value, password: password.value } }).then((customer_data) => {
+            if(customer_data.data.customerSignin !== null){
+              customerSignInAction(customer_data)
+              setLoading(false)
+              navigation.navigate('CustomerDashBoardScreen')
+            }
+            else{
+              taskerSignIn({ variables: { email: email.value, password: password.value } }).then((tasker_data) => {
+                if(tasker_data.data.taskerSignin !== null ){
+                  taskerSignInAction(tasker_data)
+                  setLoading(false)
+                  navigation.navigate('TaskerDashBoardScreen')
+                }
+                else{
+                  Alert.alert('Incorrect email and password')
+                  setLoading(false)
+                }
+              })
+            }
+          })
+        }
       }
-      else{
-        taskerSignIn({ variables: { email: email.value, password: password.value } }).then((tasker_data) => {
-          if(tasker_data.data.taskerSignin !== null ){
-            taskerSignInAction(tasker_data)
-            navigation.navigate('TaskerDashBoardScreen')
-          }
-          else{
-            console.log("null")
-          }
-        })
-      }
-    })
+    },3000)
   };
+
+  if(customer_id !== '' && tasker_id === ''){
+    return <CustomerDashBoardScreen />
+  }
+  else if(customer_id === '' && tasker_id !== ''){
+    return <TaskerDashBoardScreen />
+  }
 
   return (
     <React.Fragment>
       <Background>
-        <View style={styles.logo_container}>
-          <Image
-            source={require("../../assets/lokal.png")}
-            resizeMode="contain"
-            style={styles.image}
-          ></Image>
-        </View>
+        <Logo />
         <TextInput
           label="Email"
           returnKeyType="next"
@@ -83,73 +104,23 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
           secureTextEntry
         />
 
-        <View style={styles.forgotPassword}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ForgotPasswordScreen')}
-          >
-            <Text style={styles.label}>Forgot your password?</Text>
-          </TouchableOpacity>
-        </View>
+        <ForgotPasswordlinkButton 
+          navigation={navigation}
+        />
 
         <Button mode="contained" onPress={_onLoginPressed}>
           Login
         </Button>
-        <View style={styles.row}>
-          <Text style={styles.label}>Don’t have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
-            <Text style={styles.link}>Sign up</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ width:'100%' }}>
-          <SocialIcon
-            title='Sign In With Facebook'
-            button
-            type='facebook'
+        <TextWithLinkSection 
+          navigation={navigation} 
         />
-          <SocialIcon
-            title='Sign In With Google'
-            button
-            type='google'
-          />
-        </View>
-        <View style={styles.container}>
-          <Loader loading={isLoading} color="#ff66be" />
-        </View>
+        <SocialMediaButtons />
+        <Loader loading={isLoading} color="#ff66be" />
       </Background>
     </React.Fragment>
   );
 };
 
-const styles = StyleSheet.create({
-  logo_container: {
-    position: 'absolute',
-    top: 80,
-    width: '136%',
-    height: 300,
-    alignItems: 'center',
-    backgroundColor: 'white'
-  },
-  image: {
-    width: 307,
-    height: 220
-  },
-  forgotPassword: {
-    width: '100%',
-    alignItems: 'flex-end',
-    marginBottom: 24,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  label: {
-    color: theme.colors.secondary,
-  },
-  link: {
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-  },
-});
 
 const mapStateToProps = ({ customerReducer, taskerReducer }) => {
   return {

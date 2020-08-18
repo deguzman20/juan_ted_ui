@@ -5,7 +5,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { SafeAreaView } from 'react-navigation';
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import Navigation from './Navigation';
 import _ from 'lodash';
 

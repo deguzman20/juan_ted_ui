@@ -22,13 +22,16 @@ import { formatMoney } from '../../../../core/utils';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
-import TextInput from '../../../../components/TextInput';
+import Loader from "react-native-modal-loader";
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+import TextInput from '../../../../components/atoms/text_input/TextInput';
 import _ from 'lodash';
 
 const CompletedTransactionInfoScreen = ({ navigation, customer_id }) => {
   const total_cost_arr = [];
   const netInfo = useNetInfo();
+  const [isLoading, setLoading] = useState(false);
+  
   const [visible, setVisible] = useState(false);
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState({ value: '', error: '' });
@@ -54,26 +57,32 @@ const CompletedTransactionInfoScreen = ({ navigation, customer_id }) => {
 
   if(loading || error) return null; 
   if([data.transactionService].length >= 1){
-
     _onSubmitReviewPressed = () => {
       if(netInfo.isConnected){
-        submit_review({ 
-          variables: { 
-            rating: parseInt(rating), 
-            comment: comment.value,
-            customer_id: parseInt(customer_id),
-            tasker_id: parseInt(data.transactionService.tasker.id), 
-            service_type_id: parseInt(data.transactionService.serviceType.id)  
-          } 
-        }).then(({ data }) => {
-          if(data.createReview.response === 'Review Created'){
-            Alert.alert('Review sent successfuly')
-            navigation.navigate('CompletedTaskScreen')
+        setTimeout(() => {
+          for(let i = 1; i <= 3; i++){
+            setLoading(true)
+            submit_review({ 
+              variables: { 
+                rating: parseInt(rating), 
+                comment: comment.value,
+                customer_id: parseInt(customer_id),
+                tasker_id: parseInt(data.transactionService.tasker.id), 
+                service_type_id: parseInt(data.transactionService.serviceType.id),
+                transaction_id: parseInt(navigation.state.params.transaction_id)
+              } 
+            }).then(({ data }) => {
+              if(i === 3 && data.createReview.response === 'Review Created'){
+                setLoading(false)
+                Alert.alert('Review sent successfuly')
+                navigation.navigate('CompletedTaskScreen')
+              }
+            })
           }
-        })
+        },3000)
       }
-    } 
-
+    }
+    
     const { firstName, lastName, image } = data.transactionService.tasker;
     keyExtractor = (item, index) => index.toString()    
     renderItem = ({ item }) => {
@@ -167,16 +176,26 @@ const CompletedTransactionInfoScreen = ({ navigation, customer_id }) => {
             </MapView>
           </View>
         </ScrollView>
-        <View style={styles.doneTotalCostWrapper}>
-          <Text style={styles.totalCost}>Total Cost</Text>
-          <Text style={styles.cost}>P {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
-          <View style={styles.buttonContainer}>
-            <Button title="Review" 
-              onPress={() => { toggleOverlay() }} 
-              buttonStyle={{ backgroundColor: "#009C3C" }}
-            />
-          </View>
-        </View>
+        {
+          !data.transactionService.review ? (
+            <View style={styles.doneTotalCostWrapper}>
+              <Text style={styles.totalCost}>Total Cost</Text>
+              <Text style={styles.cost}>₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
+              <View style={styles.buttonContainer}>
+                <Button title="Review" 
+                  onPress={() => { toggleOverlay() }} 
+                  buttonStyle={{ backgroundColor: "#009C3C" }}
+                />
+              </View>
+            </View>
+          ) :
+          (
+            <View style={styles.unDoneTotalCostWrapper}>
+              <Text style={styles.totalCost}>Total Cost</Text>
+              <Text style={styles.cost}>₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
+            </View>  
+          )
+        }
         <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
           <View style={{
             flex: 1,
@@ -229,6 +248,7 @@ const CompletedTransactionInfoScreen = ({ navigation, customer_id }) => {
             </View>
           </View>
         </Overlay>
+        <Loader loading={isLoading} color="#ff66be" />
         <InternetConnectionChecker />
       </React.Fragment>
     )

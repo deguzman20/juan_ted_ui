@@ -6,8 +6,8 @@ import { addTodo, deleteTodo } from './../../../../actions';
 import { StyleSheet, ScrollView } from 'react-native';
 import { todoDescriptionValidator } from './../../../../core/utils';
 import { Card, Icon, Button as TodoItemButton } from 'react-native-elements';
-import TextInput from './../../../../components/TextInput';
-import Button from './../../../../components/Button';
+import TextInput from './../../../../components/atoms/text_input/TextInput';
+import Button from './../../../../components/atoms/button/Button';
 
 const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
   const [createTodo] = useMutation(CREATE_TODO);

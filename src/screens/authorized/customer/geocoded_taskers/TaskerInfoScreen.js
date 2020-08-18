@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import {  
   StyleSheet, 
   View, 
@@ -21,12 +21,14 @@ import { TASKER_INFO } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import Loader from "react-native-modal-loader";
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 import axios from 'axios';
 
 const TaskerInfoScreen = ({ navigation }) => {
   const netInfo = useNetInfo();
+  const [isLoading, setLoading] = useState(false);
   const { loading, error, data } = useQuery(TASKER_INFO, {
     variables: { 
       tasker_id: navigation.state.params.tasker_id
@@ -81,35 +83,43 @@ const TaskerInfoScreen = ({ navigation }) => {
   
   const _onNavigateToInfoListAndSaveTransactionPressed = () => {
     if(netInfo.isConnected){
-      axios.get(`${DEFAULT_URL}/customer/create_transaction`,{
-        params: {
-          lng: navigation.state.params.lng,
-          lat: navigation.state.params.lat,
-          service_type_id: navigation.state.params.service_type_id,
-          from: navigation.state.params.start_from,
-          to: navigation.state.params.start_to,
-          customer_id: navigation.state.params.customer_id,
-          tasker_id: navigation.state.params.tasker_id
-        }
-      })
-      .then((response) => {
-        axios.get(`${DEFAULT_URL}/customer/create_bulk_of_transaction_service`,{
-          params: {
-            services: JSON.stringify(navigation.state.params.services.map((service) => {
-              return {
-                ...service, 
-                transaction_id: parseInt(response.data)
+      setTimeout(() => {
+        for(let i = 1; i <= 3; i++){
+          setLoading(true)
+          if(i === 3){
+            axios.get(`${DEFAULT_URL}/customer/create_transaction`,{
+              params: {
+                lng: navigation.state.params.lng,
+                lat: navigation.state.params.lat,
+                service_type_id: navigation.state.params.service_type_id,
+                from: navigation.state.params.start_from,
+                to: navigation.state.params.start_to,
+                customer_id: navigation.state.params.customer_id,
+                tasker_id: navigation.state.params.tasker_id
               }
-            }))
+            })
+            .then((response) => {
+              axios.get(`${DEFAULT_URL}/customer/create_bulk_of_transaction_service`,{
+                params: {
+                  services: JSON.stringify(navigation.state.params.services.map((service) => {
+                    return {
+                      ...service, 
+                      transaction_id: parseInt(response.data)
+                    }
+                  }))
+                }
+              })
+              .then((transaction_service_response) => {
+                if(transaction_service_response.data === 'Transaction service was created successfuly'){
+                  setLoading(false)
+                  Alert.alert(transaction_service_response.data)
+                  navigation.navigate('Home')
+                }
+              })
+            })
           }
-        })
-        .then((transaction_service_response) => {
-          if(transaction_service_response.data === 'Transaction service was created successfuly'){
-            Alert.alert(transaction_service_response.data)
-            navigation.navigate('HomeScreen')
-          }
-        })
-      })
+        }
+      },3000)
     }
   }
 
@@ -195,6 +205,7 @@ const TaskerInfoScreen = ({ navigation }) => {
           onPress={() =>{ _onNavigateToInfoListAndSaveTransactionPressed() }} 
           buttonStyle={styles.select_button_background_style} />
       </View>
+      <Loader loading={isLoading} color="#ff66be" /> 
       <InternetConnectionChecker />
     </React.Fragment>
   )

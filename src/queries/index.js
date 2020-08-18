@@ -97,8 +97,8 @@ export const CREATE_TODO = gql `
   }`;
 
 export const CREATE_REVIEW = gql `
-  mutation createReview($rating: Int!, $comment: String!, $customer_id: Int!, $tasker_id: Int!, $service_type_id: Int!){
-    createReview(rating: $rating, comment: $comment, customerId: $customer_id, taskerId: $tasker_id, serviceTypeId: $service_type_id){
+  mutation createReview($rating: Int!, $comment: String!, $customer_id: Int!, $tasker_id: Int!, $service_type_id: Int!, $transaction_id: Int!){
+    createReview(rating: $rating, comment: $comment, customerId: $customer_id, taskerId: $tasker_id, serviceTypeId: $service_type_id, transactionId: $transaction_id){
       response
       statusCode
     }
@@ -324,6 +324,8 @@ export const TASKER_INFO = gql `
       firstName
       lastName
       image
+      email
+      mobileNumber
       introduction
       reviews {
         id
@@ -488,6 +490,7 @@ export const TRANSACTION_SERVICE = gql `
       lat
       lng
       done
+      review
       customer {
         id
         firstName

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import TasksScreen from './tasks/TasksScreen';
 import PastTaskerScreen from './my_tasker/past_tasker/PastTaskerScreen';
-import FavorateTaskerScreen from  './my_tasker/favorate_tasker/FavorateTaskerScreen';
+import FavoriteTaskerScreen from  './my_tasker/favorite_tasker/FavoriteTaskerScreen';
 import ProfileScreen from './profile/ProfileScreen';
 import HomeScreen from './HomeScreen';
 import ConversationsScreen from './conversation/ConversationScreen';
@@ -17,7 +17,7 @@ class CustomerDashBoardScreen extends React.Component {
       { key: 'home', title: 'Home', icon: 'home-outline', color: 'white'},
       { key: 'tasks', title: 'Tasks', icon: 'view-list', color: 'white' },
       { key: 'past_tasker', title: 'Past Tasker', icon: 'history', color: 'white' },
-      { key: 'favorate_tasker', title: 'Favorate Tasker', icon: 'account-outline', color: 'white' },
+      { key: 'favorite_tasker', title: 'Favorite Tasker', icon: 'account-outline', color: 'white' },
       { key: 'chat', title: 'Chat', icon: 'message-text-outline', color: 'white' },
       { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' },
     ],
@@ -29,7 +29,7 @@ class CustomerDashBoardScreen extends React.Component {
     home: HomeScreen,
     tasks: TasksScreen,
     past_tasker: PastTaskerScreen,
-    favorate_tasker: FavorateTaskerScreen,
+    favorite_tasker: FavoriteTaskerScreen,
     chat: ConversationsScreen,
     profile: ProfileScreen,
   });

@@ -11,7 +11,7 @@ import { PENDING_TRANSACTION_LIST } from '../../../../queries'
 import { DEFAULT_URL } from '../../../../actions/types';
 
 import CustomerRequestInfoScreen from './CustomerRequestInfoScreen';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const CustomerRequestScreen = ({ tasker_id, navigation }) => {
   const netInfo = useNetInfo();

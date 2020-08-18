@@ -10,7 +10,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import RNSchedule from 'rnschedule';
 import TransactionInfoScreen from '../transaction_info/TransactionInfoScreen';
 import CustomerRequestScreen from '../customer_request/CustomerRequestScreen';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const AppointmentScreen = ({ tasker_id, navigation }) => {
   const arr = []
@@ -39,7 +39,7 @@ const AppointmentScreen = ({ tasker_id, navigation }) => {
     data.taskerAppointmentList.map((ap) => {
       arr.push({
         title: `with ${ap.customer.firstName} ${ap.customer.lastName}`,
-        subtitle: `${ap.done ? 'Done' : 'Undone'}`,
+        subtitle: `${ap.done ? 'Completed' : 'Scheduled'}`,
         start: new Date(...getParsedDate(`${ap.from}`)), 
         end: new Date(...getParsedDate(`${ap.to}`)),
         color: 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',

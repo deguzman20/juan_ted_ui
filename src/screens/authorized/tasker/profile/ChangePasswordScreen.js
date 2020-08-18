@@ -10,22 +10,22 @@ import {
   newPasswordValidator, 
   confirmPasswordValidator } from './../../../../core/utils';
 
-import Background from './../../../../components/Background';
-import Header from './../../../../components/Header';
-import Button from './../../../../components/Button';
-import TextInput from './../../../../components/TextInput';
-import BackButton from './../../../../components/BackButton';
+import Loader from "react-native-modal-loader";
+
+import Background from './../../../../components/atoms/background/Background';
+import Header from './../../../../components/atoms/header/Header';
+import Button from './../../../../components/atoms/button/Button';
+import TextInput from './../../../../components/atoms/text_input/TextInput';
+import BackButton from './../../../../components/atoms/button/BackButton';
 
 const ChangePasswordScreen = ({ navigation, tasker_id }) => {
   const netInfo = useNetInfo();
   const [updatePassword] = useMutation(UPDATE_PASSWORD);
+  
+  const [isLoading, setLoading] = useState(false);
   const [old_password, setOldPassword] = useState({ value: '', error: '' });
   const [new_password, setNewPassword] = useState({ value: '', error: '' });
   const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' });
-
-  toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
 
   _onChangePasswordPressed = () => {
     const oldPasswordError = oldPasswordValidator(old_password.value);
@@ -40,28 +40,36 @@ const ChangePasswordScreen = ({ navigation, tasker_id }) => {
     }
 
     if(netInfo.isConnected){
-      updatePassword({ 
-        variables: { 
-          id: parseInt(tasker_id), 
-          old_password: old_password.value, 
-          new_password: new_password.value, 
-          confirm_password: confirm_password.value,
-          customer: false
-        } 
-      }).then(({ data }) =>{
-        if(data !== null){
-          if(data.updatePassword.response === "Password Successfuly updated!"){
-            setLoading(false)
-            Alert.alert(data.updatePassword.response)
-            navigation.navigate('ProfileScreen')
-          }
-          else{
-            toggleModal();
+      console.log("darlene")
+      setTimeout(() => {
+        for(let i = 1; i <= 3; i++){
+          setLoading(true)
+          if(i === 3){
+            updatePassword({ 
+              variables: { 
+                id: parseInt(tasker_id), 
+                old_password: old_password.value, 
+                new_password: new_password.value, 
+                confirm_password: confirm_password.value,
+                customer: false
+              } 
+            }).then(({ data }) =>{
+              if(data !== null){
+                if(data.updatePassword.response === "Password Successfuly updated!"){
+                  setLoading(false)
+                  Alert.alert(data.updatePassword.response)
+                  navigation.navigate('ProfileScreen')
+                }
+                else{
+                  Alert.alert('Incorrect old password')
+                  setLoading(false)
+                }
+              }
+            })
           }
         }
-      })
+      },3000)
     }
-
   };
 
   return(
@@ -103,8 +111,9 @@ const ChangePasswordScreen = ({ navigation, tasker_id }) => {
         />
 
         <Button mode="contained" onPress={_onChangePasswordPressed} style={styles.button}>
-          Sign Up
+          Update Password
         </Button>
+        <Loader loading={isLoading} color="#ff66be" />
       </Background>
       <InternetConnectionChecker />
     </React.Fragment>

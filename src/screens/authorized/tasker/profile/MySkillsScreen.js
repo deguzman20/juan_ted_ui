@@ -12,10 +12,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { theme } from './../../../../core/theme';
 import { Chip } from 'react-native-paper';
 
-import Background from './../../../../components/Background';
-import Header from './../../../../components/Header';
-import BackButton from './../../../../components/BackButton';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import Background from './../../../../components/atoms/background/Background';
+import Header from './../../../../components/atoms/header/Header';
+import BackButton from './../../../../components/atoms/button/BackButton';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import _ from 'lodash';
 
 const MySkillsScreen = ({ navigation, tasker_id }) => {
@@ -49,7 +49,7 @@ const MySkillsScreen = ({ navigation, tasker_id }) => {
   const addSkill = (service_type_id) => {
     if(netInfo.isConnected){
       Alert.alert(
-        "Are you sure you want to remove this",
+        "Are you sure you want to add this",
         "",
         [
           {
@@ -147,7 +147,6 @@ const MySkillsScreen = ({ navigation, tasker_id }) => {
             {
               data.tasker[0].featuredSkills.length >= 1 ? (
                 data.tasker[0].featuredSkills.map((fs, i) => {
-                  // selected_arr.push(fs.serviceType.id)
                   return(
                     <View style={styles.chipWrapper}>
                       <Chip

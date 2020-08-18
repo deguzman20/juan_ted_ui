@@ -18,7 +18,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 
 const NailCareScreen = ({ navigation }) => {

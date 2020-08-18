@@ -12,9 +12,9 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { SafeAreaView } from 'react-navigation';
-import InternetConnectionChecker from '../../../../../components/InternetConnectionChecker';
 import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
 import ReviewsScreen from '../../my_tasker/ReviewsScreen';
+import InternetConnectionChecker from '../../../../../components/atoms/snackbar/InternetConnectionChecker';
 import _ from 'lodash';
 
 const PastTaskerScreen = ({ customer_id, navigation }) => {
@@ -106,7 +106,7 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
         rightElement={
           <Button 
             buttonStyle={{ backgroundColor: '#009C3C' }}
-            title={`${item.favorate ? 'Remove': 'Add'} to favorate`}
+            title={`${item.favorate ? 'Remove': 'Add'} to favorite`}
             onPress={() => { item.favorate ?  _onRemoveToFavorateTaskerPressed(item.id) :  _onAddToFavorateTaskerPressed(item.id) }}
           /> 
         }

@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { CUSTOMER_SCHEDULED_TRANSACTION_LIST  } from '../../../../../queries'
 import RNSchedule from 'rnschedule';
-import InternetConnectionChecker from '../../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const ScheduledTaskScreen = ({ customer_id, navigation }) => {
   const arr = []
@@ -33,7 +33,7 @@ const ScheduledTaskScreen = ({ customer_id, navigation }) => {
     data.customerScheduledTransactionList.map((ap) => {
       arr.push({
         title: `with ${ap.tasker.firstName} ${ap.tasker.lastName}`,
-        subtitle: `${ap.done ? 'Done' : 'Undone'}`,
+        subtitle: `${ap.done ? 'Completed' : 'Scheduled'}`,
         start: new Date(...getParsedDate(`${ap.from}`)), 
         end: new Date(...getParsedDate(`${ap.to}`)),
         color: 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')',

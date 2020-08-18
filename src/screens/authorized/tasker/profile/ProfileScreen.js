@@ -18,12 +18,14 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { taskerLogoutAction } from './../../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
-import Background from '../../../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
 import MySkillsScreen from './MySkillsScreen';
 import CurrentLocationScreen from '../../tasker/map/CurrentLocationScreen';
+
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+import Background from '../../../../components/atoms/background/Background';
+
 
 const ProfileScreen = ({ navigation, tasker_id, taskerLogoutAction }) => {
   const netInfo = useNetInfo();

@@ -14,7 +14,7 @@ import {
 import { Chip } from 'react-native-paper';
 
 import { DEFAULT_URL } from "../../../../actions/types";
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const ReviewsScreen = ({ navigation }) => {
   keyExtractor = (item, index) => index.toString()

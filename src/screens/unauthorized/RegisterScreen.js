@@ -1,14 +1,8 @@
 import React, { memo, useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { CREATE_CUSTOMER } from './../../queries';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
-import Background from './../../components/Background';
-import Header from './../../components/Header';
-import Button from './../../components/Button';
-import TextInput from './../../components/TextInput';
-import BackButton from './../../components/BackButton';
-import { theme } from './../../core/theme';
-import Loader from "react-native-modal-loader";
+import { SafeAreaView } from 'react-native';
+
 import {
   emailValidator,
   passwordValidator,
@@ -17,8 +11,17 @@ import {
   mobileNumberValidator
 } from './../../core/utils';
 
+import Button from './../../components/atoms/button/Button';
+import Header from './../../components/atoms/header/Header';
+import ModalLoader from '../../components/atoms/loader/ModalLoader';
+import TextInput from './../../components/atoms/text_input/TextInput';
+import Background from './../../components/atoms/background/Background';
+import BackButton from './../../components/atoms/button/BackButton';
+
+import RegisterTextWithLinkSection from './../../components/molecules/register_text_with_link_section/RegisterTextWithLinkSection';
+
 const RegisterScreen = ({ navigation }) => {
-  const [createCustomer, response] = useMutation(CREATE_CUSTOMER);
+  const [createCustomer] = useMutation(CREATE_CUSTOMER);
 
   const [isLoading, setLoading] = useState(false)
   const [first_name, setFirstName] = useState({ value: '', error: '' });
@@ -108,46 +111,23 @@ const RegisterScreen = ({ navigation }) => {
           secureTextEntry
         />
 
-        <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
+        <Button mode="contained" 
+          onPress={_onSignUpPressed} 
+          style={{ marginTop: 24 }}
+        >
           Sign Up
         </Button>
 
-        <View style={styles.row}>
-          <Text style={styles.label}>Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-            <Text style={styles.link}>Login</Text>
-          </TouchableOpacity>
-        </View>
+        <RegisterTextWithLinkSection 
+          navigation={navigation}
+        />
 
-        <View style={styles.container}>
-          <Loader loading={isLoading} color="#ff66be" />
-        </View>
-    </Background>
+        <ModalLoader 
+          isLoading={isLoading} 
+        />
+      </Background>
     </React.Fragment>
   );
 };
-
-const styles = StyleSheet.create({
-  label: {
-    color: theme.colors.secondary,
-  },
-  button: {
-    marginTop: 24,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  link: {
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  }
-});
 
 export default memo(RegisterScreen);

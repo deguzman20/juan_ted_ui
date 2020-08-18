@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { FAVORATE_TASKER_BY_GEOLOCATION } from '../../../../queries';
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import DatePicker from 'react-native-datepicker';
 import { useQuery } from 'react-apollo';
 

@@ -19,7 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { DEFAULT_URL } from "../../../../actions/types";
 import { TASKER_INFO } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const MyTaskerInfoScreen = ({ navigation }) => {
   const { loading, error, data } = useQuery(TASKER_INFO, {

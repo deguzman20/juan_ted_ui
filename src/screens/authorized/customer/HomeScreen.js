@@ -3,11 +3,11 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  Image,
   FlatList,
   SafeAreaView
 } from 'react-native';
-import { Card, Text, Button, Icon } from 'react-native-elements';
+import { Text } from 'react-native-elements';
+import { Card } from 'react-native-paper';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -18,8 +18,6 @@ import { getAllServiceAction } from './../../../actions';
 import { DEFAULT_URL, ITEM_WIDTH } from './../../../actions/types';
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../components/InternetConnectionChecker';
-
 import MyTodoListScreen from './todo/MyTodoListScreen';
 import ProfileScreen from './profile/ProfileScreen';
 import HairSalonScreen from './services/HairSalonScreen';
@@ -29,6 +27,8 @@ import TaskersScreen from './geocoded_taskers/TaskersScreen';
 import TaskerInfoScreen from './geocoded_taskers/TaskerInfoScreen';
 import ReviewsScreen from './geocoded_taskers/ReviewsScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
+
+import InternetConnectionChecker from '../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const HomeScreen = ({ navigation, customer_first_name }) => {
   const netInfo = useNetInfo();
@@ -64,6 +64,7 @@ const HomeScreen = ({ navigation, customer_first_name }) => {
   }
 
   return(
+
     <View style={{ flex: 1 }}>
       <View style={{ flex: 0.5, backgroundColor: '#009C3C', width: '100%' }}>
         <SafeAreaView/>
@@ -75,22 +76,25 @@ const HomeScreen = ({ navigation, customer_first_name }) => {
           <View>
             <Text h4 style={styles.txt_services_txt}>Services</Text>
           </View>
-          <FlatList style={{ margin:5 }}
+          <FlatList
+            style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 20 }}
             numColumns={2}
             columnWrapperStyle={styles.row}            
             data={data["allServiceType"]}
             keyExtractor={(item) => item.id }
             renderItem={(item) => (
               <TouchableWithoutFeedback onPress={() => { _onNavigateToServiceTypePress(parseInt(item.item.id))}}>
-                <Card
-                  title={item.item.name} 
-                  key={item.item.id}
-                >
-                  <Image style={styles.image} source={{  uri: `${DEFAULT_URL}/${item.item.image}` }}  />
+                <Card style={{ width: (ITEM_WIDTH / 2) - 20, borderRadius: 20 }}>
+                  <Card.Cover 
+                    source={{ uri: `${DEFAULT_URL}/${item.item.image}` }} 
+                  />
+                  <Card.Title
+                    title={`${item.item.name}`}
+                  />
                 </Card>
               </TouchableWithoutFeedback>
             )}
-          />       
+          />     
         </ScrollView>
         <InternetConnectionChecker 
           navigation={navigation}

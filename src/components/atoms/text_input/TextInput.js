@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { TextInput as Input } from 'react-native-paper';
-import { theme } from '../core/theme';
+import { theme } from '../../../core/theme';
 
 const TextInput = ({ errorText, ...props }) => (
   <View style={styles.container}>
@@ -10,7 +10,7 @@ const TextInput = ({ errorText, ...props }) => (
       selectionColor={theme.colors.primary}
       underlineColor="transparent"
       mode="outlined"
-      theme={{ colors: { primary: 'gray',underlineColor:'transparent',}}}
+      theme={{ colors: { primary: 'gray',underlineColor:'transparent'}}}
       {...props}
     />
     {errorText ? <Text style={styles.error}>{errorText}</Text> : null}

@@ -15,7 +15,7 @@ import { connect } from 'react-redux'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Loader from "react-native-modal-loader";
-import axios from 'axios';
+import axios from 'axios';  
 
 const CurrentLocationScreen = ({ customer_id, navigation }) => {
   const _map = useRef(null);
@@ -25,7 +25,7 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
   const [geolocation, setGeolocation] = useState({ lng: 120.9979456, lat: 14.6821022});
   const [isLoading, setLoading] = useState(false);
   const [formattedAddress, setFormattedAddress] = useState('');
-  const [updateCustomerGeolocation, response] = useMutation(UPDATE_CUSTOMER_GEOLOCATION);
+  const [updateCustomerGeolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION);
 
   
   const { loading, error } = useQuery(CUSTOMER_CURRENT_GEOLOCATION, {
@@ -81,10 +81,10 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
               formatted_address: formattedAddress.toString() } 
             }).then((data) => {
               if(i == 3 && data.data.updateCustomerGeolocation.response !== null){
+                setLoading(false)
                 Alert.alert("Your geolocation info was successfuly updated");
                 navigation.navigate('ProfileScreen')
               }
-              setLoading(false)
           })
         }
       },3000)

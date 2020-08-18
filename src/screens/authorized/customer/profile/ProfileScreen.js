@@ -3,7 +3,6 @@ import {  StyleSheet,
   SafeAreaView, 
   View, 
   Text, 
-  ScrollView,
   Alert } from 'react-native';
 
 import { ListItem, Avatar } from 'react-native-elements';
@@ -20,12 +19,12 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { customerLogoutAction } from './../../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
-import Background from '../../../../components/Background';
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
 import CurrentLocationScreen from '../map/CurrentLocationScreen';
-import EditProfilePicScreen from './EditProfilePicScreen';
+
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+import Background from '../../../../components/atoms/background/Background';
 
 const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
   const netInfo = useNetInfo();
@@ -68,7 +67,6 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
               rounded
               source={{ uri: `${DEFAULT_URL}/${data.customer[0].image}` }}
               onPress={() => {
-                navigation.navigate('EditProfilePicScreen')
               }}
               activeOpacity={0.7}
               size={150}
@@ -159,9 +157,6 @@ const App = createStackNavigator({
     navigationOptions: {
       headerTitle: 'My Current Location'
     }
-  },
-  EditProfilePicScreen: {
-    screen: EditProfilePicScreen
   }
 });
 

@@ -91,9 +91,7 @@ const CurrentLocationScreen = ({ tasker_id, navigation }) => {
     else{
       Alert.alert("Please select your current location");
     }
-
   }
-  console.log(error)
 
   if(error || loading) return null;
   return (
@@ -155,7 +153,7 @@ const CurrentLocationScreen = ({ tasker_id, navigation }) => {
             }}
             title={"Your Location"}
           />
-      </MapView>
+        </MapView>
       </View>
       <View style={{
         width: '100%',

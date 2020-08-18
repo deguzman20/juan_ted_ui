@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
 import { StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { useNetInfo } from "@react-native-community/netinfo";
 import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { UPDATE_PASSWORD } from './../../../../queries';
@@ -9,20 +10,21 @@ import {
   newPasswordValidator, 
   confirmPasswordValidator } from './../../../../core/utils';
 
-import { useNetInfo } from "@react-native-community/netinfo";
+import Loader from "react-native-modal-loader";
 
-import Background from './../../../../components/Background';
-import Header from './../../../../components/Header';
-import Button from './../../../../components/Button';
-import TextInput from './../../../../components/TextInput';
-import BackButton from './../../../../components/BackButton';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
 
+import Background from './../../../../components/atoms/background/Background';
+import Header from './../../../../components/atoms/header/Header';
+import Button from './../../../../components/atoms/button/Button';
+import TextInput from './../../../../components/atoms/text_input/TextInput';
+import BackButton from './../../../../components/atoms/button/BackButton';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const ChangePasswordScreen = ({ navigation, customer_id }) => {
   const netInfo = useNetInfo();
   const [updatePassword] = useMutation(UPDATE_PASSWORD);
 
+  const [isLoading, setLoading] = useState(false);
   const [old_password, setOldPassword] = useState({ value: '', error: '' });
   const [new_password, setNewPassword] = useState({ value: '', error: '' });
   const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' });
@@ -39,16 +41,27 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
         setConfirmPassword({ ...confirm_password, error: confirmPasswordError });
         return;
       }
-      updatePassword({ variables: { id: parseInt(customer_id), old_password: old_password.value, new_password: new_password.value, confirm_password: confirm_password.value } }).then(({ data }) =>{
-        if(data !== null){
-          if(data['updatePassword']['response'] === "Password Successfuly updated!"){
-            navigation.navigate('ProfileScreen')
-          }
-          else{
-            Alert.alert("Failed to update")
+      setTimeout(() => {
+        for(let i = 1; i <= 3; i++){
+          setLoading(true)
+          if(i === 3){
+            updatePassword({ variables: { id: parseInt(customer_id), old_password: old_password.value, new_password: new_password.value, confirm_password: confirm_password.value } }).then(({ data }) =>{
+              if(data !== null){
+                console.log(data['updatePassword']['response'])
+                if(data['updatePassword']['response'] === "Password Successfuly updated!"){
+                  setLoading(false)
+                  Alert.alert("Update successfuly")
+                  navigation.navigate('ProfileScreen')
+                }
+                else{
+                  setLoading(false)
+                  Alert.alert("Incorrect old password")
+                }
+              }
+            })
           }
         }
-      })
+      },3000)
     }
   }
 
@@ -94,6 +107,7 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
           Update
         </Button>
       </Background>
+      <Loader loading={isLoading} color="#ff66be" />
       <InternetConnectionChecker />
     </React.Fragment>
   );

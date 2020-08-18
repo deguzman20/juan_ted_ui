@@ -12,15 +12,18 @@ import {
   emailValidator,
   mobileNumberValidator } from './../../../../core/utils';
 
-import Background from './../../../../components/Background';
-import Header from './../../../../components/Header';
-import Button from './../../../../components/Button';
-import TextInput from './../../../../components/TextInput';
-import BackButton from './../../../../components/BackButton';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import Loader from "react-native-modal-loader";
 
+import Background from './../../../../components/atoms/background/Background';
+import Header from './../../../../components/atoms/header/Header';
+import Button from './../../../../components/atoms/button/Button';
+import TextInput from './../../../../components/atoms/text_input/TextInput';
+import BackButton from './../../../../components/atoms/button/BackButton';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+  
 const EditProfileScreen = ({ navigation, tasker_id }) => {
   const netInfo = useNetInfo();
+  const [isLoading, setLoading] = useState(false);
   const [first_name, setFirstName] = useState({ value: '', error: '' });
   const [last_name, setLastName] = useState({ value: '', error: '' });
   const [email, setEmail] = useState({ valu: '', error: '' });
@@ -55,20 +58,28 @@ const EditProfileScreen = ({ navigation, tasker_id }) => {
     }
 
     if(netInfo.isConnected){
-      updateTaskerInfo({ 
-        variables: { 
-          tasker_id: parseInt(tasker_id),
-          first_name: first_name.value,
-          last_name: last_name.value,
-          email: email.value,
-          mobile_number: mobile_number.value
-        } 
-      }).then((data) => {
-        if(data.data.updateTaskerInfo.response === 'Tasker info was updated!'){
-            Alert.alert('Tasker info was updated!');
-            navigation.navigate('ProfileScreen');
+      setTimeout(() => {
+        for(let i = 1; i <= 3; i++){
+          setLoading(true)
+          if(i === 3){
+            updateTaskerInfo({ 
+              variables: { 
+                tasker_id: parseInt(tasker_id),
+                first_name: first_name.value,
+                last_name: last_name.value,
+                email: email.value,
+                mobile_number: mobile_number.value
+              } 
+            }).then((data) => {
+              if(data.data.updateTaskerInfo.response === 'Tasker info was updated!'){
+                setLoading(false)
+                Alert.alert('Tasker info was updated!');
+                navigation.navigate('ProfileScreen');
+              }
+            })
+          }
         }
-      })
+      },3000)
     }
   };
 
@@ -127,6 +138,7 @@ const EditProfileScreen = ({ navigation, tasker_id }) => {
 
           </ScrollView>
         </KeyboardAwareScrollView>
+        <Loader loading={isLoading} color="#ff66be" />
       </Background>
       <InternetConnectionChecker />
     </React.Fragment>

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { View, FlatList, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Text, ListItem, Avatar, Button } from 'react-native-elements';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -10,16 +10,19 @@ import {
 import { DEFAULT_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
 import { formatMoney } from '../../../../core/utils';
 import MapView from 'react-native-maps';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+import Loader from "react-native-modal-loader";
 import _ from 'lodash';
 
 
 const CustomerRequestInfoScreen = ({ navigation }) => {
   const total_cost_arr = [];
   const netInfo = useNetInfo();
+  const [isLoading, setLoading] = useState(false);
   const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
   const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
   const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO;
+
   const [approveRequest] = useMutation(UPDATE_TRANSACTION_STATUS)
   const [createRoom] = useMutation(SEND_MESSAGE)
   const { loading, error, data } = useQuery(PENDING_TRANSACTION_SERVICE_INFO, {
@@ -31,20 +34,28 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
 
   _onApproveRequestPressed = () => { 
     if(netInfo.isConnected){
-      approveRequest({ variables: { transaction_id: parseInt(navigation.state.params.transaction_id) } }).then(({ data }) => {
-        if(data.updateTransactionStatus.response === 'Update was successfully') {
-          createRoom({ 
-            variables: {
-              customer_id: navigation.state.params.customer_id,
-              tasker_id: navigation.state.params.tasker_id,
-              own_by_customer: false,
-              text: 'Hello'
-            } 
-          })
-          navigation.navigate('CustomerRequestScreen')
-          Alert.alert("Approved")
+      setTimeout(() => {
+        for(let i = 1; i <= 3; i++){
+          setLoading(true)
+          if(i == 3){
+            approveRequest({ variables: { transaction_id: parseInt(navigation.state.params.transaction_id) } }).then(({ data }) => {
+              if(data.updateTransactionStatus.response === 'Update was successfully') {
+                createRoom({ 
+                  variables: {
+                    customer_id: navigation.state.params.customer_id,
+                    tasker_id: navigation.state.params.tasker_id,
+                    own_by_customer: false,
+                    text: 'Hello'
+                  } 
+                })
+                setLoading(false)
+                navigation.navigate('CustomerRequestScreen')
+                // Alert.alert("Approved")
+              }
+            })
+          }
         }
-      })
+      },3000)
     }
   }
 
@@ -147,6 +158,7 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
             />
           </View>
         </View>  
+        <Loader loading={isLoading} color="#ff66be" />
         <InternetConnectionChecker />
       </React.Fragment>
     )

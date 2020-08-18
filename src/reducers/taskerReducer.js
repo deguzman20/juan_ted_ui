@@ -10,12 +10,7 @@ const initialState = {
   first_name: '',
   last_name: '',
   image: '',
-  mobile_number: '',
-  // zip_code: '',
-  // hourly_rate: '',
-  // introduction: '',
-  // auth_token: '',
-  // tasks: []
+  mobile_number: ''
 }
 
 export default taskerReducer = (state = initialState, action) => {
@@ -30,10 +25,6 @@ export default taskerReducer = (state = initialState, action) => {
         last_name: action.payload.lastName,
         image: action.payload.image,
         mobile_number: action.payload.mobileNumber,
-        // zip_code: action.payload.zipCode,
-        // hourly_rate: action.payload.hourlyRate,
-        // introduction: action.payload.introduction,
-        // tasks: _.mapKeys(action.payload.tasks, action.payload.tasks.id)
       }
     case TASKER_LOGOUT:
       return {
@@ -45,10 +36,6 @@ export default taskerReducer = (state = initialState, action) => {
         last_name: '',
         image: '',
         mobile_number: '',
-        zip_code: '',
-        hourly_rate: '',
-        introduction: '',
-        tasks: []
       }
     default:
       return state

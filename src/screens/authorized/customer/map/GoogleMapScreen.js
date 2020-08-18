@@ -8,7 +8,7 @@ import { Button } from 'react-native-elements';
 import { formatMoney } from '../../../../core/utils';
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 import axios from 'axios';
 
@@ -92,7 +92,7 @@ const GoogleMapScreen = ({ navigation }) => {
         top: -95
       }}>
         <Text style={styles.totalCost}>Total Cost</Text>
-        <Text style={styles.cost}>P {formatMoney(navigation.state.params["totalPrice"])}</Text>
+        <Text style={styles.cost}>₱ {formatMoney(navigation.state.params["totalPrice"])}</Text>
         <Button 
           style={styles.next_button} 
           title="Next" 

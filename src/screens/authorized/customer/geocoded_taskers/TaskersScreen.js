@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const TaskersScreen = ({ navigation, customer_id }) => {
   const netInfo = useNetInfo();

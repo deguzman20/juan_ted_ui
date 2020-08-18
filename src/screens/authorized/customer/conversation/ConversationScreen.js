@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { CUSTOMER_CONVERSATION_LIST } from './../../../../queries';
 import ConversationList from './ConversationList';
 import MessageScreen from '../messages/MessageScreen';
-import InternetConnectionChecker from '../../../../components/InternetConnectionChecker';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const ConversationScreen = ({ user_id, navigation }) => {
   const { loading, error, data } = useQuery(CUSTOMER_CONVERSATION_LIST, {

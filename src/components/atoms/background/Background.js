@@ -15,7 +15,7 @@ const Background = ({ children }) => (
       {children}
     </KeyboardAvoidingView>
   </ImageBackground>
-);
+)
 
 const styles = StyleSheet.create({
   background: {
@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})
 
-export default memo(Background);
+export default memo(Background)

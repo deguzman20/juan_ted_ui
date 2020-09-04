@@ -18,14 +18,14 @@ import Loader from "react-native-modal-loader";
 import axios from 'axios';  
 
 const CurrentLocationScreen = ({ customer_id, navigation }) => {
-  const _map = useRef(null);
-  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
-  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
-  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO;
-  const [geolocation, setGeolocation] = useState({ lng: 120.9979456, lat: 14.6821022});
-  const [isLoading, setLoading] = useState(false);
-  const [formattedAddress, setFormattedAddress] = useState('');
-  const [updateCustomerGeolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION);
+  const _map = useRef(null)
+  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT
+  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5)
+  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO
+  const [geolocation, setGeolocation] = useState({ lng: 120.9979456, lat: 14.6821022})
+  const [isLoading, setLoading] = useState(false)
+  const [formattedAddress, setFormattedAddress] = useState('')
+  const [updateCustomerGeolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION)
 
   
   const { loading, error } = useQuery(CUSTOMER_CURRENT_GEOLOCATION, {
@@ -33,9 +33,9 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
       Geolocation.getCurrentPosition(
         //Will give you the current location
         (position) => {
-          const currentLongitude = JSON.stringify(position.coords.longitude);
+          const currentLongitude = JSON.stringify(position.coords.longitude)
           //getting the Longitude from the location json
-          const currentLatitude = JSON.stringify(position.coords.latitude);
+          const currentLatitude = JSON.stringify(position.coords.latitude)
           //getting the Latitude from the location json
           setGeolocation({ 
             lng: data.customer[0].lng !== null ? parseFloat(data.customer[0].lng) : currentLongitude,
@@ -46,7 +46,7 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
         { 
           enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 
         }
-      );
+      )
     },
     variables: { customer_id: parseInt(customer_id) },
     pollInterval: 500
@@ -63,10 +63,9 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
           zoom: 10
         },
         5000
-      );
+      )
     }
   },[])
-  
   
   const _onChangeGeolocationPressed = () => {
     if(formattedAddress !== ""){
@@ -92,88 +91,86 @@ const CurrentLocationScreen = ({ customer_id, navigation }) => {
     else{
       Alert.alert("Please select your current location");
     }
-
   }
 
   if(error || loading) return null;
-   return (
-    <View style={styles.container}>
-      <View style={styles.mapViewStack}>
-        <MapView
-          initialRegion={{
-            latitude: geolocation.lat,   
-            longitude: geolocation.lng,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }}
-          customMapStyle={[]}
-          style={styles.mapView}
-          ref={_map}
-        >
-          <GooglePlacesAutocomplete
-            placeholder='Search'
-            onPress={(details = null) => {
-              axios.get(`${GOOGLE_GEOCODE_URL}?place_id=${details['place_id']}&key=${GOOGLE_PLACE_API_KEY}`)
-              .then((response) => {
-                const data = response.data["results"];
-                const lng = data[0]["geometry"]["location"]["lng"]
-                const lat = data[0]["geometry"]["location"]["lat"]
-                setGeolocation(({ lng, lat }))
-                setFormattedAddress(data[0].formatted_address)
-              })
-              .catch((error) => console.log(error))
-            }}
-            query={{
-              key: GOOGLE_PLACE_API_KEY,
-              language: 'en',
-              components: 'country:ph'
-            }}
-            styles={{
-              textInputContainer: {
-                backgroundColor: 'rgba(0,0,0,0)',
-                borderTopWidth: 0,
-                borderBottomWidth: 0
-              },
-              textInput: {
-                marginLeft: 10,
-                marginRight: 10,
-                height: 38,
-                color: '#5d5d5d',
-                fontSize: 16,
-              },
-              predefinedPlacesDescription: {
-                color: '#1faadb',
-                backgroundColor: 'white'
-              },
-            }}
-          />
-          <MapView.Marker.Animated
-            coordinate={{ 
+    return (
+      <View style={styles.container}>
+        <View style={styles.mapViewStack}>
+          <MapView
+            initialRegion={{
               latitude: geolocation.lat,   
-              longitude: geolocation.lng
+              longitude: geolocation.lng,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA,
             }}
-            title={"Your Location"}
-          />
-      </MapView>
+            customMapStyle={[]}
+            style={styles.mapView}
+            ref={_map}
+          >
+            <GooglePlacesAutocomplete
+              placeholder='Search'
+              onPress={(details = null) => {
+                axios.get(`${GOOGLE_GEOCODE_URL}?place_id=${details['place_id']}&key=${GOOGLE_PLACE_API_KEY}`)
+                .then((response) => {
+                  const data = response.data["results"];
+                  const lng = data[0]["geometry"]["location"]["lng"]
+                  const lat = data[0]["geometry"]["location"]["lat"]
+                  setGeolocation(({ lng, lat }))
+                  setFormattedAddress(data[0].formatted_address)
+                })
+                .catch((error) => console.log(error))
+              }}
+              query={{
+                key: GOOGLE_PLACE_API_KEY,
+                language: 'en',
+                components: 'country:ph'
+              }}
+              styles={{
+                textInputContainer: {
+                  backgroundColor: 'rgba(0,0,0,0)',
+                  borderTopWidth: 0,
+                  borderBottomWidth: 0
+                },
+                textInput: {
+                  marginLeft: 10,
+                  marginRight: 10,
+                  height: 38,
+                  color: '#5d5d5d',
+                  fontSize: 16,
+                },
+                predefinedPlacesDescription: {
+                  color: '#1faadb',
+                  backgroundColor: 'white'
+                },
+              }}
+            />
+            <MapView.Marker.Animated
+              coordinate={{ 
+                latitude: geolocation.lat,   
+                longitude: geolocation.lng
+              }}
+              title={"Your Location"}
+            />
+        </MapView>
+        </View>
+        <View style={{
+          width: '100%',
+          height: 80,
+          backgroundColor: "white",
+          position: 'absolute',
+          top: '91%'
+        }}>
+          <Button 
+            style={styles.updateBtn} 
+            title="Update my geolocation" 
+            onPress={() =>{ _onChangeGeolocationPressed() }} 
+            buttonStyle={styles.update_button_background_color} />
+        </View>
+        <Loader loading={isLoading} color="#ff66be" />
       </View>
-      <View style={{
-        width: '100%',
-        height: 80,
-        backgroundColor: "white",
-        position: 'absolute',
-        top: '91%'
-      }}>
-        <Button 
-          style={styles.updateBtn} 
-          title="Update my geolocation" 
-          onPress={() =>{ _onChangeGeolocationPressed() }} 
-          buttonStyle={styles.update_button_background_color} />
-      </View>
-      <Loader loading={isLoading} color="#ff66be" />
-    </View>
-  );
-}
-  
+    );
+  }
 
 const mapStateToProps = ({ customerReducer }) => {
   return {
@@ -222,6 +219,6 @@ const styles = StyleSheet.create({
   update_button_background_color: {
     backgroundColor: '#009C3C'
   }
-});
+})
 
-export default memo(connect(mapStateToProps, null)(CurrentLocationScreen));
+export default memo(connect(mapStateToProps, null)(CurrentLocationScreen))

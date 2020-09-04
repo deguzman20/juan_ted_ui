@@ -260,6 +260,28 @@ export const SERVICES = gql`
     }
   }`;
 
+export const SERVICE_DETAILS = gql `
+  query service($service_type_id: Int!) {
+    service(serviceTypeId: $service_type_id) {
+      id
+      name
+      image
+      price
+      whyThisServices {
+        id
+        reason
+      }
+      equipmentUses {
+        id
+        text
+      }
+      whatIsIncludeds {
+        id
+        text
+      }
+    }
+  }`;
+
 
 export const SPECIFIC_TODO = gql `
   query todo($customer_id: Int!) {
@@ -675,5 +697,28 @@ export const CUSTOMER_SCHEDULED_TRANSACTION_LIST = gql `
           price
         }
       }
+    }
+  }`;
+
+export const MOST_HELPFUL_REVIEW = gql `
+  query mostHelpfulReviews($service_id: Int!) {
+    mostHelpfulReviews(serviceId: $service_id) {
+      id
+      rating
+      comment
+      customer {
+        id
+        firstName
+        lastName
+        image
+      }
+    }
+  }`;
+
+export const CUSTOMER_SHIPPING_ADDRESS = gql `
+  query customerShippingAddressList($customer_id: Int!) {
+    customerShippingAddressList(customerId: $customer_id) {
+      id
+      formattedAddress
     }
   }`;

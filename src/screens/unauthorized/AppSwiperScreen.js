@@ -1,11 +1,7 @@
 import React, {  memo, useEffect } from 'react';
-import {
-  StyleSheet,
-  View,
-  Image
-} from 'react-native';
-import { ITEM_WIDTH, ITEM_HEIGHT  } from './../../actions/types';
+import { View, Image } from 'react-native';
 import { connect } from 'react-redux';
+import { styles } from './../../styles/unauthorized/AppSwiperStyle';
 import Swiper from 'react-native-swiper';
 
 const AppSwiperScreen = ({ customer_id, tasker_id, navigation }) => {
@@ -46,28 +42,6 @@ const AppSwiperScreen = ({ customer_id, tasker_id, navigation }) => {
   )
 }
 
-
-const styles = StyleSheet.create({
-  slide: {
-    flex: 1,
-    backgroundColor: 'white'
-  },
-  container: {
-    flex: 1
-  },
-  image: {
-    width: ITEM_WIDTH,
-    height: ITEM_HEIGHT,
-    backgroundColor: 'transparent',
-    position: 'absolute'
-  },
-
-  button: {
-    padding:10,
-    marginTop:ITEM_HEIGHT-175,
-  }
-})
-
 const mapStateToProps = ({ customerReducer, taskerReducer }) => {
   return {
     customer_id: customerReducer.id,
@@ -75,4 +49,4 @@ const mapStateToProps = ({ customerReducer, taskerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(AppSwiperScreen));
+export default memo(connect(mapStateToProps, null)(AppSwiperScreen))

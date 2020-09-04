@@ -7,4 +7,4 @@ const Message = ({ text, id }) => (
   </Text> 
 )
 
-export default memo(Message);
+export default memo(Message)

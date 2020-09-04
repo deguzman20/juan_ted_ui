@@ -15,19 +15,19 @@ export default InternetConnectionChecker = ({ navigation }) => {
                 <Text style={styles.txt_connection}>You are currently offline, some features may be disabled</Text>
               </View>
             )}
-            action={(
-              <TouchableWithoutFeedback 
-                onPress={() => { 
-                  console.log(navigation.navigate)
-                }}
-              >
-                <Text 
-                  style={styles.txt_retry}
-                >
-                  Retry
-                </Text>
-              </TouchableWithoutFeedback>
-            )}
+            // action={(
+            //   <TouchableWithoutFeedback 
+            //     onPress={() => { 
+            //       console.log(navigation.navigate)
+            //     }}
+            //   >
+            //     <Text 
+            //       style={styles.txt_retry}
+            //     >
+            //       Retry
+            //     </Text>
+            //   </TouchableWithoutFeedback>
+            // )}
             autoHidingTime={0}
             
           />

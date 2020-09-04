@@ -21,7 +21,7 @@ const Button = ({ mode, style, children, ...props }) => (
   >
     {children}
   </PaperButton>
-);
+)
 
 const styles = StyleSheet.create({
   button: {
@@ -33,6 +33,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 26,
   },
-});
+})
 
-export default memo(Button);
+export default memo(Button)

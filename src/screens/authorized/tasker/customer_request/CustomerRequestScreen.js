@@ -1,7 +1,8 @@
 import React, { memo } from 'react';
-import { View, StyleSheet, ScrollView, SafeAreaView, FlatList, Image } from 'react-native';
+import { View, ScrollView, SafeAreaView, FlatList } from 'react-native';
 import { Text, ListItem } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
+import { styles } from './../../../../styles/authorized/tasker/customer_request/CustomerRequestStyle';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -12,13 +13,14 @@ import { DEFAULT_URL } from '../../../../actions/types';
 
 import CustomerRequestInfoScreen from './CustomerRequestInfoScreen';
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+import EmptyCustomerRequest from '../../../../components/molecules/empty_container/EmptyCustomerRequest';
 
 const CustomerRequestScreen = ({ tasker_id, navigation }) => {
-  const netInfo = useNetInfo();
+  const netInfo = useNetInfo()
   const { loading, error, data } = useQuery(PENDING_TRANSACTION_LIST, {
     variables: { tasker_id: parseInt(tasker_id) },
     pollInterval: 500
-  });
+  })
 
   _onCustomerRequestInfoNavigatePressed = (transaction_id, customer_id) => {
     if(netInfo.isConnected){
@@ -34,7 +36,7 @@ const CustomerRequestScreen = ({ tasker_id, navigation }) => {
   keyExtractor = (item, index) => index.toString()
   
   renderItem = ({ item }) => {
-    const { id, firstName, lastName, image } = item.customer;
+    const { id, firstName, lastName, image } = item.customer
     return(
       <ListItem
         onPress={() => { 
@@ -96,62 +98,13 @@ const CustomerRequestScreen = ({ tasker_id, navigation }) => {
       )
     }
     else{
-      return(
-        <View style={styles.empty_request_container}>
-          <Image source={require('../../../../assets/tasker.png')} />
-          <Text h3 style={styles.empty_request_txt}>No Request</Text>
-        </View>
-      )
+      return <EmptyCustomerRequest />
     }
   }
   else{
-    return(
-      <View style={styles.empty_request_container}>
-        <Image source={require('../../../../assets/tasker.png')} />
-        <Text h3 style={styles.empty_request_txt}>No Request</Text>
-      </View>
-    )
+    return <EmptyCustomerRequest />
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingLeft: '5%',
-    paddingRight: '5%'
-  },
-  first_row_container: {
-    flexDirection: 'row',
-    height: 70,
-  },
-  customer_request_txt: {
-    paddingLeft: 30,
-    paddingTop: 20
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: 0
-  },
-  chipWrapper: {
-    flex: 1,
-    height: 30,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginTop: 20,
-    width: '90%',
-    marginLeft: '5%',
-    alignContent: 'center'    
-  },
-  empty_request_txt: {
-    textAlign: 'center',
-    color: 'black'
-  },
-  empty_request_container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
-  }
-});
 
 const mapStateToProps = ({ taskerReducer }) => {
   return {
@@ -173,6 +126,6 @@ const App = createStackNavigator({
       title: ''
     }
   }
-});
+})
 
-export default memo(createAppContainer(App));
+export default memo(createAppContainer(App))

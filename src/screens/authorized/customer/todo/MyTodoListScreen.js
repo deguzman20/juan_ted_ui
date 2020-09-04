@@ -10,22 +10,22 @@ import TextInput from './../../../../components/atoms/text_input/TextInput';
 import Button from './../../../../components/atoms/button/Button';
 
 const MyTodoListScreen = ({ todos, customer_id, addTodo, deleteTodo }) => {
-  const [createTodo] = useMutation(CREATE_TODO);
-  const [removeTodo] = useMutation(DELETE_TODO);
-  const [todo_description, setTodoDescription] = useState({ value: '', error: '' });
+  const [createTodo] = useMutation(CREATE_TODO)
+  const [removeTodo] = useMutation(DELETE_TODO)
+  const [todo_description, setTodoDescription] = useState({ value: '', error: '' })
 
   const _onAddTodoPressed = () => {
-    const todoDescriptionError = todoDescriptionValidator(todo_description.value);
+    const todoDescriptionError = todoDescriptionValidator(todo_description.value)
 
     if (todoDescriptionError) {
-      setTodoDescription({ ...todo_description, error: todoDescriptionError });
+      setTodoDescription({ ...todo_description, error: todoDescriptionError })
       return;
     }
     
     createTodo({ variables: { id: parseInt(customer_id), todo_description: todo_description.value} }).then((data) =>{
       addTodo(data)
     })
-  };
+  }
 
   const _onDeleteTodoPressed = (todo_id) => {
     removeTodo({ variables: { todo_id } }).then((data) => {
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     top: 5, 
     backgroundColor: "black"
   }
-});
+})
 
 const mapStateToProps = ( { customerReducer } ) => {
   return {
@@ -101,4 +101,4 @@ const mapStateToProps = ( { customerReducer } ) => {
   }
 }
 
-export default memo(connect(mapStateToProps, { addTodo, deleteTodo })(MyTodoListScreen));
+export default memo(connect(mapStateToProps, { addTodo, deleteTodo })(MyTodoListScreen))

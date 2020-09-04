@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import {  
-  StyleSheet, 
   View, 
   ScrollView,
   FlatList,
@@ -11,8 +10,9 @@ import {
   Rating, 
   ListItem, 
 } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Chip } from 'react-native-paper';
-
+import { styles } from './../../../../styles/authorized/customer/my_tasker/ReviewsStyle';
 import { DEFAULT_URL } from "../../../../actions/types";
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
@@ -32,7 +32,12 @@ const ReviewsScreen = ({ navigation }) => {
         subtitle={
           <React.Fragment>
             <View style={{marginTop: 10}}>
-              <Text>{item.comment}</Text>
+              <Icon 
+                name='quote-left' 
+                style={{ position: 'absolute' }}
+                size={15}
+              />
+              <Text style={{ left: 20 }}>{item.comment}</Text>
             </View>
             <View style={{marginTop: 10}}>
               <Chip
@@ -80,32 +85,4 @@ const ReviewsScreen = ({ navigation }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  reviewWrapper: {
-    flex: 1,
-    height: 30,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginTop: 20,
-    width: '90%',
-    height: '100%',
-    marginLeft: '5%',
-    alignContent: 'center'    
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: -8
-  },
-  ratingWrapper: {
-    position: 'absolute', 
-    top: 0
-  },
-  fullNameTxtOnList: {
-    fontWeight: 'bold'
-  }
-});
-
-export default memo(ReviewsScreen);
+export default memo(ReviewsScreen)

@@ -36,9 +36,9 @@ const App = createStackNavigator({
 }, { 
     initialRouteName: 'LoginScreen',
     headerMode:'none', 
-    // defaultNavigationOptions: {
-    //   gestureEnabled: false
-    // }
+    defaultNavigationOptions: {
+      gestureEnabled: false
+    }
 });
 
 

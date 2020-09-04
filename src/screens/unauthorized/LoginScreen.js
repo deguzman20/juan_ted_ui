@@ -1,15 +1,14 @@
 import React, { memo, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from './../../queries';
 import { customerSignInAction, taskerSignInAction } from './../../actions';
 import { emailValidator, passwordValidator } from './../../core/utils';
 
-import Loader from "react-native-modal-loader";
-
 // atoms
 import Logo from './../../components/atoms/logo/Logo';
+import ModalLoader from '../../components/atoms/loader/ModalLoader';
 import Button from './../../components/atoms/button/Button';
 import TextInput from './../../components/atoms/text_input/TextInput';
 import Background from './../../components/atoms/background/Background';
@@ -24,20 +23,20 @@ import CustomerDashBoardScreen from '../authorized/customer/CustomerDashBoardScr
 import TaskerDashBoardScreen from '../authorized/tasker/TaskerDashBoardScreen';
 
 const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, customer_id, tasker_id}) => {
-  const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN);
-  const [taskerSignIn] = useMutation(TASKER_SIGN_IN);
+  const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN)
+  const [taskerSignIn] = useMutation(TASKER_SIGN_IN)
 
-  const [isLoading, setLoading] = useState(false);
-  const [email, setEmail] = useState({ value: '', error: '' });
-  const [password, setPassword] = useState({ value: '', error: '' });
+  const [isLoading, setLoading] = useState(false)
+  const [email, setEmail] = useState({ value: '', error: '' })
+  const [password, setPassword] = useState({ value: '', error: '' })
 
   const _onLoginPressed = () => {
-    const emailError = emailValidator(email.value);
-    const passwordError = passwordValidator(password.value);
+    const emailError = emailValidator(email.value)
+    const passwordError = passwordValidator(password.value)
 
     if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError });
-      setPassword({ ...password, error: passwordError });
+      setEmail({ ...email, error: emailError })
+      setPassword({ ...password, error: passwordError })
       return;
     }
 
@@ -79,48 +78,49 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
 
   return (
     <React.Fragment>
-      <Background>
-        <Logo />
-        <TextInput
-          label="Email"
-          returnKeyType="next"
-          value={email.value}
-          onChangeText={text => setEmail({ value: text, error: '' })}
-          error={!!email.error}
-          errorText={email.error}
-          autoCapitalize="none"
-          autoCompleteType="email"
-          textContentType="emailAddress"
-          keyboardType="email-address"
-        />
+      <View style={{ flex: 1, marginTop: '50%' }}>
+        <Background>
+          <Logo />
+          <TextInput
+            label="Email"
+            returnKeyType="next"
+            value={email.value}
+            onChangeText={text => setEmail({ value: text, error: '' })}
+            error={!!email.error}
+            errorText={email.error}
+            autoCapitalize="none"
+            autoCompleteType="email"
+            textContentType="emailAddress"
+            keyboardType="email-address"
+          />
 
-        <TextInput
-          label="Password"
-          returnKeyType="done"
-          value={password.value}
-          onChangeText={text => setPassword({ value: text, error: '' })}
-          error={!!password.error}
-          errorText={password.error}
-          secureTextEntry
-        />
+          <TextInput
+            label="Password"
+            returnKeyType="done"
+            value={password.value}
+            onChangeText={text => setPassword({ value: text, error: '' })}
+            error={!!password.error}
+            errorText={password.error}
+            secureTextEntry
+          />
 
-        <ForgotPasswordlinkButton 
-          navigation={navigation}
-        />
+          <ForgotPasswordlinkButton 
+            navigation={navigation}
+          />
 
-        <Button mode="contained" onPress={_onLoginPressed}>
-          Login
-        </Button>
-        <TextWithLinkSection 
-          navigation={navigation} 
-        />
-        <SocialMediaButtons />
-        <Loader loading={isLoading} color="#ff66be" />
-      </Background>
+          <Button mode="contained" onPress={_onLoginPressed}>
+            Login
+          </Button>
+          <TextWithLinkSection 
+            navigation={navigation} 
+          />
+          <SocialMediaButtons />
+          <ModalLoader loading={isLoading} />
+        </Background>
+      </View>
     </React.Fragment>
-  );
-};
-
+  )
+}
 
 const mapStateToProps = ({ customerReducer, taskerReducer }) => {
   return {
@@ -129,4 +129,4 @@ const mapStateToProps = ({ customerReducer, taskerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, { customerSignInAction, taskerSignInAction })(LoginScreen));
+export default memo(connect(mapStateToProps, { customerSignInAction, taskerSignInAction })(LoginScreen))

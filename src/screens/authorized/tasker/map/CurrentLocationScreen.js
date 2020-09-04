@@ -18,23 +18,24 @@ import Loader from "react-native-modal-loader";
 import axios from 'axios';
 
 const CurrentLocationScreen = ({ tasker_id, navigation }) => {
-  const _map = useRef(null);
-  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
-  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
-  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO;
-  const [geolocation, setGeolocation] = useState({ lng: 120.9979456, lat: 14.6821022});
-  const [isLoading, setLoading] = useState(false);
-  const [formattedAddress, setFormattedAddress] = useState('');
-  const [updateTaskerGeolocation, response] = useMutation(UPDATE_TASKER_GEOLOCATION);
+  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT
+  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5)
+  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO
+  
+  const _map = useRef(null)
+  const [geolocation, setGeolocation] = useState({ lng: 120.9979456, lat: 14.6821022})
+  const [isLoading, setLoading] = useState(false)
+  const [formattedAddress, setFormattedAddress] = useState('')
+  const [updateTaskerGeolocation] = useMutation(UPDATE_TASKER_GEOLOCATION)
 
   const { loading, error } = useQuery(TASKER_CURRENT_GEOLOCATION, {
     onCompleted: (data) => {
       Geolocation.getCurrentPosition(
         //Will give you the current location
         (position) => {
-          const currentLongitude = JSON.stringify(position.coords.longitude);
+          const currentLongitude = JSON.stringify(position.coords.longitude)
           //getting the Longitude from the location json
-          const currentLatitude = JSON.stringify(position.coords.latitude);
+          const currentLatitude = JSON.stringify(position.coords.latitude)
           //getting the Latitude from the location json
 
           setGeolocation({ 
@@ -63,7 +64,7 @@ const CurrentLocationScreen = ({ tasker_id, navigation }) => {
           zoom: 10
         },
         5000
-      );
+      )
     }
   },[])
   
@@ -170,9 +171,8 @@ const CurrentLocationScreen = ({ tasker_id, navigation }) => {
       </View>
       <Loader loading={isLoading} color="#ff66be" />
     </View>
-  );
+  )
 }
-  
 
 const mapStateToProps = ({ taskerReducer }) => {
   return {
@@ -221,6 +221,6 @@ const styles = StyleSheet.create({
   update_button_background_color: {
     backgroundColor: '#009C3C'
   }
-});
+})
 
-export default memo(connect(mapStateToProps, null)(CurrentLocationScreen));
+export default memo(connect(mapStateToProps, null)(CurrentLocationScreen))

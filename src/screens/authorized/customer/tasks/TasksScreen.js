@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { styles } from './../../../../styles/authorized/customer/tasks/TasksStyle';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { SafeAreaView } from 'react-navigation';
@@ -24,24 +25,6 @@ const TasksScreen = ({ navigation }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  first_row_container: {
-    flexDirection: 'row',
-    height: 70,
-  },
-  second_row_container: {
-    flex: 2, 
-    flexDirection: 'row'
-  },
-  task_txt: {
-    paddingLeft: 30,
-    paddingTop: 20
-  }
-});
-
 const App = createStackNavigator({
   TasksScreen: { 
     screen: TasksScreen,
@@ -49,6 +32,6 @@ const App = createStackNavigator({
       header: null
     }
   }
-});
+})
 
-export default memo(createAppContainer(App));
+export default memo(createAppContainer(App))

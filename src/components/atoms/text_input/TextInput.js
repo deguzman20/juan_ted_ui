@@ -15,7 +15,7 @@ const TextInput = ({ errorText, ...props }) => (
     />
     {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
   </View>
-);
+)
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     color: theme.colors.error,
     paddingHorizontal: 4,
     paddingTop: 4,
-  },
-});
+  }
+})
 
-export default memo(TextInput);
+export default memo(TextInput)

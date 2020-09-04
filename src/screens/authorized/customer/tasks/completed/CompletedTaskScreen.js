@@ -1,24 +1,66 @@
-import React, { memo } from 'react';
-import { useNetInfo } from '@react-native-community/netinfo';
-import { useQuery } from '@apollo/react-hooks';
+import React, { memo, useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
-import { CUSTOMER_COMPLETED_TRANSACTION_LIST  } from '../../../../../queries'
+import { useNetInfo } from '@react-native-community/netinfo';
+import Geolocation from '@react-native-community/geolocation';
+
+import { 
+  CUSTOMER_COMPLETED_TRANSACTION_LIST,
+  UPDATE_CUSTOMER_GEOLOCATION  } from '../../../../../queries'
+import { GOOGLE_PLACE_API_KEY } from '../../../../../actions/types';
+
 import RNSchedule from 'rnschedule';
+import Loading from '../../../../../components/atoms/loader/Loading';
+import OutOfLocationService from '../../../../../components/molecules/out_of_location_service/OutOfLocationService';
 import InternetConnectionChecker from '../../../../../components/atoms/snackbar/InternetConnectionChecker';
+import axios from 'axios';
 
 const CompletedTaskScreen = ({ customer_id, navigation }) => {
   const arr = []
-  const netInfo = useNetInfo();
+  const netInfo = useNetInfo()
+  const pattern = /Parañaque/g
+  const [compoundCode, setCompoundCode] = useState('')
+  const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION)
   const { loading, error, data } = useQuery(CUSTOMER_COMPLETED_TRANSACTION_LIST, {
     variables: { customer_id: parseInt(customer_id) },
     pollInterval: 600
-  });
+  })
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      //Will give you the current location
+      (position) => {
+        const currentLongitude = JSON.stringify(position.coords.longitude)
+        const currentLatitude = JSON.stringify(position.coords.latitude)
+        console.log(currentLatitude)
+        update_customer_geolocation({ 
+          variables: {
+            customer_id: parseInt(customer_id),
+            lng: currentLongitude,
+            lat: currentLatitude,
+            formatted_address: ''
+          }
+        }).then(({ data }) => {
+          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLatitude},${currentLongitude}&key=${GOOGLE_PLACE_API_KEY}`)
+          .then((response) => {
+            if(response.data.plus_code.compound_code !== ''){
+              setCompoundCode(response.data.plus_code.compound_code)
+            }
+          })
+        })
+      },
+      (error) => alert(error.message),
+      { 
+        enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 
+      }
+    )
+  },[])
 
   getParsedDate = (date) => {
-    var date = String(date).split(' ');
-    var days = String(date[0]).split('-');
-    var hours = String(date[1]).split(':');
-    return [parseInt(days[0]), parseInt(days[1])-1, parseInt(days[2]), parseInt(hours[0]), parseInt(hours[1]), parseInt(hours[2])];
+    var date = String(date).split(' ')
+    var days = String(date[0]).split('-')
+    var hours = String(date[1]).split(':')
+    return [parseInt(days[0]), parseInt(days[1])-1, parseInt(days[2]), parseInt(hours[0]), parseInt(hours[1]), parseInt(hours[2])]
   }
 
   _onNavigateToTransactionInfoPressed = (id) => {
@@ -41,18 +83,28 @@ const CompletedTaskScreen = ({ customer_id, navigation }) => {
       })
     })
 
-  return(
-    <React.Fragment>
-      <RNSchedule
-        dataArray={arr}
-        onEventPress={(appt) => {
-          _onNavigateToTransactionInfoPressed(appt.id)
-        }}
-        accentColor="black"
-      />
-      <InternetConnectionChecker />
-    </React.Fragment>
-  )
+  // if(compoundCode !== ''){
+  //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
+      return(
+        <React.Fragment>
+          <RNSchedule
+            dataArray={arr}
+            onEventPress={(appt) => {
+              _onNavigateToTransactionInfoPressed(appt.id)
+            }}
+            accentColor="black"
+          />
+          <InternetConnectionChecker />
+        </React.Fragment>
+      )
+    // }
+  //   else{
+  //     return <OutOfLocationService />
+  //   }
+  // }
+  // else{
+  //   return <Loading />
+  // }
 }
 
 const mapStateToProps = ({ customerReducer }) => {
@@ -61,4 +113,4 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(CompletedTaskScreen));
+export default memo(connect(mapStateToProps, null)(CompletedTaskScreen))

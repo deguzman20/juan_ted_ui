@@ -12,6 +12,6 @@ const styles = StyleSheet.create({
   label: {
     color: theme.colors.secondary
   }
-});
+})
 
-export default memo(TextLabel);
+export default memo(TextLabel)

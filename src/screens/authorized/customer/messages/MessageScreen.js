@@ -1,18 +1,19 @@
 import React, { memo, useState, useRef } from 'react';
-import { ScrollView, View, StyleSheet, Alert } from 'react-native';
-import { CONVERSATION_MESSAGES, SEND_MESSAGE } from './../../../../queries';
+import { ScrollView, View, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-import { useNetInfo } from "@react-native-community/netinfo";
 import { Query } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
+import { CONVERSATION_MESSAGES, SEND_MESSAGE } from './../../../../queries';
+import { useNetInfo } from "@react-native-community/netinfo";
+import { styles } from './../../../../styles/authorized/customer/messages/MessageStyle';
 import MessageList from './MessageList';
 
 const MessageScreen = ({ navigation, customer_id }) => {
-  const netInfo = useNetInfo();
-  const scrollViewRef = useRef();
-  const [sendMessage] = useMutation(SEND_MESSAGE);
-  const [message, setMessage] = useState({ value: '' });
+  const netInfo = useNetInfo()
+  const scrollViewRef = useRef()
+  const [sendMessage] = useMutation(SEND_MESSAGE)
+  const [message, setMessage] = useState({ value: '' })
   
   _onSendMessagePressed = () => {
     if(netInfo.isConnected){
@@ -44,9 +45,11 @@ const MessageScreen = ({ navigation, customer_id }) => {
               scrollViewRef.current.scrollToEnd({ animated: true })
             }}
           >
-            <MessageList 
-              {...props}
-            />
+            <React.Fragment>
+              <MessageList 
+                {...props}
+              />
+            </React.Fragment> 
           </ScrollView>
           <View style={styles.messageWrapper}>
             <View style={styles.messageInputWrapper}>
@@ -71,25 +74,10 @@ const MessageScreen = ({ navigation, customer_id }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  messageWrapper:{
-    flexDirection: 'row',
-  },
-  messageInputWrapper:{
-    width: '80%'
-  },
-  messageButtonWrapper: {
-    width: '18%'
-  },
-  background_color: {
-    backgroundColor: "#009C3C"
-  }
-});
-
 const mapStateToProps = ({ customerReducer }) => {
   return {
     customer_id: customerReducer.id
   }
 }
 
-export default memo(connect(mapStateToProps, null)(MessageScreen));
+export default memo(connect(mapStateToProps, null)(MessageScreen))

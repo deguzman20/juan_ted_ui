@@ -1,15 +1,17 @@
-import React, { memo } from 'react';
-import { View, FlatList, StyleSheet, ScrollView, Image } from 'react-native';
+import React, { memo, useState, useEffect } from 'react';
+import { View, FlatList, ScrollView, SafeAreaView } from 'react-native';
 import { Text, ListItem, Rating, Button } from 'react-native-elements';
+import { styles } from './../../../../../styles/authorized/customer/my_tasker/favorate_tasker/FavorateTaskerStyle';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { DEFAULT_URL } from '../../../../../actions/types';
-import { FAVORATE_TASKER_LIST } from '../../../../../queries';
-import { useQuery } from '@apollo/react-hooks';
+import { DEFAULT_URL, GOOGLE_PLACE_API_KEY } from '../../../../../actions/types';
+import { 
+  FAVORATE_TASKER_LIST, 
+  UPDATE_CUSTOMER_GEOLOCATION } from '../../../../../queries';
 import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
-import { SafeAreaView } from 'react-navigation';
-
+import Geolocation from '@react-native-community/geolocation';
 import TaskerServiceScreen from '../TaskerServiceScreen';
 import MyTaskerInfoScreen from '../MyTaskerInfoScreen';
 import GoogleMapScreen from '../../map/GoogleMapScreen';
@@ -21,16 +23,53 @@ import TaskerInfoScreen from '../../geocoded_taskers/TaskerInfoScreen';
 import ReviewsScreen from '../ReviewsScreen';
 
 import InternetConnectionChecker from '../../../../../components/atoms/snackbar/InternetConnectionChecker';
+import EmptyFavoriteTasker from '../../../../../components/molecules/empty_container/EmptyFavoriteTasker';
+import Loading from '../../../../../components/atoms/loader/Loading';
+import OutOfLocationService from '../../../../../components/molecules/out_of_location_service/OutOfLocationService';
+import axios from 'axios';
 import _ from 'lodash';
 
 const FavoriteTaskerScreen = ({ customer_id, navigation }) => {
-  const netInfo = useNetInfo();
+  const netInfo = useNetInfo()
+  const pattern = /Parañaque/g
+  const [compoundCode, setCompoundCode] = useState('')
+  const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION)
   const { loading, error, data } = useQuery(FAVORATE_TASKER_LIST, {
     variables: {
       customer_id: parseInt(customer_id)
     },
     pollInterval: 1000
-  });
+  })
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      //Will give you the current location
+      (position) => {
+        const currentLongitude = JSON.stringify(position.coords.longitude)
+        const currentLatitude = JSON.stringify(position.coords.latitude)
+        update_customer_geolocation({ 
+          variables: {
+            customer_id: parseInt(customer_id),
+            lng: currentLongitude,
+            lat: currentLatitude,
+            formatted_address: ''
+          }
+        }).then(({ data }) => {
+          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLatitude},${currentLongitude}&key=${GOOGLE_PLACE_API_KEY}`)
+          .then((response) => {
+            if(response.data.plus_code.compound_code !== ''){
+              setCompoundCode(response.data.plus_code.compound_code)
+            }
+          })
+        })
+      },
+      (error) => alert(error.message),
+      { 
+        enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 
+      }
+    )
+  },[])
+
   
   keyExtractor = (item, index) => index.toString()
 
@@ -72,77 +111,45 @@ const FavoriteTaskerScreen = ({ customer_id, navigation }) => {
   )
 
   if(loading || error) return null;
-  
-  if(data.favorateTaskerList.length >= 1){
-    return(
-      <React.Fragment>
-        <SafeAreaView />
-        <View style={styles.first_row_container}>
-          <Text h4 style={styles.my_tasker_txt}>My Favorite Tasker</Text> 
-        </View>
-        <View style={styles.second_row_container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.container}>
-              <View style={styles.taskerWrapper}>
-                <FlatList
-                  keyExtractor={keyExtractor}
-                  data={data.favorateTaskerList}
-                  renderItem={renderItem}
-                />
-              </View>
-            </View>
-          </ScrollView>
-          <InternetConnectionChecker />
-        </View>  
-      </React.Fragment>
-    )
-  }
-  else {
-    return(
-      <View style={styles.empty_tasker_container}>
-        <Image source={require('../../../../../assets/tasker.png')} />
-        <Text h4 style={styles.empty_tasker_txt}>No Favorate Tasker yet</Text>
-        <InternetConnectionChecker />
-      </View>
-    )
-  }
-  
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: -20
-  },
-  ratingWrapper: {
-    position: 'absolute', 
-    top: 5
-  },
-  empty_tasker_txt: {
-    textAlign: 'center',
-    color: 'black'
-  },
-  empty_tasker_container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
-  },
-  first_row_container: {
-    flexDirection: 'row',
-    height: 70,
-  },
-  second_row_container: {
-    flex: 2, 
-    flexDirection: 'row'
-  },
-  my_tasker_txt: {
-    paddingLeft: 30,
-    paddingTop: 20
-  }
-});
+  // if(compoundCode !== ""){
+  //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
+      if(data.favorateTaskerList.length >= 1){
+        return(
+          <React.Fragment>
+            <SafeAreaView />
+            <View style={styles.first_row_container}>
+              <Text h4 style={styles.my_tasker_txt}>My Favorite Tasker</Text> 
+            </View>
+            <View style={styles.second_row_container}>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.container}>
+                  <View style={styles.taskerWrapper}>
+                    <FlatList
+                      keyExtractor={keyExtractor}
+                      data={data.favorateTaskerList}
+                      renderItem={renderItem}
+                    />
+                  </View>
+                </View>
+              </ScrollView>
+              <InternetConnectionChecker />
+            </View>  
+          </React.Fragment>
+        )
+      }
+      else {
+        return <EmptyFavoriteTasker />
+      }  
+  //   }
+  //   else{
+  //     return <OutOfLocationService />
+  //   }
+  // }
+  // else{
+  //   return <Loading />
+  // }
+}
 
 const mapStateToProps = ({ customerReducer }) => {
   return {
@@ -216,6 +223,6 @@ const App = createStackNavigator({
       headerStyle: {}
     }
   }
-});
+})
 
-export default memo(createAppContainer(App));
+export default memo(createAppContainer(App))

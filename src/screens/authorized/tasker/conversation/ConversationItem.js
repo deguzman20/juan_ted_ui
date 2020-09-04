@@ -5,7 +5,7 @@ import { DEFAULT_URL } from '../../../../actions/types';
 import { useNetInfo } from '@react-native-community/netinfo';
 import _ from 'lodash';
 const ConversationItem = ({ l, i, navigation }) => {
-  const netInfo = useNetInfo();
+  const netInfo = useNetInfo()
   return(
     <TouchableWithoutFeedback onPress={() =>{
       netInfo.isConnected ? navigation.navigate('MessageScreen',{ 
@@ -25,4 +25,5 @@ const ConversationItem = ({ l, i, navigation }) => {
     </TouchableWithoutFeedback>
   )
 }
-export default memo(ConversationItem); 
+
+export default memo(ConversationItem) 

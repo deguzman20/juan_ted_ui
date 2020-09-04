@@ -1,10 +1,10 @@
 import React, { memo, useState } from 'react';
-import { StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { SafeAreaView, Alert } from 'react-native';
+import { styles } from './../../../../styles/authorized/tasker/profile/ChangePasswordStyle';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { UPDATE_PASSWORD } from './../../../../queries';
-import { theme } from './../../../../core/theme';
 import { 
   oldPasswordValidator, 
   newPasswordValidator, 
@@ -19,28 +19,27 @@ import TextInput from './../../../../components/atoms/text_input/TextInput';
 import BackButton from './../../../../components/atoms/button/BackButton';
 
 const ChangePasswordScreen = ({ navigation, tasker_id }) => {
-  const netInfo = useNetInfo();
-  const [updatePassword] = useMutation(UPDATE_PASSWORD);
+  const netInfo = useNetInfo()
+  const [updatePassword] = useMutation(UPDATE_PASSWORD)
   
   const [isLoading, setLoading] = useState(false);
-  const [old_password, setOldPassword] = useState({ value: '', error: '' });
-  const [new_password, setNewPassword] = useState({ value: '', error: '' });
-  const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' });
+  const [old_password, setOldPassword] = useState({ value: '', error: '' })
+  const [new_password, setNewPassword] = useState({ value: '', error: '' })
+  const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' })
 
   _onChangePasswordPressed = () => {
-    const oldPasswordError = oldPasswordValidator(old_password.value);
-    const newPasswordError = newPasswordValidator(new_password.value);
-    const confirmPasswordError = confirmPasswordValidator(confirm_password.value);
+    const oldPasswordError = oldPasswordValidator(old_password.value)
+    const newPasswordError = newPasswordValidator(new_password.value)
+    const confirmPasswordError = confirmPasswordValidator(confirm_password.value)
 
     if (oldPasswordError || newPasswordError || confirmPasswordError) {
-      setOldPassword({ ...old_password, error: oldPasswordError });
-      setNewPassword({ ...new_password, error: newPasswordError });
-      setConfirmPassword({ ...confirm_password, error: confirmPasswordError });
+      setOldPassword({ ...old_password, error: oldPasswordError })
+      setNewPassword({ ...new_password, error: newPasswordError })
+      setConfirmPassword({ ...confirm_password, error: confirmPasswordError })
       return;
     }
 
     if(netInfo.isConnected){
-      console.log("darlene")
       setTimeout(() => {
         for(let i = 1; i <= 3; i++){
           setLoading(true)
@@ -117,25 +116,8 @@ const ChangePasswordScreen = ({ navigation, tasker_id }) => {
       </Background>
       <InternetConnectionChecker />
     </React.Fragment>
-  );
-};
-
-const styles = StyleSheet.create({
-  label: {
-    color: theme.colors.secondary,
-  },
-  button: {
-    marginTop: 24,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  link: {
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-  }
-});
+  )
+}
 
 
 const mapStateToProps = ({ taskerReducer }) => {
@@ -144,4 +126,4 @@ const mapStateToProps = ({ taskerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(ChangePasswordScreen));
+export default memo(connect(mapStateToProps, null)(ChangePasswordScreen))

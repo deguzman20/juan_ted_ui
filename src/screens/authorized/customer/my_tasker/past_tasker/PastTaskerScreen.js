@@ -1,24 +1,34 @@
-import React, { memo } from 'react';
-import { View, FlatList, StyleSheet, ScrollView, Image, Alert } from 'react-native';
+import React, { memo, useState, useEffect } from 'react';
+import { View, FlatList, ScrollView, Alert, SafeAreaView } from 'react-native';
 import { Text, ListItem, Button, Rating } from 'react-native-elements';
+import { styles } from './../../../../../styles/authorized/customer/my_tasker/past_tasker/PastTaskerStyle';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { DEFAULT_URL } from '../../../../../actions/types';
 import { 
   PAST_TASKER_LIST, 
   ADD_TO_FAVORATE_TASKER, 
-  REMOVE_TO_FAVORATE_TASKER } from '../../../../../queries';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+  REMOVE_TO_FAVORATE_TASKER,
+  UPDATE_CUSTOMER_GEOLOCATION } from '../../../../../queries';
+import { GOOGLE_PLACE_API_KEY  } from '../../../../../actions/types';
 import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
-import { SafeAreaView } from 'react-navigation';
+import Geolocation from '@react-native-community/geolocation';
 import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
 import ReviewsScreen from '../../my_tasker/ReviewsScreen';
+import EmptyPastTasker from './../../../../../components/molecules/empty_container/EmptyPastTasker';
 import InternetConnectionChecker from '../../../../../components/atoms/snackbar/InternetConnectionChecker';
+import Loading from '../../../../../components/atoms/loader/Loading';
+import OutOfLocationService from '../../../../../components/molecules/out_of_location_service/OutOfLocationService';
+import axios from 'axios';
 import _ from 'lodash';
 
 const PastTaskerScreen = ({ customer_id, navigation }) => {
-  const netInfo = useNetInfo();
+  const netInfo = useNetInfo()
+  const pattern = /Parañaque/g
+  const [compoundCode, setCompoundCode] = useState('')
+  const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION)
   const [addToFavorateTasker] = useMutation(ADD_TO_FAVORATE_TASKER)
   const [removeToFavorateTasker] = useMutation(REMOVE_TO_FAVORATE_TASKER)
   const { loading, error, data } = useQuery(PAST_TASKER_LIST, {
@@ -26,7 +36,37 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
       customer_id: parseInt(customer_id)
     },
     pollInterval: 300
-  });
+  })
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      //Will give you the current location
+      (position) => {
+        const currentLongitude = JSON.stringify(position.coords.longitude)
+        const currentLatitude = JSON.stringify(position.coords.latitude)
+        console.log(currentLatitude)
+        update_customer_geolocation({ 
+          variables: {
+            customer_id: parseInt(customer_id),
+            lng: currentLongitude,
+            lat: currentLatitude,
+            formatted_address: ''
+          }
+        }).then(({ data }) => {
+          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLatitude},${currentLongitude}&key=${GOOGLE_PLACE_API_KEY}`)
+          .then((response) => {
+            if(response.data.plus_code.compound_code !== ''){
+              setCompoundCode(response.data.plus_code.compound_code)
+            }
+          })
+        })
+      },
+      (error) => alert(error.message),
+      { 
+        enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 
+      }
+    )
+  },[])
 
   _onAddToFavorateTaskerPressed = (id) => {
     if(netInfo.isConnected){
@@ -47,7 +87,7 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
           }
         ],
         { cancelable: false }
-      );  
+      )
     }
   }
 
@@ -70,7 +110,7 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
           }
         ],
         { cancelable: false }
-      );
+      )
     }
   }
 
@@ -117,75 +157,43 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
   }
 
   if(loading || error) return null;
-  
-  if(data.pastTaskerList.length >= 1){
-    return(
-      <React.Fragment>
-        <SafeAreaView />
-        <View style={styles.first_row_container}>
-          <Text h4 style={styles.my_tasker_txt}>My Past Tasker</Text> 
-        </View>
-        <View style={styles.second_row_container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.container}>
-              <FlatList
-                keyExtractor={keyExtractor}
-                data={data.pastTaskerList}
-                renderItem={renderItem}
-              />
-            </View>
-          </ScrollView>
-        </View>  
-        <InternetConnectionChecker />
-      </React.Fragment>
-    )
-  }
-  else {
-    return(
-      <View style={styles.empty_tasker_container}>
-        <Image source={require('../../../../../assets/tasker.png')} />
-        <Text h4 style={styles.empty_tasker_txt}>No Past Tasker Available yet</Text>
-        <InternetConnectionChecker />
-      </View>
-    )
-  }
-  
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: -20
-  },
-  ratingWrapper: {
-    position: 'absolute', 
-    top: 5
-  },
-  empty_tasker_txt: {
-    textAlign: 'center',
-    color: 'black'
-  },
-  empty_tasker_container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
-  },
-  first_row_container: {
-    flexDirection: 'row',
-    height: 70,
-  },
-  second_row_container: {
-    flex: 2, 
-    flexDirection: 'row'
-  },
-  my_tasker_txt: {
-    paddingLeft: 30,
-    paddingTop: 20
-  }
-});
+  // if(compoundCode !== ""){
+  //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
+      if(data.pastTaskerList.length >= 1){
+        return(
+          <React.Fragment>
+            <SafeAreaView />
+            <View style={styles.first_row_container}>
+              <Text h4 style={styles.my_tasker_txt}>My Past Tasker</Text> 
+            </View>
+            <View style={styles.second_row_container}>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles.container}>
+                  <FlatList
+                    keyExtractor={keyExtractor}
+                    data={data.pastTaskerList}
+                    renderItem={renderItem}
+                  />
+                </View>
+              </ScrollView>
+              <InternetConnectionChecker />
+            </View>  
+          </React.Fragment>
+        )
+      }
+      else {
+        return <EmptyPastTasker />
+      }
+  //   }
+  //   else{
+  //     return <OutOfLocationService />
+  //   }
+  // }
+  // else{
+  //   return <Loading />
+  // }
+}
 
 const mapStateToProps = ({ customerReducer }) => {
   return {
@@ -212,7 +220,6 @@ const App = createStackNavigator({
       title: 'Reviews'
     }
   }
-});
+})
 
-export default memo(createAppContainer(App));
-
+export default memo(createAppContainer(App))

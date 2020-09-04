@@ -15,4 +15,4 @@ const SocialMediaButtons = () => {
   )
 }
 
-export default memo(SocialMediaButtons);
+export default memo(SocialMediaButtons)

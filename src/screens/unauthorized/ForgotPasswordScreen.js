@@ -1,12 +1,14 @@
 import React, { memo, useState } from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
-import { theme } from './../../core/theme';
 import { emailValidator } from './../../core/utils';
 import { FORGOT_PASSWORD } from './../../queries';
 import { useNetInfo } from "@react-native-community/netinfo";
 
+import { styles } from './../../styles/unauthorized/ForgotPasswordStyle';
+
 import Header from './../../components/atoms/header/Header';
+import ModalLoader from '../../components/atoms/loader/ModalLoader';
 import TextInput from './../../components/atoms/text_input/TextInput';
 import Button from './../../components/atoms/button/Button';
 import Background from './../../components/atoms/background/Background';
@@ -15,20 +17,27 @@ import InternetConnectionChecker from './../../components/atoms/snackbar/Interne
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const netInfo = useNetInfo()
+  const [isLoading, setLoading] = useState(false)
   const [forgotPassword] = useMutation(FORGOT_PASSWORD)
   const [email, setEmail] = useState({ value: '', error: '' })
 
   const _onSendPressed = () => {
-    const emailError = emailValidator(email.value);
+    const emailError = emailValidator(email.value)
 
     if (emailError) {
-      setEmail({ ...email, error: emailError });
+      setEmail({ ...email, error: emailError })
       return;
     }
 
     if(netInfo.isConnected){
-      forgotPassword({ variables: { email: email.value } })
-      navigation.navigate('LoginScreen')
+      for(let i = 1; i <= 3; i++){
+        setLoading(true)
+        if(i === 3){
+          setLoading(false)
+          forgotPassword({ variables: { email: email.value } })
+          navigation.navigate('LoginScreen')
+        }
+      }
     }
   };
 
@@ -36,7 +45,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     <React.Fragment>
       <Background>
         <BackButton goBack={() => navigation.navigate('LoginScreen')} />
-
+        <SafeAreaView style={{marginBottom: 100}} />
         <Header>Restore Password</Header>
 
         <TextInput
@@ -62,24 +71,11 @@ const ForgotPasswordScreen = ({ navigation }) => {
         >
           <Text style={styles.label}>← Back to login</Text>
         </TouchableOpacity>
+        <ModalLoader loading={isLoading} />
       </Background>
       <InternetConnectionChecker />
     </React.Fragment>
-  );
-};
+  )
+}
 
-const styles = StyleSheet.create({
-  back: {
-    width: '100%',
-    marginTop: 12,
-  },
-  button: {
-    marginTop: 12,
-  },
-  label: {
-    color: theme.colors.secondary,
-    width: '100%',
-  },
-});
-
-export default memo(ForgotPasswordScreen);
+export default memo(ForgotPasswordScreen)

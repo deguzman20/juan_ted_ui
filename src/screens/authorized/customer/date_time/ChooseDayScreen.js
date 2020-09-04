@@ -1,28 +1,28 @@
 import React, { memo, useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, Alert } from 'react-native';
+import { View, TouchableWithoutFeedback, Alert } from 'react-native';
 import { Card, Text, Button } from 'react-native-elements';
-import { ITEM_WIDTH } from '../../../../actions/types';
-import { connect } from 'react-redux';
+import { useQuery } from 'react-apollo';
 import { FAVORATE_TASKER_BY_GEOLOCATION } from '../../../../queries';
+import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
+import { styles } from './../../../../styles/authorized/customer/date_time/ChooseDayStyle'
 
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import DatePicker from 'react-native-datepicker';
-import { useQuery } from 'react-apollo';
 
 const ChooseDayScreen = ({ navigation, customer_id }) => {
-  const today = new Date();
-  const netInfo = useNetInfo();
-  const dateToday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-  const maxDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 6);
-  const [time, setTimeRange] = useState({ from: null, to: null });
-  const [date, setDate] = useState({ date: dateToday });
+  const today = new Date()
+  const netInfo = useNetInfo()
+  const dateToday = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+  const maxDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 6)
+  const [time, setTimeRange] = useState({ from: null, to: null })
+  const [date, setDate] = useState({ date: dateToday })
 
-  const [firstStyle, setFirstStyle] = useState({ color: 'black', backgroundColor: 'white' });
-  const [secondStyle, setSecondStyle] = useState({ color: 'black', backgroundColor: 'white' });
-  const [thirdStyle, setThirdStyle] = useState({ color: 'black', backgroundColor: 'white' });
-  const [fourthStyle, setFourthStyle] = useState({ color: 'black', backgroundColor: 'white' });
-  const [fifthStyle, setFifthStyle] = useState({ color: 'black', backgroundColor: 'white' });
+  const [firstStyle, setFirstStyle] = useState({ color: 'black', backgroundColor: 'white' })
+  const [secondStyle, setSecondStyle] = useState({ color: 'black', backgroundColor: 'white' })
+  const [thirdStyle, setThirdStyle] = useState({ color: 'black', backgroundColor: 'white' })
+  const [fourthStyle, setFourthStyle] = useState({ color: 'black', backgroundColor: 'white' })
+  const [fifthStyle, setFifthStyle] = useState({ color: 'black', backgroundColor: 'white' })
 
   const favorate_tasker_by_geolocation = useQuery(FAVORATE_TASKER_BY_GEOLOCATION, {
     variables: {
@@ -41,18 +41,20 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       if(time.from !== null && time.to !== null){
         if(navigation.state.params.tasker_id === ""){
           navigation.navigate('TaskersScreen',{
+            formatted_address: navigation.state.params.formatted_address, 
             longitude: String(navigation.state.params.longitude), 
             latitude: String(navigation.state.params.latitude),
             start_from: `${date.date} ${time.from}`,
             start_to: `${date.date} ${time.to}`,
             service_type_id: navigation.state.params.service_type_id,
-            services: navigation.state.params.services
+            services: navigation.state.params.services,
+            service_details: navigation.state.params.service_details,
           });
         }
         else{
-          console.log(favorate_tasker_by_geolocation.data.favorateTaskerByGeolocation)
           if(favorate_tasker_by_geolocation.data.favorateTaskerByGeolocation.length !== 0){
             navigation.navigate('TaskerInfoScreen',{ 
+              formatted_address: navigation.state.params.formatted_address, 
               lng: String(navigation.state.params.longitude),
               lat: String(navigation.state.params.latitude),
               start_from: `${date.date} ${time.from}`,
@@ -60,7 +62,8 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
               service_type_id: navigation.state.params.service_type_id,
               customer_id: parseInt(customer_id),
               tasker_id: parseInt(navigation.state.params.tasker_id),
-              services: navigation.state.params.services
+              services: navigation.state.params.services,
+              service_details: navigation.state.params.service_details,
             })
           }
           else{
@@ -76,43 +79,43 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
 
   const hoverizedCard = (data) => {
     if(data === 1){
-      setFirstStyle({ color: 'white', backgroundColor: 'black' });
-      setSecondStyle({ color: 'black', backgroundColor: 'white' });
-      setThirdStyle({ color: 'black', backgroundColor: 'white' });
-      setFourthStyle({ color: 'black', backgroundColor: 'white' });
-      setFifthStyle({ color : 'black', backgroundColor: 'white' });
+      setFirstStyle({ color: 'white', backgroundColor: 'black' })
+      setSecondStyle({ color: 'black', backgroundColor: 'white' })
+      setThirdStyle({ color: 'black', backgroundColor: 'white' })
+      setFourthStyle({ color: 'black', backgroundColor: 'white' })
+      setFifthStyle({ color : 'black', backgroundColor: 'white' })
       setTimeRange({ from: '07:00:00', to: '10:00:00' })
     }
     else if(data === 2){
-      setFirstStyle({ color: 'black', backgroundColor: 'white' });
-      setSecondStyle({ color: 'white', backgroundColor: 'black' });
-      setThirdStyle({ color: 'black', backgroundColor: 'white' });
-      setFourthStyle({ color: 'black', backgroundColor: 'white' });
-      setFifthStyle({ color: 'black', backgroundColor: 'white' });
+      setFirstStyle({ color: 'black', backgroundColor: 'white' })
+      setSecondStyle({ color: 'white', backgroundColor: 'black' })
+      setThirdStyle({ color: 'black', backgroundColor: 'white' })
+      setFourthStyle({ color: 'black', backgroundColor: 'white' })
+      setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '10:00:00', to: '13:00:00' })
     }
     else if(data === 3){
-      setFirstStyle({ color: 'black', backgroundColor: 'white' });
-      setSecondStyle({ color: 'black', backgroundColor: 'white' });
-      setThirdStyle({ color: 'white', backgroundColor: 'black' });
-      setFourthStyle({ color: 'black', backgroundColor: 'white' });
-      setFifthStyle({ color: 'black', backgroundColor: 'white' });
+      setFirstStyle({ color: 'black', backgroundColor: 'white' })
+      setSecondStyle({ color: 'black', backgroundColor: 'white' })
+      setThirdStyle({ color: 'white', backgroundColor: 'black' })
+      setFourthStyle({ color: 'black', backgroundColor: 'white' })
+      setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '13:00:00', to: '16:00:00' })
     }
     else if(data === 4){
-      setFirstStyle({ color: 'black', backgroundColor: 'white' });
-      setSecondStyle({ color: 'black', backgroundColor: 'white' });
-      setThirdStyle({ color: 'black', backgroundColor: 'white' });
-      setFourthStyle({ color: 'white', backgroundColor: 'black' });
-      setFifthStyle({ color: 'black', backgroundColor: 'white' });
+      setFirstStyle({ color: 'black', backgroundColor: 'white' })
+      setSecondStyle({ color: 'black', backgroundColor: 'white' })
+      setThirdStyle({ color: 'black', backgroundColor: 'white' })
+      setFourthStyle({ color: 'white', backgroundColor: 'black' })
+      setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '16:00:00', to: '19:00:00' })
     }
     else if(data === 5){
-      setFirstStyle({ color: 'black', backgroundColor: 'white' });
-      setSecondStyle({ color: 'black', backgroundColor: 'white' });
-      setThirdStyle({ color: 'black', backgroundColor: 'white' });
-      setFourthStyle({ color: 'black', backgroundColor: 'white' });
-      setFifthStyle({ color: 'white', backgroundColor: 'black' });
+      setFirstStyle({ color: 'black', backgroundColor: 'white' })
+      setSecondStyle({ color: 'black', backgroundColor: 'white' })
+      setThirdStyle({ color: 'black', backgroundColor: 'white' })
+      setFourthStyle({ color: 'black', backgroundColor: 'white' })
+      setFifthStyle({ color: 'white', backgroundColor: 'black' })
       setTimeRange({ from: '19:00:00', to: '22:00:00' })
     }
   }
@@ -208,24 +211,4 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-const styles = StyleSheet.create({
-  containerRows: {
-    flexDirection: 'row',
-    height: 35,
-    justifyContent: 'center',
-  },
-  datePicker: {
-    width: ITEM_WIDTH,
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    paddingTop: 20
-  },
-  buttonContainer: {
-    width: ITEM_WIDTH,
-    paddingLeft: '4%',
-    paddingRight: '4s%',
-    paddingTop: '5%'
-  }
-});
-
-export default memo(connect(mapStateToProps, null)(ChooseDayScreen));
+export default memo(connect(mapStateToProps, null)(ChooseDayScreen))

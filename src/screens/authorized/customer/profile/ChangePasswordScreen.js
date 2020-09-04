@@ -1,17 +1,16 @@
 import React, { memo, useState } from 'react';
-import { StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { SafeAreaView, Alert } from 'react-native';
+import { styles } from './../../../../styles/authorized/customer/profile/ChangePasswordStyle';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { UPDATE_PASSWORD } from './../../../../queries';
-import { theme } from './../../../../core/theme';
 import { 
   oldPasswordValidator, 
   newPasswordValidator, 
   confirmPasswordValidator } from './../../../../core/utils';
 
 import Loader from "react-native-modal-loader";
-
 
 import Background from './../../../../components/atoms/background/Background';
 import Header from './../../../../components/atoms/header/Header';
@@ -21,31 +20,38 @@ import BackButton from './../../../../components/atoms/button/BackButton';
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const ChangePasswordScreen = ({ navigation, customer_id }) => {
-  const netInfo = useNetInfo();
-  const [updatePassword] = useMutation(UPDATE_PASSWORD);
+  const netInfo = useNetInfo()
+  const [updatePassword] = useMutation(UPDATE_PASSWORD)
 
   const [isLoading, setLoading] = useState(false);
-  const [old_password, setOldPassword] = useState({ value: '', error: '' });
-  const [new_password, setNewPassword] = useState({ value: '', error: '' });
-  const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' });
+  const [old_password, setOldPassword] = useState({ value: '', error: '' })
+  const [new_password, setNewPassword] = useState({ value: '', error: '' })
+  const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' })
 
   const _onChangePasswordPressed = () => {
-    const oldPasswordError = oldPasswordValidator(old_password.value);
-    const newPasswordError = newPasswordValidator(new_password.value);
-    const confirmPasswordError = confirmPasswordValidator(confirm_password.value);
+    const oldPasswordError = oldPasswordValidator(old_password.value)
+    const newPasswordError = newPasswordValidator(new_password.value)
+    const confirmPasswordError = confirmPasswordValidator(confirm_password.value)
     
     if(netInfo.isConnected){
       if (oldPasswordError || newPasswordError || confirmPasswordError) {
-        setOldPassword({ ...old_password, error: oldPasswordError });
-        setNewPassword({ ...new_password, error: newPasswordError });
-        setConfirmPassword({ ...confirm_password, error: confirmPasswordError });
+        setOldPassword({ ...old_password, error: oldPasswordError })
+        setNewPassword({ ...new_password, error: newPasswordError })
+        setConfirmPassword({ ...confirm_password, error: confirmPasswordError })
         return;
       }
       setTimeout(() => {
         for(let i = 1; i <= 3; i++){
           setLoading(true)
           if(i === 3){
-            updatePassword({ variables: { id: parseInt(customer_id), old_password: old_password.value, new_password: new_password.value, confirm_password: confirm_password.value } }).then(({ data }) =>{
+            updatePassword({ 
+              variables: { 
+                id: parseInt(customer_id), 
+                old_password: old_password.value, 
+                new_password: new_password.value, 
+                confirm_password: confirm_password.value 
+              } 
+            }).then(({ data }) =>{
               if(data !== null){
                 console.log(data['updatePassword']['response'])
                 if(data['updatePassword']['response'] === "Password Successfuly updated!"){
@@ -110,32 +116,8 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
       <Loader loading={isLoading} color="#ff66be" />
       <InternetConnectionChecker />
     </React.Fragment>
-  );
-};
-
-const styles = StyleSheet.create({
-  label: {
-    color: theme.colors.secondary,
-  },
-  button: {
-    marginTop: 24,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  link: {
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  }
-});
-
+  )
+}
 
 const mapStateToProps = ({ customerReducer }) => {
   return {
@@ -143,4 +125,4 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(ChangePasswordScreen));
+export default memo(connect(mapStateToProps, null)(ChangePasswordScreen))

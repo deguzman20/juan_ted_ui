@@ -1,7 +1,8 @@
 import React, { memo, useState, useRef } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { CONVERSATION_MESSAGES, SEND_MESSAGE } from './../../../../queries';
+import { ScrollView, View } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import { styles } from './../../../../styles/authorized/tasker/messages/MessageStyle';
+import { CONVERSATION_MESSAGES, SEND_MESSAGE } from './../../../../queries';
 import { Query } from 'react-apollo';
 import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
@@ -9,9 +10,9 @@ import MessageList from './MessageList';
 
 
 const MessageScreen = ({ navigation, tasker_id }) => {
-  const scrollViewRef = useRef();
-  const [sendMessage] = useMutation(SEND_MESSAGE);
-  const [message, setMessage] = useState({ value: '' });
+  const scrollViewRef = useRef()
+  const [sendMessage] = useMutation(SEND_MESSAGE)
+  const [message, setMessage] = useState({ value: '' })
   const _onSendMessagePressed = () => {
     sendMessage({ variables: { 
                   customer_id: navigation.state.params.customer_id, 
@@ -62,25 +63,10 @@ const MessageScreen = ({ navigation, tasker_id }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  messageWrapper:{
-    flexDirection: 'row'
-  },
-  messageInputWrapper:{
-    width: '80%'
-  },
-  messageButtonWrapper: {
-    width: '18%'
-  },
-  background_color: {
-    backgroundColor: "#009C3C"
-  }
-});
-
 const mapStateToProps = ({ taskerReducer }) => {
   return {
     tasker_id: taskerReducer.id
   }
 }
 
-export default memo(connect(mapStateToProps, null)(MessageScreen));
+export default memo(connect(mapStateToProps, null)(MessageScreen))

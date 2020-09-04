@@ -1,11 +1,9 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import {  
-  StyleSheet, 
   View, 
   ScrollView,
   FlatList,
   TouchableWithoutFeedback,
-  Alert
 } from 'react-native';
 import { 
   Text, 
@@ -14,27 +12,23 @@ import {
   Divider, 
   ListItem, 
   Avatar } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Chip } from 'react-native-paper';
-
 import { DEFAULT_URL } from "./../../../../actions/types";
 import { TASKER_INFO } from '../../../../queries';
+import { styles } from './../../../../styles/authorized/customer/geocoded_taskers/TaskerInfoStyle';
 import { useQuery } from '@apollo/react-hooks';
 import { useNetInfo } from "@react-native-community/netinfo";
 
-import Loader from "react-native-modal-loader";
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
-import axios from 'axios';
-
 const TaskerInfoScreen = ({ navigation }) => {
-  const netInfo = useNetInfo();
-  const [isLoading, setLoading] = useState(false);
+  const netInfo = useNetInfo()
   const { loading, error, data } = useQuery(TASKER_INFO, {
     variables: { 
       tasker_id: navigation.state.params.tasker_id
     },
-    pollInterval: 2000
-  });
+  })
 
   const keyExtractor = (item, index) => index.toString()
 
@@ -51,7 +45,12 @@ const TaskerInfoScreen = ({ navigation }) => {
         subtitle={
           <React.Fragment>
             <View style={{marginTop: 10}}>
-              <Text>{item.comment}</Text>
+              <Icon 
+                name='quote-left'
+                style={{ position: 'absolute' }}
+                size={15}
+              />
+              <Text style={{ left: 20 }}>{item.comment}</Text>
             </View>
             <View style={{marginTop: 10}}>
               <Chip
@@ -64,6 +63,7 @@ const TaskerInfoScreen = ({ navigation }) => {
             </View>
           </React.Fragment>
         }
+        right
         rightTitle={ 
           <View style={styles.ratingWrapper}>
             <Rating
@@ -83,43 +83,18 @@ const TaskerInfoScreen = ({ navigation }) => {
   
   const _onNavigateToInfoListAndSaveTransactionPressed = () => {
     if(netInfo.isConnected){
-      setTimeout(() => {
-        for(let i = 1; i <= 3; i++){
-          setLoading(true)
-          if(i === 3){
-            axios.get(`${DEFAULT_URL}/customer/create_transaction`,{
-              params: {
-                lng: navigation.state.params.lng,
-                lat: navigation.state.params.lat,
-                service_type_id: navigation.state.params.service_type_id,
-                from: navigation.state.params.start_from,
-                to: navigation.state.params.start_to,
-                customer_id: navigation.state.params.customer_id,
-                tasker_id: navigation.state.params.tasker_id
-              }
-            })
-            .then((response) => {
-              axios.get(`${DEFAULT_URL}/customer/create_bulk_of_transaction_service`,{
-                params: {
-                  services: JSON.stringify(navigation.state.params.services.map((service) => {
-                    return {
-                      ...service, 
-                      transaction_id: parseInt(response.data)
-                    }
-                  }))
-                }
-              })
-              .then((transaction_service_response) => {
-                if(transaction_service_response.data === 'Transaction service was created successfuly'){
-                  setLoading(false)
-                  Alert.alert(transaction_service_response.data)
-                  navigation.navigate('Home')
-                }
-              })
-            })
-          }
-        }
-      },3000)
+      navigation.navigate('PlaceOrderScreen',{
+        lng: navigation.state.params.lng,
+        lat: navigation.state.params.lat,
+        formatted_address: navigation.state.params.formatted_address,
+        service_type_id: navigation.state.params.service_type_id,
+        from: navigation.state.params.start_from,
+        to: navigation.state.params.start_to,
+        customer_id: navigation.state.params.customer_id,
+        tasker_id: navigation.state.params.tasker_id,
+        services: navigation.state.params.services,
+        service_details: navigation.state.params.service_details
+      })
     }
   }
 
@@ -201,130 +176,13 @@ const TaskerInfoScreen = ({ navigation }) => {
       }}>
         <Button 
           style={styles.select_button} 
-          title="Select" 
+          title="Checkout" 
           onPress={() =>{ _onNavigateToInfoListAndSaveTransactionPressed() }} 
           buttonStyle={styles.select_button_background_style} />
       </View>
-      <Loader loading={isLoading} color="#ff66be" /> 
-      <InternetConnectionChecker />
+    <InternetConnectionChecker />
     </React.Fragment>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  rect: {
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: 181,
-    position: "absolute",
-    alignItems: 'stretch',
-    backgroundColor: "#E6E6E6"
-  },
-  taskerImage: {
-    top: 90,
-    left: '27%',
-    position: "absolute"
-  },
-  fullNameTxt: {
-    top: 198,
-    left: 20,
-    position: "absolute",
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 20
-  },
-  rectStack: {
-    top: 0,
-    left: 0,
-    width: '210%',
-    height: 281,
-    position: "absolute"
-  },
-  featuredSkills: {
-    top: 257,
-    left: 20,
-    position: "absolute",
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 20
-  },
-  rectStackStack: {
-    width: 428,
-    height: 281
-  },
-  chipWrapper: {
-    flex: 1,
-    height: 30,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginTop: 20,
-    width: '90%',
-    marginLeft: '5%',
-    alignContent: 'center'    
-  },
-  reviewWrapper: {
-    flex: 1,
-    height: 30,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginTop: 20,
-    width: '90%',
-    height: '100%',
-    marginLeft: '5%',
-    alignContent: 'center'    
-  },
-  introduction: {
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 20,
-    marginTop: 27,
-    marginLeft: 20
-  },
-  introductionContent: {
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 15,
-    marginTop: '5%',
-    marginLeft: '5%'
-  },
-  firstDivider: {
-    backgroundColor: 'silver', 
-    top: '90%', 
-    marginLeft: '5%', 
-    marginRight: '7.6%'
-  },
-  secondDivider: {
-    backgroundColor: 'silver', 
-    top: 20, 
-    marginLeft: '5%', 
-    marginRight: '5%' 
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: -8
-  },
-  ratingWrapper: {
-    position: 'absolute', 
-    top: 0
-  },
-  fullNameTxtOnList: {
-    fontWeight: 'bold'
-  },
-  select_button: {
-    width: '100%',
-    height: 150,
-    marginTop: 0,
-    color:'white',
-    paddingLeft:10,
-    paddingRight:10,
-  },
-  select_button_background_style: {
-    backgroundColor: '#009C3C'
-  }
-});
-
-export default memo(TaskerInfoScreen);
+export default memo(TaskerInfoScreen)

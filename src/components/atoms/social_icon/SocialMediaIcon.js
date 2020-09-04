@@ -7,6 +7,6 @@ const SocialMediaIcon = ({ title }) => (
     button
     type={title}
   />
-);
+)
 
-export default memo(SocialMediaIcon);
+export default memo(SocialMediaIcon)

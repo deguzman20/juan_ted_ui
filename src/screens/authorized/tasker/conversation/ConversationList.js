@@ -25,4 +25,5 @@ const ConversationList = ({ data, loading, error, navigation }) => {
     <Text>empty</Text>
   )
 }
-export default memo(ConversationList);
+
+export default memo(ConversationList)

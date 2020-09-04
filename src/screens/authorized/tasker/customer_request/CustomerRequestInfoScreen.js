@@ -1,6 +1,7 @@
 import React, { memo, useState } from 'react';
-import { View, FlatList, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, FlatList, ScrollView } from 'react-native';
 import { Text, ListItem, Avatar, Button } from 'react-native-elements';
+import { styles } from './../../../../styles/authorized/tasker/customer_request/CustomerRequestInfoStyle';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { 
@@ -14,14 +15,14 @@ import InternetConnectionChecker from '../../../../components/atoms/snackbar/Int
 import Loader from "react-native-modal-loader";
 import _ from 'lodash';
 
-
 const CustomerRequestInfoScreen = ({ navigation }) => {
-  const total_cost_arr = [];
-  const netInfo = useNetInfo();
-  const [isLoading, setLoading] = useState(false);
-  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
-  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
-  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO;
+  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT
+  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5)
+  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO
+  
+  const total_cost_arr = []
+  const netInfo = useNetInfo()
+  const [isLoading, setLoading] = useState(false)
 
   const [approveRequest] = useMutation(UPDATE_TRANSACTION_STATUS)
   const [createRoom] = useMutation(SEND_MESSAGE)
@@ -30,7 +31,7 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
       transaction_id: parseInt(navigation.state.params.transaction_id)
     },
     pollInterval: 1000
-  });
+  })
 
   _onApproveRequestPressed = () => { 
     if(netInfo.isConnected){
@@ -63,7 +64,6 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
   
   renderItem = ({ item }) => {
     const { name, price, image } = item.service;
-    console.log(item.service)
     return(
       <ListItem
         title={    
@@ -86,9 +86,11 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
     )
   }
 
+  console.log(error)
+
 
   if(loading || error) return null;
-  const { firstName, lastName, image } = data.pendingTransactionServiceInfo.customer;
+  const { firstName, lastName, image } = data.pendingTransactionServiceInfo.customer
 
   if([data.pendingTransactionServiceInfo].length >= 1){
     [data.pendingTransactionServiceInfo].map((ts) => {
@@ -96,6 +98,7 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
         total_cost_arr.push(ts.transactionServices[i].quantity * ts.transactionServices[i].service.price)
       }
     })
+
     return(
       <React.Fragment>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -120,7 +123,7 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
             <View style={styles.serviceTypeWrapper}>
               <FlatList
                 keyExtractor={keyExtractor}
-                data={data.pendingTransactionServiceInfo.transactionServices}
+                data={data.pendingTransactionServiceInfo.transactionServices.filter(ts => ts.quantity >= 1)}
                 renderItem={renderItem}
               />
             </View>
@@ -164,100 +167,5 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
     )
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  serviceWrapper: {
-    position: 'absolute', 
-    top: -10
-  },
-  serviceTypeWrapper: {
-    marginLeft: '5%',
-    marginRight: '5%'
-  },
-  priceWrapper: {
-    position: 'relative',
-    top: 10
-  },
-  rect: {
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: 181,
-    position: "absolute",
-    alignItems: 'stretch',
-    backgroundColor: "#E6E6E6"
-  },
-  customerImage: {
-    top: 90,
-    left: '27%',
-    position: "absolute"
-  },
-  fullNameTxt: {
-    top: 198,
-    left: 20,
-    position: "absolute",
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 20
-  },
-  rectStack: {
-    top: 0,
-    left: 0,
-    width: '210%',
-    height: 281,
-    position: "absolute"
-  },
-  rectStackStack: {
-    width: 428,
-    height: 281
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: -8
-  },
-  totalCostWrapper: {
-    width: '100%',
-    height: 100,
-    backgroundColor: "white",
-    position: 'relative'
-  },
-  totalCost: {
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 25,
-    marginLeft: 42,
-    position: 'absolute',
-    marginTop: "2%"
-  },
-  cost: {
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 25,
-    marginLeft: '55%',
-    position: 'absolute',
-    marginTop: '2%'
-  },
-  mapView: {
-    position: "absolute",
-    top: -70,
-    left: 0,
-    height: 641,
-    width: '100%'
-  },
-  mapViewStack: {
-    width: '100%',
-    height: 400,
-    position: 'relative',
-    top:'15%'
-  },
-  buttonContainer: {
-    width: ITEM_WIDTH,
-    paddingLeft: '4%',
-    paddingRight: '4s%',
-    paddingTop: '12%'
-  }
-});
 
-export default memo(CustomerRequestInfoScreen);
+export default memo(CustomerRequestInfoScreen)

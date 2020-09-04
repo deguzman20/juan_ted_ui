@@ -1,6 +1,7 @@
 import React, { memo, useState } from 'react';
-import { View, FlatList, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, FlatList, ScrollView } from 'react-native';
 import { Text, ListItem, Avatar, Button } from 'react-native-elements';
+import { styles } from './../../../../styles/authorized/tasker/transaction_info/TransactionInfoStyle';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { TRANSACTION_SERVICE, UPDATE_TRANSACTION_STATUS_TO_DONE } from '../../../../queries';
@@ -12,18 +13,18 @@ import InternetConnectionChecker from '../../../../components/atoms/snackbar/Int
 import _ from 'lodash';
 
 const TransactionInfoScreen = ({ navigation }) => {
-  const total_cost_arr = [];
-  const netInfo = useNetInfo();
-  const [isLoading, setLoading] = useState(false);
-  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
-  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
-  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO;
-  const [update_transaction_status_to_done] = useMutation(UPDATE_TRANSACTION_STATUS_TO_DONE);
+  const total_cost_arr = []
+  const netInfo = useNetInfo()
+  const [isLoading, setLoading] = useState(false)
+  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT
+  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5)
+  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO
+  const [update_transaction_status_to_done] = useMutation(UPDATE_TRANSACTION_STATUS_TO_DONE)
   const { loading, error, data } = useQuery(TRANSACTION_SERVICE, {
     variables: {
       transaction_id: parseInt(navigation.state.params.transaction_id)
     }
-  });
+  })
 
   _onMarkAsDonePressed = () => {
     if(netInfo.isConnected){
@@ -86,6 +87,9 @@ const TransactionInfoScreen = ({ navigation }) => {
             <View style={styles.rectStackStack}>
               <View style={styles.rectStack}>
                 <View style={styles.rect}/>
+                <Text style={styles.fullNameTxt}>
+                  {firstName} {lastName} 
+                </Text>
                 <Avatar
                   source={{ 
                     uri: `${DEFAULT_URL}/${image}`
@@ -95,9 +99,6 @@ const TransactionInfoScreen = ({ navigation }) => {
                   size={150}
                   containerStyle={styles.customerImage}
                 />
-                <Text style={styles.fullNameTxt}>
-                  {firstName} {lastName} 
-                </Text>
               </View>
             </View>
             <View style={styles.serviceTypeWrapper}>
@@ -159,106 +160,4 @@ const TransactionInfoScreen = ({ navigation }) => {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  serviceWrapper: {
-    position: 'absolute', 
-    top: -10
-  },
-  serviceTypeWrapper: {
-    marginLeft: '5%',
-    marginRight: '5%'
-  },
-  priceWrapper: {
-    position: 'relative',
-    top: 10
-  },
-  rect: {
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: 181,
-    position: "absolute",
-    alignItems: 'stretch',
-    backgroundColor: "#E6E6E6"
-  },
-  customerImage: {
-    top: 90,
-    left: '27%',
-    position: "absolute"
-  },
-  fullNameTxt: {
-    top: 198,
-    left: 20,
-    position: "absolute",
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 20
-  },
-  rectStack: {
-    top: 0,
-    left: 0,
-    width: '210%',
-    height: 281,
-    position: "absolute"
-  },
-  rectStackStack: {
-    width: 428,
-    height: 281
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: -8
-  },
-  doneTotalCostWrapper: {
-    width: '100%',
-    height: 100,
-    backgroundColor: "white",
-    position: 'relative',
-  },
-  unDoneTotalCostWrapper: {
-    width: '100%',
-    height: 50,
-    backgroundColor: "white",
-    position: 'relative'
-  },
-  totalCost: {
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 25,
-    marginLeft: 42,
-    position: 'absolute',
-    marginTop: "2%"
-  },
-  cost: {
-    fontFamily: "verdana",
-    color: "#121212",
-    fontSize: 25,
-    marginLeft: '65%',
-    position: 'absolute',
-    marginTop: '2%'
-  },
-  mapView: {
-    position: "absolute",
-    top: -70,
-    left: 0,
-    height: 641,
-    width: '100%'
-  },
-  mapViewStack: {
-    width: '100%',
-    height: 400,
-    position: 'relative',
-    top:'15%'
-  },
-  buttonContainer: {
-    width: ITEM_WIDTH,
-    paddingLeft: '4%',
-    paddingRight: '4s%',
-    paddingTop: '12%'
-  }
-});
-
-export default memo(TransactionInfoScreen);
+export default memo(TransactionInfoScreen)

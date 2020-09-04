@@ -12,6 +12,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 14,
   },
-});
+})
 
-export default memo(Paragraph);
+export default memo(Paragraph)

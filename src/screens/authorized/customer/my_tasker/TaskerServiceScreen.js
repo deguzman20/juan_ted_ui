@@ -1,102 +1,142 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import {  
-  StyleSheet,
   View,
   ScrollView,
   Image,
   FlatList,
   SafeAreaView,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { Card, Text } from 'react-native-elements';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { CUSTOMER_SERVICE_TYPE_LIST } from '../../../../queries';
-import { DEFAULT_URL } from '../../../../actions/types';
-import { useQuery } from '@apollo/react-hooks';
+import { styles } from './../../../../styles/authorized/customer/my_tasker/TaskerServiceStyle';
+import { connect } from 'react-redux';
+import { useNetInfo } from "@react-native-community/netinfo";
+import Geolocation from '@react-native-community/geolocation';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import { 
+  CUSTOMER_SERVICE_TYPE_LIST, 
+  UPDATE_CUSTOMER_GEOLOCATION } from '../../../../queries';
+import { DEFAULT_URL, GOOGLE_PLACE_API_KEY } from '../../../../actions/types';
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+import Loading from '../../../../components/atoms/loader/Loading';
+import OutOfLocationService from '../../../../components/molecules/out_of_location_service/OutOfLocationService';
+import axios from 'axios';
 
-const TaskerServiceScreen = ({ navigation }) =>{
+
+const TaskerServiceScreen = ({ navigation, customer_id }) =>{
+  const netInfo = useNetInfo()
+  const pattern = /Parañaque/g
+  const [compoundCode, setCompoundCode] = useState('')
+  const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION)
   const { loading, error, data } = useQuery(CUSTOMER_SERVICE_TYPE_LIST, {
     variables: {
       tasker_id: navigation.state.params.tasker_id
     },
     pollInterval: 700
-  });
+  })
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      //Will give you the current location
+      (position) => {
+        const currentLongitude = JSON.stringify(position.coords.longitude)
+        const currentLatitude = JSON.stringify(position.coords.latitude)
+        console.log(currentLatitude)
+        update_customer_geolocation({ 
+          variables: {
+            customer_id: parseInt(customer_id),
+            lng: currentLongitude,
+            lat: currentLatitude,
+            formatted_address: ''
+          }
+        }).then(({ data }) => {
+          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLatitude},${currentLongitude}&key=${GOOGLE_PLACE_API_KEY}`)
+          .then((response) => {
+            if(response.data.plus_code.compound_code !== ''){
+              setCompoundCode(response.data.plus_code.compound_code)
+            }
+          })
+        })
+      },
+      (error) => alert(error.message),
+      { 
+        enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 
+      }
+    )
+  },[])
 
   navigateToService = (id) => {
     if(id === 1){
-      navigation.navigate('BarberScreen', 
-      { 
-        service_type_id: id,
-        tasker_id: navigation.state.params.tasker_id
-      });
+      if(netInfo.isConnected){
+        navigation.navigate('BarberScreen', 
+        { 
+          service_type_id: id,
+          tasker_id: navigation.state.params.tasker_id
+        })
+      }
     }
     else if(id === 2){
-      navigation.navigate('HairSalonScreen', 
-      { 
-        service_type_id: id,
-        tasker_id: navigation.state.params.tasker_id
-      });
+      if(netInfo.isConnected){
+        navigation.navigate('HairSalonScreen', 
+        { 
+          service_type_id: id,
+          tasker_id: navigation.state.params.tasker_id
+        })
+      }
     }
   }
 
   if(loading || error) return null;
 
-  return(
-    <React.Fragment>
-      <SafeAreaView />
-      <View style={styles.container}>
-        <View style={styles.container_row}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View>
-              <Text h4 style={styles.txt_services_txt}>Services</Text>
+  // if(compoundCode !== ""){
+  //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
+      return(
+        <React.Fragment>
+          <SafeAreaView />
+          <View style={styles.container}>
+            <View style={styles.container_row}>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View>
+                  <Text h4 style={styles.txt_services_txt}>Services</Text>
+                </View>
+                <FlatList style={{ margin:5 }}
+                  numColumns={1}
+                  data={[data['taskerServiceTypeList'][0]['serviceType']]}
+                  keyExtractor={(item) => item.id }
+                  renderItem={({ item }) => (
+                    <TouchableWithoutFeedback onPress={() => { navigateToService(parseInt(item.id))}}>
+                      <Card
+                        title={item.name} 
+                        key={item.id}
+                      >
+                        <Image 
+                          style={styles.image} 
+                          source={{  uri: `${DEFAULT_URL}/${item.image}` }}  
+                        />
+                      </Card>
+                    </TouchableWithoutFeedback>
+                  )}
+                />       
+              </ScrollView>
+              <InternetConnectionChecker />
             </View>
-            <FlatList style={{ margin:5 }}
-              numColumns={1}
-              data={[data['taskerServiceTypeList'][0]['serviceType']]}
-              keyExtractor={(item) => item.id }
-              renderItem={({ item }) => (
-                <TouchableWithoutFeedback onPress={() => { navigateToService(parseInt(item.id))}}>
-                  <Card
-                    title={item.name} 
-                    key={item.id}
-                  >
-                    <Image 
-                      style={styles.image} 
-                      source={{  uri: `${DEFAULT_URL}/${item.image}` }}  
-                    />
-                  </Card>
-                </TouchableWithoutFeedback>
-              )}
-            />       
-          </ScrollView>
-        </View>
-      </View>
-    </React.Fragment>
-  )
+          </View>
+        </React.Fragment>
+      )
+  //   }
+  //   else{
+  //     return <OutOfLocationService />
+  //   }
+  // }
+  // else{
+  //   return <Loading />
+  // }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'stretch'
-  },
-  container_row: {
-    height: 100, 
-    flex: 1,
-  },
-  row: {
-    flex: 1,
-    justifyContent: "space-around"
-  },
-  txt_services_txt: {
-    left: 20, 
-    marginTop: 20
-  },
-  image: {
-    width: '100%',
-    height: 200
+const mapStateToProps = ({ customerReducer }) => {
+  return {
+    customer_id: customerReducer.id
   }
-});
+}
 
-export default memo(TaskerServiceScreen);
+export default memo(connect(mapStateToProps, null)(TaskerServiceScreen))

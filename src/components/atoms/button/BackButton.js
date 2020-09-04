@@ -9,7 +9,7 @@ const BackButton = ({ goBack }) => (
       source={require('../../../assets/arrow_back.png')} 
     />
   </TouchableOpacity>
-);
+)
 
 const styles = StyleSheet.create({
   container: {
@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-});
+})
 
-export default memo(BackButton);
+export default memo(BackButton)

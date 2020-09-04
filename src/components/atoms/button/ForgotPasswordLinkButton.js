@@ -10,7 +10,7 @@ const ForgotPasswordlinkButton = ({ navigation }) => (
       <Text style={styles.label}>Forgot your password?</Text>
     </TouchableOpacity>
   </View>
-);
+)
 
 const styles = StyleSheet.create({
   forgotPassword: {
@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
   label: {
     color: theme.colors.secondary,
   } 
-});
+})
 
-export default memo(ForgotPasswordlinkButton);
+export default memo(ForgotPasswordlinkButton)

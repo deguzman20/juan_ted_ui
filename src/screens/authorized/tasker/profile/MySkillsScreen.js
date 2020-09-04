@@ -1,5 +1,6 @@
-import React, { memo, useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, Alert, ScrollView, View } from 'react-native';
+import React, { memo, useState } from 'react';
+import { SafeAreaView, Alert, ScrollView, View } from 'react-native';
+import { styles } from './../../../../styles/authorized/tasker/profile/MySkillStyle';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
@@ -9,7 +10,6 @@ import {
   UNSELECTED_SERVICE_TYPE_LIST, 
   REMOVE_TO_FEATURED_SKILL } from './../../../../queries';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { theme } from './../../../../core/theme';
 import { Chip } from 'react-native-paper';
 
 import Background from './../../../../components/atoms/background/Background';
@@ -19,11 +19,11 @@ import InternetConnectionChecker from '../../../../components/atoms/snackbar/Int
 import _ from 'lodash';
 
 const MySkillsScreen = ({ navigation, tasker_id }) => {
-  const netInfo = useNetInfo();
-  const selected_arr = [];
+  const netInfo = useNetInfo()
+  const selected_arr = []
   const [selectedArr, setSelectedArr] = useState([])
-  const [add_skill] = useMutation(ADD_FEATURED_SKILL);
-  const [remove_skill] = useMutation(REMOVE_TO_FEATURED_SKILL);
+  const [add_skill] = useMutation(ADD_FEATURED_SKILL)
+  const [remove_skill] = useMutation(REMOVE_TO_FEATURED_SKILL)
 
   const { loading, error, data } = useQuery(TASKER_INFO, {
     onCompleted: (dat) => {
@@ -36,7 +36,7 @@ const MySkillsScreen = ({ navigation, tasker_id }) => {
       tasker_id: parseInt(tasker_id) 
     },
     pollInterval: 500
-  });
+  })
 
 
   const unselected_service_type_list = useQuery(UNSELECTED_SERVICE_TYPE_LIST, {
@@ -44,7 +44,7 @@ const MySkillsScreen = ({ navigation, tasker_id }) => {
       tasker_id: parseInt(tasker_id)
     },
     pollInterval: 700
-  });
+  })
   
   const addSkill = (service_type_id) => {
     if(netInfo.isConnected){
@@ -167,42 +167,8 @@ const MySkillsScreen = ({ navigation, tasker_id }) => {
       </Background>
       <InternetConnectionChecker />
     </React.Fragment>
-  );
-};
-
-const styles = StyleSheet.create({
-  label: {
-    color: theme.colors.secondary,
-  },
-  button: {
-    marginTop: 24,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  link: {
-    fontWeight: 'bold',
-    color: theme.colors.primary,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  chipWrapper: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'flex-start',
-    marginTop: 20
-  },
-  chipStyle: {
-    marginTop: 20, 
-    alignItems: 'center',
-  }
-});
-
+  )
+}
 
 const mapStateToProps = ({ taskerReducer }) => {
   return {
@@ -210,4 +176,4 @@ const mapStateToProps = ({ taskerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(MySkillsScreen));
+export default memo(connect(mapStateToProps, null)(MySkillsScreen))

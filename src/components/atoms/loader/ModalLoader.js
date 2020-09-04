@@ -8,7 +8,6 @@ const ModalLoader = ({ isLoading }) => (
   </View>
 )
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -18,5 +17,4 @@ const styles = StyleSheet.create({
   }
 })
 
-
-export default memo(ModalLoader);
+export default memo(ModalLoader)

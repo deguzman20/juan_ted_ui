@@ -9,12 +9,13 @@ const Logo = () => (
       style={styles.image}
     ></Image>
   </View>
-);
+)
 
 const styles = StyleSheet.create({
   logo_container: {
+    flex: 1,
     position: 'absolute',
-    top: 80,
+    top: '-30%',
     width: '136%',
     height: 300,
     alignItems: 'center',
@@ -24,6 +25,6 @@ const styles = StyleSheet.create({
     width: 307,
     height: 220
   }
-});
+})
 
-export default memo(Logo);
+export default memo(Logo)

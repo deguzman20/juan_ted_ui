@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     marginTop: 4,
-  },
+  }
 })
 
 export default memo(RegisterTextWithLinkSection)

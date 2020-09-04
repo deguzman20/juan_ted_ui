@@ -11,7 +11,7 @@ const TextWithLinkSection = ({ navigation }) => (
       navigation={navigation}
     />
   </View>
-);
+)
 
 const styles = StyleSheet.create({
   row: {
@@ -21,6 +21,6 @@ const styles = StyleSheet.create({
   label: {
     color: theme.colors.secondary,
   }
-});
+})
 
-export default memo(TextWithLinkSection);
+export default memo(TextWithLinkSection)

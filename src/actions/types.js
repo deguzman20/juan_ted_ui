@@ -33,10 +33,10 @@ export const BASE_URL = 'http://167.172.155.29/graphql';
 export const DEFAULT_URL = 'http://167.172.155.29';
 export const API_WS_ROOT = 'ws://http://167.172.155.29/cable';
 export const GOOGLE_GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
-
-export const GOOGLE_PLACE_API_KEY = 'AIzaSyA4wmpcfAbGvLMbBqcVCY6uPuI-m5KYEbs';
+export const GOOGLE_PLACE_API_KEY = 'AIzaSyCCQmanqly0mHrOcMJK9cd-WqVuK81x4uQ';
+// export const GOOGLE_PLACE_API_KEY = 'AIzaSyA4wmpcfAbGvLMbBqcVCY6uPuI-m5KYEbs';
 export const GOOGLE_MAP_API_KEY = 'AIzaSyAyvCbJhmXauM0yrRrpJPX3T1He9AVhed';
-
+    
 // default size of mobile app
 export const ITEM_WIDTH = Dimensions.get('window').width;
 export const ITEM_HEIGHT = Dimensions.get('window').height;

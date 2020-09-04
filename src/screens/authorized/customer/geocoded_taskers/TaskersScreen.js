@@ -1,10 +1,16 @@
 import React, { memo } from 'react';
-import { StyleSheet, View, Image, ScrollView, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { 
+  View, 
+  Image, 
+  ScrollView, 
+  FlatList, 
+  TouchableWithoutFeedback } from 'react-native';
 import { Text, Rating, ListItem } from 'react-native-elements';
 import { TASKER_BY_GEOLOCATION } from '../../../../queries';
 import { DEFAULT_URL } from '../../../../actions/types';
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
+import { styles } from './../../../../styles/authorized/customer/geocoded_taskers/TaskersStyle';
 import _ from 'lodash';
 
 import { useNetInfo } from "@react-native-community/netinfo";
@@ -22,19 +28,21 @@ const TaskersScreen = ({ navigation, customer_id }) => {
       start_to: navigation.state.params.start_to,
     },
     pollInterval: 500
-  });
+  })
 
   const _onNavigateToTaskerInfoPressed = (tasker_id) => {
     if(netInfo.isConnected){
       navigation.navigate('TaskerInfoScreen',{ 
         lng: navigation.state.params.longitude,
         lat: navigation.state.params.latitude,
+        formatted_address: navigation.state.params.formatted_address,
         service_type_id: navigation.state.params.service_type_id,
         start_from: navigation.state.params.start_from,
         start_to: navigation.state.params.start_to,
         customer_id: parseInt(customer_id),
         tasker_id: parseInt(tasker_id),
-        services: navigation.state.params.services
+        services: navigation.state.params.services,
+        service_details: navigation.state.params.service_details
       })
     }
   }
@@ -91,26 +99,6 @@ const TaskersScreen = ({ navigation, customer_id }) => {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  empty_tasker_txt: {
-    textAlign: 'center',
-    color: 'black'
-  },
-  empty_tasker_list_container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: -20
-  },
-  ratingWrapper: {
-    position: 'absolute', 
-    top: 0
-  }
-});
 
 const mapStateToProps = ({ customerReducer }) => {
   return {

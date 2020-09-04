@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import {  
-  StyleSheet, 
   View, 
   ScrollView,
   FlatList,
@@ -12,8 +11,8 @@ import {
   ListItem, 
 } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
-
 import { DEFAULT_URL } from "../../../../actions/types";
+import { styles } from './../../../../styles/authorized/customer/geocoded_taskers/ReviewsStyle';
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 const ReviewsScreen = ({ navigation }) => {
@@ -80,32 +79,4 @@ const ReviewsScreen = ({ navigation }) => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  reviewWrapper: {
-    flex: 1,
-    height: 30,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginTop: 20,
-    width: '90%',
-    height: '100%',
-    marginLeft: '5%',
-    alignContent: 'center'    
-  },
-  fullNameWrapper: {
-    position: 'absolute', 
-    top: -8
-  },
-  ratingWrapper: {
-    position: 'absolute', 
-    top: 0
-  },
-  fullNameTxtOnList: {
-    fontWeight: 'bold'
-  }
-});
-
-export default memo(ReviewsScreen);
+export default memo(ReviewsScreen)

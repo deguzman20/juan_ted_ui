@@ -12,6 +12,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingVertical: 14
   },
-});
+})
 
-export default memo(Header);
+export default memo(Header)

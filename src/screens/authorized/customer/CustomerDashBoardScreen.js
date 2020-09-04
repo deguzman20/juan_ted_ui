@@ -21,9 +21,9 @@ class CustomerDashBoardScreen extends React.Component {
       { key: 'chat', title: 'Chat', icon: 'message-text-outline', color: 'white' },
       { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' },
     ],
-  };
+  }
 
-  _handleIndexChange = index => this.setState({ index });
+  _handleIndexChange = index => this.setState({ index })
 
   _renderScene = BottomNavigation.SceneMap({
     home: HomeScreen,
@@ -32,7 +32,7 @@ class CustomerDashBoardScreen extends React.Component {
     favorite_tasker: FavoriteTaskerScreen,
     chat: ConversationsScreen,
     profile: ProfileScreen,
-  });
+  })
 
   render() {
     if(this.props.customer_id !== ''){
@@ -54,9 +54,8 @@ class CustomerDashBoardScreen extends React.Component {
 
 const mapStateToProps = ({ customerReducer }) => {
   return {
-    customer_id: customerReducer.id,
+    customer_id: customerReducer.id
   }
 }
 
-
-export default connect(mapStateToProps, null)(CustomerDashBoardScreen);
+export default connect(mapStateToProps, null)(CustomerDashBoardScreen)

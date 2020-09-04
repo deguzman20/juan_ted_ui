@@ -46,6 +46,16 @@ target 'juan_ted_ui' do
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
 
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
+  # pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+
   post_install do |installer|
     installer.pods_project.targets.each do |target|
         if target.name == 'react-native-google-maps'

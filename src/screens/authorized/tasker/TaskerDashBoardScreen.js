@@ -14,18 +14,18 @@ class TaskerDashBoardScreen extends React.Component {
       { key: 'tasks', title: 'Tasks', icon: 'folder-multiple-outline', color: 'white'},
       { key: 'customer_request', title: 'Request', icon: 'account-outline', color: 'white' },
       { key: 'chat', title: 'Chat', icon: 'message-text-outline', color: 'white' },
-      { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' },
-    ],
-  };
+      { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' }
+    ]
+  }
 
-  _handleIndexChange = index => this.setState({ index });
+  _handleIndexChange = index => this.setState({ index })
 
   _renderScene = BottomNavigation.SceneMap({
     tasks: AppointmentScreen,
     customer_request: CustomerRequestScreen,
     chat: ConversationsScreen,
     profile: ProfileScreen,
-  });
+  })
 
   render() {
     if(this.props.tasker_id !== ''){
@@ -37,7 +37,7 @@ class TaskerDashBoardScreen extends React.Component {
           inactiveColor="silver"
           activeColor="#009C3C"
         />
-      );
+      )
     }
     else {
       return <LoginScreen navigation={this.props.navigation}/>;
@@ -51,4 +51,4 @@ const mapStateToProps = ({ taskerReducer }) => {
   }
 }
 
-export default connect(mapStateToProps, null)(TaskerDashBoardScreen);
+export default connect(mapStateToProps, null)(TaskerDashBoardScreen)

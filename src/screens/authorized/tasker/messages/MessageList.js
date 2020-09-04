@@ -22,4 +22,4 @@ const MessageList = ({ data, error, loading }) => {
   ))
 }
 
-export default memo(MessageList);
+export default memo(MessageList)

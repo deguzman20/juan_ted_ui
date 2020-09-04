@@ -35,30 +35,31 @@ const ScheduledStack = createStackNavigator({
       headerShown: false
     }
   }
-});
+})
 
 const AppNavigator = createMaterialTopTabNavigator({  
-    "Scheduled": ScheduledStack,  
-    "Completed": CompletedStack  
-  },  
-  {  
-    tabBarOptions: {
-      upperCaseLabel: false,
-      indicatorStyle: {
-        borderBottomColor: '#009C3C',
-        borderBottomWidth: 2,
-      },
-      showIcon: true,  
-      showLabel:true,
-      style: {
-        backgroundColor: 'white'
-      },
-      labelStyle: {
-        color: '#009C3C'
-      },
-      tabStyle: {
-        marginTop: -25
-      }
-    },  
-  })  
-export default createAppContainer(AppNavigator);  
+  "Scheduled": ScheduledStack,  
+  "Completed": CompletedStack  
+},  
+{  
+  tabBarOptions: {
+    upperCaseLabel: false,
+    indicatorStyle: {
+      borderBottomColor: '#009C3C',
+      borderBottomWidth: 2,
+    },
+    showIcon: true,  
+    showLabel:true,
+    style: {
+      backgroundColor: 'white'
+    },
+    labelStyle: {
+      color: '#009C3C'
+    },
+    tabStyle: {
+      marginTop: -25
+    }
+  }  
+})
+
+export default createAppContainer(AppNavigator)

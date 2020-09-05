@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
@@ -48,7 +49,8 @@ public class MainApplication extends Application implements ReactApplication {
             new RNGestureHandlerPackage(),
             new NetInfoPackage(),
             new AsyncStoragePackage(),
-                  new MapsPackage()
+                  new MapsPackage(),
+                  new SvgPackage()
           );
         }
 

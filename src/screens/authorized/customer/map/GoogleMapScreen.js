@@ -40,18 +40,35 @@ const GoogleMapScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.mapViewStack}>
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude: geolocation.lat,
-            longitude: geolocation.lng,
-            latitudeDelta: 60,
-            longitudeDelta: ITEM_WIDTH / ITEM_HEIGHT,
-          }}
-          customMapStyle={[]}
-          style={styles.mapView}
-          zoomEnabled = {true}
-        />
+      {
+          Platform.OS === 'ios' ?
+          (
+            <MapView
+              initialRegion={{
+                latitude: geolocation.lat,
+                longitude: geolocation.lng,
+                latitudeDelta: 60,
+                longitudeDelta: ITEM_WIDTH / ITEM_HEIGHT,
+              }}
+              customMapStyle={[]}
+              style={styles.mapView}
+              zoomEnabled = {true}
+            />
+          ):(
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              customMapStyle={[]}
+              style={styles.mapView}
+              zoomEnabled = {true}
+            />
+          )
+        }
         <GooglePlacesAutocomplete
           placeholder='Search'
           onPress={(details = null) => {

@@ -16,8 +16,8 @@ class CustomerDashBoardScreen extends React.Component {
     routes: [
       { key: 'home', title: 'Home', icon: 'home-outline', color: 'white'},
       { key: 'tasks', title: 'Tasks', icon: 'view-list', color: 'white' },
-      { key: 'past_tasker', title: 'Past Tasker', icon: 'history', color: 'white' },
-      { key: 'favorite_tasker', title: 'Favorite Tasker', icon: 'account-outline', color: 'white' },
+      { key: 'past_tasker', title: 'Past', icon: 'history', color: 'white' },
+      { key: 'favorite_tasker', title: 'Favorite', icon: 'account-outline', color: 'white' },
       { key: 'chat', title: 'Chat', icon: 'message-text-outline', color: 'white' },
       { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' },
     ],

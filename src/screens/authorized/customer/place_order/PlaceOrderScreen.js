@@ -128,8 +128,6 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
   if(loading || error) return null;
   if(data.customerShippingAddressList.length >= 1){
     data.customerShippingAddressList.map((sa) => {
-      console.log("====")
-      console.log(sa.formattedAddress)
       shipping_address_arr.push(sa.formattedAddress)
     })
   }

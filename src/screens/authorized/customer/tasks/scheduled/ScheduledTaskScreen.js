@@ -63,7 +63,7 @@ const ScheduledTaskScreen = ({ customer_id, navigation }) => {
 
   _onNavigateToTransactionInfoPressed = (id) => {
     if(netInfo.isConnected){
-      navigation.navigate('ScheduledTransactionInfoScreen', {
+      navigation.navigate('CompletedTransactionInfoScreen', {
         transaction_id: parseInt(id)
       })
     }

@@ -4,7 +4,8 @@ import {
   FlatList, 
   ScrollView, 
   Alert,
-  TouchableWithoutFeedback } from 'react-native';
+  TouchableWithoutFeedback,
+  Platform } from 'react-native';
 import { 
   Text, 
   ListItem, 
@@ -20,7 +21,7 @@ import { TRANSACTION_SERVICE, CREATE_REVIEW } from '../../../../queries';
 import { DEFAULT_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
 import { formatMoney } from '../../../../core/utils';
 import { connect } from 'react-redux';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Loader from "react-native-modal-loader";
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
@@ -146,39 +147,77 @@ const CompletedTransactionInfoScreen = ({ navigation, customer_id }) => {
             <View style={styles.serviceTypeWrapper}>
               <FlatList
                 keyExtractor={keyExtractor}
-                data={data.transactionService.transactionServices}
+                data={data.transactionService.transactionServices.filter(ts => ts.quantity >= 1)}
                 renderItem={renderItem}
               />
             </View>
           </View>
           <View style={styles.mapViewStack}>
-            <MapView
-              initialRegion={{
-                latitude: parseFloat(data.transactionService.lat),
-                longitude: parseFloat(data.transactionService.lng),
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA,
-              }}
-              customMapStyle={[]}
-              style={styles.mapView}
-              zoomEnabled = {true}
-              >
-              <MapView.Marker
-                coordinate={{
-                  latitude: parseFloat(data.transactionService.lat),
-                  longitude: parseFloat(data.transactionService.lng)
-                }}
-                title={"Info"}
-                description={"description"}
-              />
-            </MapView>
+            {
+              Platform.OS === 'ios' ?
+              (
+                <MapView
+                  initialRegion={{
+                    latitude: parseFloat(data.transactionService.lat),
+                    longitude: parseFloat(data.transactionService.lng),
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
+                  }}
+                  customMapStyle={[]}
+                  style={styles.mapView}
+                  zoomEnabled = {true}
+                  >
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: parseFloat(data.transactionService.lat),
+                      longitude: parseFloat(data.transactionService.lng)
+                    }}
+                    title={"Info"}
+                    description={"description"}
+                  />
+                </MapView>   
+              ) : (
+                <MapView
+                  provider={PROVIDER_GOOGLE}
+                  initialRegion={{
+                    latitude: parseFloat(data.transactionService.lat),
+                    longitude: parseFloat(data.transactionService.lng),
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
+                  }}
+                  customMapStyle={[]}
+                  style={styles.mapView}
+                  zoomEnabled = {true}
+                  >
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: parseFloat(data.transactionService.lat),
+                      longitude: parseFloat(data.transactionService.lng)
+                    }}
+                    title={"Info"}
+                    description={"description"}
+                  />
+                </MapView>  
+              )
+            }
           </View>
         </ScrollView>
         {
           !data.transactionService.review ? (
             <View style={styles.doneTotalCostWrapper}>
-              <Text style={styles.totalCost}>Total Cost</Text>
-              <Text style={styles.cost}>₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={styles.amount_wrapper}>
+                  <Text style={styles.total_amount_txt}>
+                    Total Amount
+                  </Text>
+                </View>
+                <View style={styles.amount_value_wrapper}>
+                  <Text style={styles.total_amount_value_txt}>
+                    ₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}
+                  </Text>
+                </View>
+              </View>
+              <Divider style={styles.divider} />
               <View style={styles.buttonContainer}>
                 <Button title="Review" 
                   onPress={() => { toggleOverlay() }} 
@@ -189,8 +228,18 @@ const CompletedTransactionInfoScreen = ({ navigation, customer_id }) => {
           ) :
           (
             <View style={styles.unDoneTotalCostWrapper}>
-              <Text style={styles.totalCost}>Total Cost</Text>
-              <Text style={styles.cost}>₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={styles.amount_wrapper}>
+                  <Text style={styles.total_amount_txt}>
+                    Total Amount
+                  </Text>
+                </View>
+                <View style={styles.amount_value_wrapper}>
+                  <Text style={styles.total_amount_value_txt}>
+                    ₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}
+                  </Text>
+                </View>
+              </View>
             </View>  
           )
         }

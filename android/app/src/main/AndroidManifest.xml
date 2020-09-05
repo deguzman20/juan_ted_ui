@@ -13,12 +13,13 @@
       android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAyvCbJhmXauM0yrRrpJPX3T1He9AVhed"/>
+            android:value="AIzaSyAgYScz9A773qc5oCLpeSwLQ_QM_wciLfg"/>
 
         <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        android:windowSoftInputMode="adjustResize">
         android:windowSoftInputMode="adjustResize">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

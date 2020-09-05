@@ -153,9 +153,8 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
   }
   
   if (loading || error) return null;
-  
-  // if(compoundCode !== ''){
-  //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
+  // if(compoundCode !== '' && compoundCode.match(pattern) !== null){
+  //   if(compoundCode.match(pattern)  === 'Parañaque'){
       return(
         <View style={styles.container}>
           <View style={styles.wallet_wrapper}>

@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
-import { View, FlatList, ScrollView } from 'react-native';
-import { Text, ListItem, Avatar, Button } from 'react-native-elements';
+import { View, FlatList, ScrollView, Platform } from 'react-native';
+import { Text, ListItem, Avatar, Button, Divider } from 'react-native-elements';
 import { styles } from './../../../../styles/authorized/tasker/customer_request/CustomerRequestInfoStyle';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { useNetInfo } from '@react-native-community/netinfo';
@@ -10,7 +10,7 @@ import {
   SEND_MESSAGE } from '../../../../queries';
 import { DEFAULT_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
 import { formatMoney } from '../../../../core/utils';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import Loader from "react-native-modal-loader";
 import _ from 'lodash';
@@ -94,7 +94,7 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
 
   if([data.pendingTransactionServiceInfo].length >= 1){
     [data.pendingTransactionServiceInfo].map((ts) => {
-      for(var i = 0; i <= ([ts.pendingTransactionServiceInfo].length - 1); i++){
+      for(var i = 0; i <= ([ts.pendingTransactionServiceInfo].length); i++){
         total_cost_arr.push(ts.transactionServices[i].quantity * ts.transactionServices[i].service.price)
       }
     })
@@ -129,31 +129,69 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
             </View>
           </View>
           <View style={styles.mapViewStack}>
-            <MapView
-              initialRegion={{
-                latitude: parseFloat(data.pendingTransactionServiceInfo.lat),
-                longitude: parseFloat(data.pendingTransactionServiceInfo.lng),
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA,
-              }}
-              customMapStyle={[]}
-              style={styles.mapView}
-              zoomEnabled = {true}
-              >
-              <MapView.Marker
-                coordinate={{
-                  latitude: parseFloat(data.pendingTransactionServiceInfo.lat),
-                  longitude: parseFloat(data.pendingTransactionServiceInfo.lng)
-                }}
-                title={"title"}
-                description={"description"}
-              />
-            </MapView>
+            {
+              Platform.OS === 'ios' ? 
+              (
+                <MapView
+                  initialRegion={{
+                    latitude: parseFloat(data.pendingTransactionServiceInfo.lat),
+                    longitude: parseFloat(data.pendingTransactionServiceInfo.lng),
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
+                  }}
+                  customMapStyle={[]}
+                  style={styles.mapView}
+                  zoomEnabled = {true}
+                  >
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: parseFloat(data.pendingTransactionServiceInfo.lat),
+                      longitude: parseFloat(data.pendingTransactionServiceInfo.lng)
+                    }}
+                    title={"title"}
+                    description={"description"}
+                  />
+                </MapView>
+              ) : (
+                <MapView
+                  provider={PROVIDER_GOOGLE}
+                  initialRegion={{
+                    latitude: parseFloat(data.pendingTransactionServiceInfo.lat),
+                    longitude: parseFloat(data.pendingTransactionServiceInfo.lng),
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA
+                  }}
+                  customMapStyle={[]}
+                  style={styles.mapView}
+                  zoomEnabled = {true}
+                  >
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: parseFloat(data.pendingTransactionServiceInfo.lat),
+                      longitude: parseFloat(data.pendingTransactionServiceInfo.lng)
+                    }}
+                    title={"title"}
+                    description={"description"}
+                  />
+                </MapView>
+              )
+            }
           </View>
         </ScrollView>
         <View style={styles.totalCostWrapper}>
-          <Text style={styles.totalCost}>Total Cost</Text>
-          <Text style={styles.cost}>₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={styles.amount_wrapper}>
+              <Text style={styles.total_amount_txt}>
+                Total Amount
+              </Text>
+            </View>
+            <View style={styles.amount_value_wrapper}>
+              <Text style={styles.total_amount_value_txt}>
+                ₱ {formatMoney(total_cost_arr.reduce((a, b) => a + b))}
+              </Text>
+            </View>
+          </View>
+          <Divider style={styles.divider} />
           <View style={styles.buttonContainer}>
             <Button title="Approve" 
               onPress={() => { _onApproveRequestPressed() }} 

@@ -98,63 +98,126 @@ const CurrentLocationScreen = ({ tasker_id, navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.mapViewStack}>
-        <MapView
-          initialRegion={{
-            latitude: geolocation.lat,   
-            longitude: geolocation.lng,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }}
-          customMapStyle={[]}
-          style={styles.mapView}
-          ref={_map}
-        >
-          <GooglePlacesAutocomplete
-            placeholder='Search'
-            onPress={(details = null) => {
-              axios.get(`${GOOGLE_GEOCODE_URL}?place_id=${details['place_id']}&key=${GOOGLE_PLACE_API_KEY}`)
-              .then((response) => {
-                const data = response.data["results"];
-                const lng = data[0]["geometry"]["location"]["lng"]
-                const lat = data[0]["geometry"]["location"]["lat"]
-                setGeolocation(({ lng, lat }))
-                setFormattedAddress(data[0].formatted_address)
-              })
-              .catch((error) => console.log(error))
-            }}
-            query={{
-              key: GOOGLE_PLACE_API_KEY,
-              language: 'en',
-              components: 'country:ph'
-            }}
-            styles={{
-              textInputContainer: {
-                backgroundColor: 'rgba(0,0,0,0)',
-                borderTopWidth: 0,
-                borderBottomWidth: 0,
-                marginTop: 20
-              },
-              textInput: {
-                marginLeft: 10,
-                marginRight: 10,
-                height: 38,
-                color: '#5d5d5d',
-                fontSize: 16,
-              },
-              predefinedPlacesDescription: {
-                color: '#1faadb',
-                backgroundColor: 'white'
-              },
-            }}
-          />
-          <MapView.Marker.Animated
-            coordinate={{ 
-              latitude: geolocation.lat,   
-              longitude: geolocation.lng
-            }}
-            title={"Your Location"}
-          />
-        </MapView>
+        {
+          Platform.OS === 'ios' ? (
+            <MapView
+              initialRegion={{
+                latitude: geolocation.lat,   
+                longitude: geolocation.lng,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,
+              }}
+              customMapStyle={[]}
+              style={styles.mapView}
+              ref={_map}
+            >
+              <GooglePlacesAutocomplete
+                placeholder='Search'
+                onPress={(details = null) => {
+                  axios.get(`${GOOGLE_GEOCODE_URL}?place_id=${details['place_id']}&key=${GOOGLE_PLACE_API_KEY}`)
+                  .then((response) => {
+                    const data = response.data["results"];
+                    const lng = data[0]["geometry"]["location"]["lng"]
+                    const lat = data[0]["geometry"]["location"]["lat"]
+                    setGeolocation(({ lng, lat }))
+                    setFormattedAddress(data[0].formatted_address)
+                  })
+                  .catch((error) => console.log(error))
+                }}
+                query={{
+                  key: GOOGLE_PLACE_API_KEY,
+                  language: 'en',
+                  components: 'country:ph'
+                }}
+                styles={{
+                  textInputContainer: {
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    marginTop: 20
+                  },
+                  textInput: {
+                    marginLeft: 10,
+                    marginRight: 10,
+                    height: 38,
+                    color: '#5d5d5d',
+                    fontSize: 16,
+                  },
+                  predefinedPlacesDescription: {
+                    color: '#1faadb',
+                    backgroundColor: 'white'
+                  },
+                }}
+              />
+              <MapView.Marker.Animated
+                coordinate={{ 
+                  latitude: geolocation.lat,   
+                  longitude: geolocation.lng
+                }}
+                title={"Your Location"}
+              />
+            </MapView>
+          ) : (
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              initialRegion={{
+                latitude: geolocation.lat,   
+                longitude: geolocation.lng,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,
+              }}
+              customMapStyle={[]}
+              style={styles.mapView}
+              ref={_map}
+            >
+              <GooglePlacesAutocomplete
+                placeholder='Search'
+                onPress={(details = null) => {
+                  axios.get(`${GOOGLE_GEOCODE_URL}?place_id=${details['place_id']}&key=${GOOGLE_PLACE_API_KEY}`)
+                  .then((response) => {
+                    const data = response.data["results"];
+                    const lng = data[0]["geometry"]["location"]["lng"]
+                    const lat = data[0]["geometry"]["location"]["lat"]
+                    setGeolocation(({ lng, lat }))
+                    setFormattedAddress(data[0].formatted_address)
+                  })
+                  .catch((error) => console.log(error))
+                }}
+                query={{
+                  key: GOOGLE_PLACE_API_KEY,
+                  language: 'en',
+                  components: 'country:ph'
+                }}
+                styles={{
+                  textInputContainer: {
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    borderTopWidth: 0,
+                    borderBottomWidth: 0,
+                    marginTop: 20
+                  },
+                  textInput: {
+                    marginLeft: 10,
+                    marginRight: 10,
+                    height: 38,
+                    color: '#5d5d5d',
+                    fontSize: 16,
+                  },
+                  predefinedPlacesDescription: {
+                    color: '#1faadb',
+                    backgroundColor: 'white'
+                  },
+                }}
+              />
+              <MapView.Marker.Animated
+                coordinate={{ 
+                  latitude: geolocation.lat,   
+                  longitude: geolocation.lng
+                }}
+                title={"Your Location"}
+              />
+            </MapView>
+          )
+        }
       </View>
       <View style={{
         width: '100%',

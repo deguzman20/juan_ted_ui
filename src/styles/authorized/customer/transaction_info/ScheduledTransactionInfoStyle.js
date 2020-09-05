@@ -106,5 +106,28 @@ export const styles = StyleSheet.create({
     color: "#121212",
     marginTop: 65,
     marginLeft: 35
+  },
+  divider: {
+    marginTop: 10,
+    marginLeft: '5%',
+    marginRight: '5%'
+  },
+  amount_wrapper: {
+    marginLeft: '5%',
+    width: '45%',
+    alignItems: 'flex-start'
+  },
+  amount_value_wrapper: {
+    marginLeft: '5%',
+    width: '40%',
+    alignItems: 'flex-end'
+  },
+  total_amount_txt: {
+    marginTop: 10,
+    fontSize: 25
+  },
+  total_amount_value_txt: {
+    marginTop: 10,
+    fontSize: 25
   }
 });

@@ -33,24 +33,16 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected List<ReactPackage> getPackages() {
-          //@SuppressWarnings("UnnecessaryLocalVariable")
-
-//          List<ReactPackage> packages = new PackageList(this).getPackages();
-//          // Packages that cannot be autolinked yet can be added manually here, for example:
-////          packages.add(new MyReactNativePackage());
-////          packages.add(new VectorIconsPackage());
-//            packages.add(new MapsPackage());
-//          return packages;
           return Arrays.asList(
-                  new MainReactPackage(),
+            new MainReactPackage(),
             new SafeAreaContextPackage(),
             new GeolocationPackage(),
             new ReanimatedPackage(),
             new RNGestureHandlerPackage(),
             new NetInfoPackage(),
             new AsyncStoragePackage(),
-                  new MapsPackage(),
-                  new SvgPackage()
+            new MapsPackage(),
+            new SvgPackage()
           );
         }
 

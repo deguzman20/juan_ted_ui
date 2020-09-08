@@ -11,18 +11,14 @@ import {
   ADD_TO_FAVORATE_TASKER, 
   REMOVE_TO_FAVORATE_TASKER,
   UPDATE_CUSTOMER_GEOLOCATION } from '../../../../../queries';
-import { GOOGLE_PLACE_API_KEY  } from '../../../../../actions/types';
 import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
-import Geolocation from '@react-native-community/geolocation';
 import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
 import ReviewsScreen from '../../my_tasker/ReviewsScreen';
 import EmptyPastTasker from './../../../../../components/molecules/empty_container/EmptyPastTasker';
 import InternetConnectionChecker from '../../../../../components/atoms/snackbar/InternetConnectionChecker';
 import Loading from '../../../../../components/atoms/loader/Loading';
 import OutOfLocationService from '../../../../../components/molecules/out_of_location_service/OutOfLocationService';
-import axios from 'axios';
-import _ from 'lodash';
 
 const PastTaskerScreen = ({ customer_id, navigation }) => {
   const netInfo = useNetInfo()
@@ -39,33 +35,12 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
   })
 
   useEffect(() => {
-    Geolocation.getCurrentPosition(
-      //Will give you the current location
-      (position) => {
-        const currentLongitude = JSON.stringify(position.coords.longitude)
-        const currentLatitude = JSON.stringify(position.coords.latitude)
-        console.log(currentLatitude)
-        update_customer_geolocation({ 
-          variables: {
-            customer_id: parseInt(customer_id),
-            lng: currentLongitude,
-            lat: currentLatitude,
-            formatted_address: ''
-          }
-        }).then(({ data }) => {
-          axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLatitude},${currentLongitude}&key=${GOOGLE_PLACE_API_KEY}`)
-          .then((response) => {
-            if(response.data.plus_code.compound_code !== ''){
-              setCompoundCode(response.data.plus_code.compound_code)
-            }
-          })
-        })
-      },
-      (error) => alert(error.message),
-      { 
-        enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 
-      }
-    )
+    if(Platform.OS === 'ios'){
+      _iosRequestPermissions(customer_id, compoundCode, setCompoundCode, update_customer_geolocation)
+    }
+    else {
+      _androidRequestPermissions(customer_id, compoundCode, setCompoundCode, update_customer_geolocation)
+    }
   },[])
 
   _onAddToFavorateTaskerPressed = (id) => {
@@ -158,8 +133,8 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
 
   if(loading || error) return null;
 
-  // if(compoundCode !== ""){
-  //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
+  if(compoundCode !== ''){
+    if(compoundCode.match(pattern) === null){
       if(data.pastTaskerList.length >= 1){
         return(
           <React.Fragment>
@@ -185,14 +160,14 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
       else {
         return <EmptyPastTasker />
       }
-  //   }
-  //   else{
-  //     return <OutOfLocationService />
-  //   }
-  // }
-  // else{
-  //   return <Loading />
-  // }
+    }
+    else{
+      return <OutOfLocationService />
+    }
+  }
+  else{
+    return <Loading />
+  }
 }
 
 const mapStateToProps = ({ customerReducer }) => {

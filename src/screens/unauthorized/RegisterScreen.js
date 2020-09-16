@@ -46,11 +46,22 @@ const RegisterScreen = ({ navigation }) => {
       return;
     }
 
-    createCustomer({ variables: { first_name: first_name.value,
-                                  last_name: last_name.value,
-                                  email: email.value,
-                                  mobile_number: mobile_number.value,
-                                  password: password.value } })
+    createCustomer({ 
+      variables: { 
+        first_name: first_name.value,
+        last_name: last_name.value,
+        email: email.value,
+        mobile_number: mobile_number.value,
+        password: password.value 
+      } 
+    })
+    .then(({data}) => {
+      console.log(data)
+    })
+    .catch(err => console.log(err))
+    // .then((response) => {
+    //   console.log(response)
+    // })
   };
 
   return (

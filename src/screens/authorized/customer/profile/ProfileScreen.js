@@ -65,8 +65,8 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
   }
 
   if(loading || error) return null;
-  if(compoundCode !== ''){
-    if(compoundCode.match(pattern) !== null){
+  // if(compoundCode !== ''){
+  //   if(compoundCode.match(pattern) !== null){
       return (
         <React.Fragment>
           <Background>
@@ -111,14 +111,14 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
           <InternetConnectionChecker />
         </React.Fragment>
       )
-    }
-    else{
-      return <OutOfLocationService />
-    }
-  }
-  else{
-    return <Loading />
-  }
+  //   }
+  //   else{
+  //     return <OutOfLocationService />
+  //   }
+  // }
+  // else{
+  //   return <Loading />
+  // }
 }
 
 const mapStateToProps = ({ customerReducer }) => {

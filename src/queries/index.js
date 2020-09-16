@@ -46,7 +46,7 @@ export const TASKER_SIGN_IN = gql`
       lastName
       image
       mobileNumber
-      zipCode
+      # zipCode
       hourlyRate
       introduction
       tasks{
@@ -60,8 +60,8 @@ export const TASKER_SIGN_IN = gql`
           lastName
           image
           mobileNumber
-          zipCode
-          cardDetail
+          # zipCode
+          # cardDetail
         }
       }
     }

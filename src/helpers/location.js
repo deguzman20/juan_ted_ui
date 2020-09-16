@@ -1,4 +1,4 @@
-import { PermissionsAndroid, Alert } from 'react-native';
+import { PermissionsAndroid } from 'react-native';
 import { GOOGLE_PLACE_API_KEY } from './../actions/types';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';

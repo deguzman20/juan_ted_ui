@@ -27,6 +27,7 @@
 		6C59421CA80345BCAD4BF3AA /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 582B55FE89034CC388D98A19 /* MaterialIcons.ttf */; };
 		90D17E2CA22B4959B257C2D2 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 657145A2D3D849659FDC4E8A /* MaterialCommunityIcons.ttf */; };
 		93C1FE0007A84BBEB980E84B /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C1043FA83FD34BADAC8F1CDB /* Feather.ttf */; };
+		A11AB94E2512159E00D6A256 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		A11CC2C024B88B5A00C4A1D2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A11CC2BF24B88B5A00C4A1D2 /* Default-568h@2x.png */; };
 		A1FE693424A050DF001CF0C9 /* AIRDummyView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FE68FE24A050DF001CF0C9 /* AIRDummyView.m */; };
 		A1FE693524A050DF001CF0C9 /* AIRGoogleMapUrlTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A1FE690224A050DF001CF0C9 /* AIRGoogleMapUrlTile.m */; };
@@ -532,6 +533,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A11AB94E2512159E00D6A256 /* main.jsbundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

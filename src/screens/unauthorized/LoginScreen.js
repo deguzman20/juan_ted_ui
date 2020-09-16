@@ -44,6 +44,7 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
       for(let i = 1; i <= 3; i++){
         setLoading(true)
         if(i === 3){
+          console.log("aas")
           customerSignIn({ variables: { email: email.value, password: password.value } }).then((customer_data) => {
             if(customer_data.data.customerSignin !== null){
               customerSignInAction(customer_data)

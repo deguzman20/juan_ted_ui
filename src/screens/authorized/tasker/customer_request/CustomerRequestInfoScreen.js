@@ -95,7 +95,8 @@ const CustomerRequestInfoScreen = ({ navigation }) => {
   if([data.pendingTransactionServiceInfo].length >= 1){
     [data.pendingTransactionServiceInfo].map((ts) => {
       for(var i = 0; i <= ([ts.pendingTransactionServiceInfo].length); i++){
-        total_cost_arr.push(ts.transactionServices[i].quantity * ts.transactionServices[i].service.price)
+        console.log(ts.transactionServices)
+        // total_cost_arr.push(ts.transactionServices[i].quantity * ts.transactionServices[i].service.price)
       }
     })
 

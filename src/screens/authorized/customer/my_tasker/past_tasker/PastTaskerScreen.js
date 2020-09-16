@@ -12,6 +12,7 @@ import {
   REMOVE_TO_FAVORATE_TASKER,
   UPDATE_CUSTOMER_GEOLOCATION } from '../../../../../queries';
 import { connect } from 'react-redux';
+import { _androidRequestPermissions, _iosRequestPermissions } from '../../../../../helpers/location';
 import { useNetInfo } from "@react-native-community/netinfo";
 import MyTaskerInfoScreen from '../../my_tasker/MyTaskerInfoScreen';
 import ReviewsScreen from '../../my_tasker/ReviewsScreen';

@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { View, Text, Alert, Platform } from 'react-native';
 import { Button, Divider } from 'react-native-elements';
 import { styles } from './../../../../styles/authorized/customer/map/GoogleMapStyle';
@@ -14,9 +14,25 @@ import InternetConnectionChecker from '../../../../components/atoms/snackbar/Int
 import axios from 'axios';
 
 const GoogleMapScreen = ({ navigation }) => {
+  const _map = useRef(null)
   const netInfo = useNetInfo()
   const [formatted_address, setFormattedAddress] = useState('')
   const [geolocation, setGeolocation] = useState({ lng: 1100.5680867, lat: 120.8805576 })
+
+  useEffect(() =>{
+    if(_map.current && data.customer !== null) {
+      _map.current.animateCamera(
+        {
+          center: {
+            latitude:  geolocation.lat,   
+            longitude: geolocation.lng,
+          },
+          zoom: 10
+        },
+        5000
+      )
+    }
+  },[])
 
   const _onNavigateToChooseSchedulePressed = () => {
     if(netInfo.isConnected){
@@ -53,7 +69,15 @@ const GoogleMapScreen = ({ navigation }) => {
               customMapStyle={[]}
               style={styles.mapView}
               zoomEnabled = {true}
-            />
+            >
+              <MapView.Marker.Animated
+                coordinate={{ 
+                  latitude: geolocation.lat,   
+                  longitude: geolocation.lng
+                }}
+                title={"Your Location"}
+              />
+            </MapView>
           ):(
             <MapView
               provider={PROVIDER_GOOGLE}
@@ -66,7 +90,15 @@ const GoogleMapScreen = ({ navigation }) => {
               customMapStyle={[]}
               style={styles.mapView}
               zoomEnabled = {true}
-            />
+            >
+              <MapView.Marker.Animated
+                coordinate={{ 
+                  latitude: geolocation.lat,   
+                  longitude: geolocation.lng
+                }}
+                title={"Your Location"}
+              />
+            </MapView>
           )
         }
         <GooglePlacesAutocomplete

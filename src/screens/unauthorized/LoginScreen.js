@@ -79,9 +79,11 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
 
   return (
     <React.Fragment>
-      <View style={{ flex: 1, marginTop: '50%' }}>
+      <View style={{ flex: 0.5, alignItems: 'center' }}>
+        <Logo />
+      </View>
+      <View style={{ flex: 1.5 }}>
         <Background>
-          <Logo />
           <TextInput
             label="Email"
             returnKeyType="next"
@@ -115,7 +117,7 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
           <TextWithLinkSection 
             navigation={navigation} 
           />
-          <SocialMediaButtons />
+          {/* <SocialMediaButtons /> */}
           <ModalLoader loading={isLoading} />
         </Background>
       </View>

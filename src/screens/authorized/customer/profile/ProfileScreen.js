@@ -68,7 +68,7 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
   // if(compoundCode !== ''){
   //   if(compoundCode.match(pattern) !== null){
       return (
-        <React.Fragment>
+        <>
           <Background>
             <SafeAreaView style={{ marginBottom: 25 }}/>
               <View>
@@ -109,7 +109,7 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
               </View>
           </Background>
           <InternetConnectionChecker />
-        </React.Fragment>
+        </>
       )
   //   }
   //   else{

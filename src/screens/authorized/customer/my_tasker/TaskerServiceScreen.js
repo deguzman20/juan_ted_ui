@@ -91,7 +91,7 @@ const TaskerServiceScreen = ({ navigation, customer_id }) =>{
   // if(compoundCode !== ""){
   //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
       return(
-        <React.Fragment>
+        <>
           <SafeAreaView />
           <View style={styles.container}>
             <View style={styles.container_row}>
@@ -121,7 +121,7 @@ const TaskerServiceScreen = ({ navigation, customer_id }) =>{
               <InternetConnectionChecker />
             </View>
           </View>
-        </React.Fragment>
+        </>
       )
   //   }
   //   else{

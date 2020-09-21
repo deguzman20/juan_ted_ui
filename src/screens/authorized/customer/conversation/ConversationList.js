@@ -18,7 +18,7 @@ const ConversationList = ({ data, loading, error, navigation }) => {
             ))
           }
         </View>
-      </React.Fragment>    
+      </React.Fragment>     
     )
   }
   return(

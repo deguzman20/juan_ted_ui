@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   logo_container: {
     flex: 1,
     position: 'absolute',
-    top: '-30%',
+    top: '10%',
     width: '136%',
     height: 300,
     alignItems: 'center',

@@ -72,7 +72,7 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
   }
 
   return(
-    <React.Fragment>
+    <>
       <SafeAreaView/>
       <Background>
         <BackButton goBack={() => navigation.navigate('ProfileScreen')} />
@@ -115,7 +115,7 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
       </Background>
       <Loader loading={isLoading} color="#ff66be" />
       <InternetConnectionChecker />
-    </React.Fragment>
+    </>
   )
 }
 

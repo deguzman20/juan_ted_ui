@@ -87,7 +87,7 @@ const EditProfileScreen = ({ navigation, customer_id }) => {
   if(loading || error) return null;
 
   return(
-    <React.Fragment>
+    <>
       <SafeAreaView/>
       <Background>
         <BackButton goBack={() => navigation.navigate('ProfileScreen')} />
@@ -141,7 +141,7 @@ const EditProfileScreen = ({ navigation, customer_id }) => {
         <Loader loading={isLoading} color="#ff66be" />
       </Background>
       <InternetConnectionChecker />
-    </React.Fragment>
+    </>
   )
 }
 

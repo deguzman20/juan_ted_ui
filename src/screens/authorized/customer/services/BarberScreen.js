@@ -34,7 +34,6 @@ const BarberScreen = ({ navigation }) => {
   increaseQuantity = (item) => {
     if(netInfo.isConnected){
       item.setQuantity({ quantity: item.quantity += 1, price: item.price })
-      // setContainerVisibility("")
     }
   }
 
@@ -42,19 +41,13 @@ const BarberScreen = ({ navigation }) => {
     if(netInfo.isConnected){
       if(item.quantity === 0) return false;
       item.setQuantity({ quantity: item.quantity -= 1, price: item.price })
-      // if(((haircut.quantity) - 1) >= 1) {
-      //   setContainerVisibility("")
-      // }
-      // else{
-      //   setContainerVisibility("none")
-      // }
     }
   }
 
   if(loading || error) return null; 
 
   return (
-    <React.Fragment>
+    <>
       <SafeAreaView style={styles.container}>
         <FlatList
           data={[
@@ -73,17 +66,38 @@ const BarberScreen = ({ navigation }) => {
           ]}
 
           renderItem={({ item }) => 
-            <Card>
-              <View style={styles.containerRows}>
-                <Image style={styles.imageServiceItem} 
-                  source={{  uri: `${DEFAULT_URL}/${item.image}` }} 
-                />
-                <View style={styles.containerDetails}>
-                  <View style={styles.containerRow}>
-                    <Text style={styles.serviceItemName}>{item.key}</Text>
-                    <Text style={styles.serviceItemPrice}>₱ {item.price}</Text>
-                  </View>
+            <TouchableWithoutFeedback onPress={() => { 
+              navigation.navigate('DetailsScreen', {
+                service_name: item.key,
+                id: item.id,
+                image: item.image,
+                why_this_service: item.why_this_service,
+                equipment_use: item.equipment_use,
+                what_is_included: item.what_is_included
+              }) 
+            }}>
+              <Card>
+                <View style={styles.containerRows}>
                   <TouchableWithoutFeedback onPress={() => { 
+                    navigation.navigate('DetailsScreen', {
+                      service_name: item.key,
+                      id: item.id,
+                      image: item.image,
+                      why_this_service: item.why_this_service,
+                      equipment_use: item.equipment_use,
+                      what_is_included: item.what_is_included
+                    }) 
+                  }}>
+                    <Image style={styles.imageServiceItem} 
+                      source={{  uri: `${DEFAULT_URL}/${item.image}` }} 
+                    />
+                  </TouchableWithoutFeedback>
+                  <View style={styles.containerDetails}>
+                    <View style={styles.containerRow}>
+                      <Text style={styles.serviceItemName}>{item.key}</Text>
+                      <Text style={styles.serviceItemPrice}>₱ {item.price}</Text>
+                    </View>
+                    <TouchableWithoutFeedback onPress={() => { 
                       navigation.navigate('DetailsScreen', {
                         service_name: item.key,
                         id: item.id,
@@ -92,39 +106,39 @@ const BarberScreen = ({ navigation }) => {
                         equipment_use: item.equipment_use,
                         what_is_included: item.what_is_included
                       }) 
-                    }
-                  }>
-                    <Text style={styles.viewDetails}>View Details</Text>
-                  </TouchableWithoutFeedback>
-                  <Icon 
-                    name='chevron-right' 
-                    color='black'
-                    style={styles.chevron}
-                    size={15}
-                  />
-                  <View style={styles.containerRow}> 
-                    <View style={styles.quantityButton}>
-                      <Button 
-                        title="+"
-                        onPress={() => increaseQuantity(item) } 
-                      />
-                    </View>
-                    <TextInput
-                      editable={false}
-                      style={styles.quantityInput}
-                      onChangeText={text => onChangeText(text)}
-                      value={`${item.quantity}`}
+                    }}>
+                      <Text style={styles.viewDetails}>View Details</Text>
+                    </TouchableWithoutFeedback>
+                    <Icon 
+                      name='chevron-right' 
+                      color='black'
+                      style={styles.chevron}
+                      size={15}
                     />
-                    <View style={styles.quantityButton}>
-                      <Button
-                        title="-"
-                        onPress={() => decreaseQuantity(item) }
+                    <View style={styles.containerRow}> 
+                      <View style={styles.quantityButton}>
+                        <Button 
+                          title="+"
+                          onPress={() => increaseQuantity(item) } 
+                        />
+                      </View>
+                      <TextInput
+                        editable={false}
+                        style={styles.quantityInput}
+                        onChangeText={text => onChangeText(text)}
+                        value={`${item.quantity}`}
                       />
+                      <View style={styles.quantityButton}>
+                        <Button
+                          title="-"
+                          onPress={() => decreaseQuantity(item) }
+                        />
+                      </View>
                     </View>
-                  </View>
-                </View> 
-              </View>
-            </Card>
+                  </View> 
+                </View>
+              </Card>
+            </TouchableWithoutFeedback>  
           }
         />
         <View style={{ 
@@ -177,7 +191,7 @@ const BarberScreen = ({ navigation }) => {
         </View>
       </SafeAreaView>
       <InternetConnectionChecker/>
-    </React.Fragment>
+    </>
   )
 }
 

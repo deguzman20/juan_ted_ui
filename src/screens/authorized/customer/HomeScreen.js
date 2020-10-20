@@ -33,6 +33,7 @@ import ReviewsScreen from './geocoded_taskers/ReviewsScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
 import DetailsScreen from './view_details/DetailsScreen';
 import PlaceOrderScreen from './../customer/place_order/PlaceOrderScreen';
+import PaypalScreen from './../customer/place_order/PaypalScreen';
 
 import InternetConnectionChecker from '../../../components/atoms/snackbar/InternetConnectionChecker';
 import Loading from '../../../components/atoms/loader/Loading';
@@ -78,12 +79,12 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
           tasker_id: ""
         })
       }
-    }
+    } 
   }
   
   if (loading || error) return null;
-  if(compoundCode !== ''){
-    if(compoundCode.match(pattern) !== null){
+  // if(compoundCode !== ''){
+  //   if(compoundCode.match(pattern) !== null){
       return(
         <View style={styles.container}>
           <View style={styles.wallet_wrapper}>
@@ -126,14 +127,14 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
           </View>
         </View>
       )
-    }
-    else{
-      return <OutOfLocationService />
-    }
-  }
-  else{
-    return <Loading />
-  }
+  //   }
+  //   else{
+  //     return <OutOfLocationService />
+  //   }
+  // }
+  // else{
+  //   return <Loading />
+  // }
 }
 
 const mapStateToProps = ({ serviceReducer, customerReducer }) => {
@@ -223,6 +224,13 @@ const App = createStackNavigator({
     navigationOptions: {
       title: '',
       headerStyle: {}
+    }
+  },
+  PaypalScreen: {
+    screen: PaypalScreen,
+    navigationOptions: {
+      title: '',
+      headerVisible: false,
     }
   }
 },{

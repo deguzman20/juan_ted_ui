@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.cookies.CookieManagerPackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.horcrux.svg.SvgPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
@@ -35,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
           return Arrays.asList(
             new MainReactPackage(),
+            new RNCWebViewPackage(),
             new SafeAreaContextPackage(),
             new GeolocationPackage(),
             new ReanimatedPackage(),
@@ -42,7 +45,8 @@ public class MainApplication extends Application implements ReactApplication {
             new NetInfoPackage(),
             new AsyncStoragePackage(),
             new MapsPackage(),
-            new SvgPackage()
+            new SvgPackage(),
+            new CookieManagerPackage()
           );
         }
 

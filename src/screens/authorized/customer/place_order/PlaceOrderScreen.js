@@ -79,8 +79,8 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
                       .then((transaction_service_response) => {
                         if(transaction_service_response.data === 'Transaction service was created successfuly'){
                           setLoading(false)
-                          Alert.alert(transaction_service_response.data)
-                          navigation.navigate('Home')
+                          // Alert.alert(transaction_service_response.data)
+                          navigation.navigate('PaypalScreen')
                         }
                       })
                     })

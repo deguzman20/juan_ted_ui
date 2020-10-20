@@ -16,15 +16,15 @@
             android:value="AIzaSyAgYScz9A773qc5oCLpeSwLQ_QM_wciLfg"/>
 
         <activity
-        android:name=".MainActivity"
-        android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-        android:windowSoftInputMode="adjustResize">
-        android:windowSoftInputMode="adjustResize">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+           android:name=".MainActivity"
+           android:label="@string/app_name"
+           android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+           android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>

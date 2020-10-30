@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { SafeAreaView, ScrollView, Alert } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { CREATE_CUSTOMER } from './../../queries';
 
@@ -55,8 +55,11 @@ const RegisterScreen = ({ navigation }) => {
         password: password.value 
       } 
     })
-    .then(({data}) => {
-      console.log(data)
+    .then(({createData}) => {
+      if(createData.data.response === 'Customer Created'){
+        Alert.alert('Successfuly created!')
+        navigation.navigate('LoginScreen')
+      }
     })
     .catch(err => console.log(err))
     // .then((response) => {

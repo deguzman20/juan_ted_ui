@@ -6,9 +6,9 @@ import InternetConnectionChecker from '../../atoms/snackbar/InternetConnectionCh
 
 const OutOfLocationService = () => (
   <View style={styles.out_of_location_service_container}>
-    <Image 
+    <Image
       source={require('./../../../assets/gps.png')} />
-    <Text h3 style={styles.out_of_location_service_txt}>Service not available</Text>
+    <Text h3 style={styles.out_of_location_service_txt}>App not available</Text>
     <InternetConnectionChecker />
   </View>
 )

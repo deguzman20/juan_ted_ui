@@ -17,7 +17,6 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { _androidRequestPermissions, _iosRequestPermissions } from '../../../../helpers/location';
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
-
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import Background from '../../../../components/atoms/background/Background';
 import Loading from '../../../../components/atoms/loader/Loading';

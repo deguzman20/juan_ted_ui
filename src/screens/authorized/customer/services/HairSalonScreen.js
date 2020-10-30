@@ -36,7 +36,6 @@ const NailCareScreen = ({ navigation }) => {
   increaseQuantity = (item) => {
     if(netInfo.isConnected){
       item.setQuantity({ quantity: item.quantity += 1, price: item.price })
-      // setContainerVisibility("")
     }
   }
 
@@ -44,12 +43,6 @@ const NailCareScreen = ({ navigation }) => {
     if(netInfo.isConnected){
       if(item.quantity === 0) return false;
       item.setQuantity({ quantity: item.quantity -= 1, price: item.price })
-      // if(((rebond.quantity + keratin.quantity + hair_cut.quantity) - 1) >= 1) {
-      //   setContainerVisibility("")
-      // }
-      // else{
-      //   setContainerVisibility("none")
-      // }
     }
   }
 

@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import { View, FlatList, ScrollView, Alert, SafeAreaView } from 'react-native';
 import { Text, ListItem, Button, Rating } from 'react-native-elements';
 import { styles } from './../../../../../styles/authorized/customer/my_tasker/past_tasker/PastTaskerStyle';

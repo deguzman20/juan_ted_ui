@@ -34,6 +34,10 @@ const GoogleMapScreen = ({ navigation }) => {
     }
   },[])
 
+  const onRegionChange = (region) => {
+    _values.region = region;
+  }
+
   const _onNavigateToChooseSchedulePressed = () => {
     if(netInfo.isConnected){
       if(geolocation.lng !== 1100.5680867 && geolocation.lat !== 120.8805576){
@@ -53,6 +57,18 @@ const GoogleMapScreen = ({ navigation }) => {
     }
   } 
 
+  changeRegion = () => {
+    // const latitude = 6.86;
+    // const longitude = 6.86;
+    // this.setState({ latitude, longitude });
+    mapRef.current.animateToRegion({
+      latitude:  geolocation.lat,   
+      longitude: geolocation.lng,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1
+    })
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.mapViewStack}>
@@ -66,6 +82,7 @@ const GoogleMapScreen = ({ navigation }) => {
                 latitudeDelta: 60,
                 longitudeDelta: ITEM_WIDTH / ITEM_HEIGHT,
               }}
+              onRegionChangeComplete={this.onRegionChange}
               customMapStyle={[]}
               style={styles.mapView}
               zoomEnabled = {true}
@@ -87,6 +104,7 @@ const GoogleMapScreen = ({ navigation }) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
+              onRegionChangeComplete={this.onRegionChange}
               customMapStyle={[]}
               style={styles.mapView}
               zoomEnabled = {true}
@@ -111,6 +129,7 @@ const GoogleMapScreen = ({ navigation }) => {
               const lat = data[0]["geometry"]["location"]["lat"]
               setGeolocation(({ lng, lat }))
               setFormattedAddress(data[0].formatted_address)
+              changeRegion()
             })
             .catch((error) => console.log(error))
           }}

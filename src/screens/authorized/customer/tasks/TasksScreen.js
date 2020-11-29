@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
-import { View } from 'react-native';
+import { View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { styles } from './../../../../styles/authorized/customer/tasks/TasksStyle';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { SafeAreaView } from 'react-navigation';
+// import { SafeAreaView } from 'react-navigation';
 
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import Navigation from './Navigation';

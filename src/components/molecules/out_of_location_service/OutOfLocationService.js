@@ -11,5 +11,6 @@ const OutOfLocationService = () => (
     <Text h3 style={styles.out_of_location_service_txt}>App not available</Text>
     <InternetConnectionChecker />
   </View>
-)
-export default memo(OutOfLocationService)
+);
+
+export default memo(OutOfLocationService);

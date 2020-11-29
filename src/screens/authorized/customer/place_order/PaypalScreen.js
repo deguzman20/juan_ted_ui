@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState, useRef } from 'react';
-import { SafeAreaView, Alert } from 'react-native';
+import { SafeAreaView, Alert, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { DEFAULT_URL } from './../../../../actions/types';
 import { connect } from 'react-redux';
@@ -26,19 +26,38 @@ const PaypalScreen = ({ customer_id, navigation }) => {
   return(
     <>
       <SafeAreaView/>
-      <WebView
-        source={{ url: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` }}
-        scalesPageToFit={true}
-        onLoad={
-          e => {
-            // Update the state so url changes could be detected by React and we could load the mainUrl.
-            `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` 
-          }
-        }
-        incognito={true}
-        onNavigationStateChange={e => handleResponse(e)}
-        startInLoadingState={true}
-      />
+      { Platform.OS === 'ios' ? 
+        (
+          <WebView
+            source={{ url: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` }}
+            scalesPageToFit={true}
+            onLoad={
+              e => {
+                // Update the state so url changes could be detected by React and we could load the mainUrl.
+                `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` 
+              }
+            }
+            incognito={true}
+            onNavigationStateChange={e => handleResponse(e)}
+            startInLoadingState={true}
+          />
+        ) :
+        (
+          <WebView
+            source={{ uri: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` }}
+            // scalesPageToFit={true}
+            // onLoad={
+            //   e => {
+            //     // Update the state so url changes could be detected by React and we could load the mainUrl.
+            //     `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` 
+            //   }
+            // }
+            incognito={true}
+            onNavigationStateChange={e => handleResponse(e)}
+            startInLoadingState={true}
+          />
+        )
+      }
     </>
   )
 }

@@ -13,6 +13,6 @@ const SocialMediaButtons = () => {
       />
     </View>
   )
-}
+};
 
-export default memo(SocialMediaButtons)
+export default memo(SocialMediaButtons);

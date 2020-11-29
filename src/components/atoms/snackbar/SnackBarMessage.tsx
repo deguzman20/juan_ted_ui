@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { FC } from 'react';
 import SnackBar from 'rn-snackbar-component';
 
-export default SnackBarMessage = ({ children, snackVisibility }) => {
+interface Props {
+  children: any;
+  snackVisibility: boolean;
+};
+
+const SnackBarMessage: FC<Props> = ({ children, snackVisibility }) => {
   return(
     <SnackBar
       visible={snackVisibility}
@@ -13,5 +18,7 @@ export default SnackBarMessage = ({ children, snackVisibility }) => {
       }}
       autoHidingTime={0}
     />
-  )
-}
+  );
+};
+
+export default SnackBarMessage;

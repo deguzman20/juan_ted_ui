@@ -10,6 +10,6 @@ const EmptyConversation = () => (
     <Text h3 style={styles.empty_conversation_txt}>No Conversation yet</Text>
     <InternetConnectionChecker />
   </View>
-)
+);
 
-export default memo(EmptyConversation)
+export default memo(EmptyConversation);

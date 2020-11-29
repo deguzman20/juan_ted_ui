@@ -10,6 +10,6 @@ const EmptyFavoriteTasker = () => (
     <Text h5 style={styles.empty_tasker_txt}>No Favorate Tasker Available yet</Text>
     <InternetConnectionChecker />
   </View>
-)
+);
 
-export default memo(EmptyFavoriteTasker)
+export default memo(EmptyFavoriteTasker);

@@ -10,6 +10,6 @@ const EmptyPastTasker = () => (
     <Text h5 style={styles.empty_tasker_txt}>No Past Tasker Available yet</Text>
     <InternetConnectionChecker />
   </View>
-)
+);
 
-export default memo(EmptyPastTasker)
+export default memo(EmptyPastTasker);

@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import React, { FC } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { NetworkConsumer } from 'react-native-offline';
 import SnackBar from 'rn-snackbar-component';
 
-export default InternetConnectionChecker = ({ navigation }) => {
+const InternetConnectionChecker = () => {
   return(
     <NetworkConsumer>
       {({ isConnected }) => ( 
@@ -15,27 +15,13 @@ export default InternetConnectionChecker = ({ navigation }) => {
                 <Text style={styles.txt_connection}>You are currently offline, some features may be disabled</Text>
               </View>
             )}
-            // action={(
-            //   <TouchableWithoutFeedback 
-            //     onPress={() => { 
-            //       console.log(navigation.navigate)
-            //     }}
-            //   >
-            //     <Text 
-            //       style={styles.txt_retry}
-            //     >
-            //       Retry
-            //     </Text>
-            //   </TouchableWithoutFeedback>
-            // )}
             autoHidingTime={0}
-            
           />
         ) : null
       )}
     </NetworkConsumer>
   )
-}
+};
 
 const styles = StyleSheet.create({
   snackbar_container: {
@@ -50,4 +36,6 @@ const styles = StyleSheet.create({
   txt_retry: {
     color: 'white'
   }
-})
+});
+
+export default InternetConnectionChecker;

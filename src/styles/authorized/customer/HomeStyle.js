@@ -15,14 +15,15 @@ export const styles = StyleSheet.create({
     color: 'white'
   },
   wallet_wrapper: {
-    flex: 0.5, 
+    flex: 0.3, 
     backgroundColor: '#009C3C', 
     width: '100%'
   },
   wallet_ammount_txt: {
     marginTop: 40,
     textAlign: 'center',
-    color: 'white'
+    color: 'white',
+    fontFamily: 'verdana'
   },
   txt_services_txt: {
   left: 20, 

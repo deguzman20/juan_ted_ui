@@ -11,13 +11,13 @@ const RegisterTextWithLinkSection = ({ navigation }) => (
       navigation={navigation} 
     />
   </View>
-)
+);
 
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     marginTop: 4,
   }
-})
+});
 
-export default memo(RegisterTextWithLinkSection)
+export default memo(RegisterTextWithLinkSection);

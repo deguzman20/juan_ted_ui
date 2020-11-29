@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10
   }
-})
+});
 
-export default memo(Loading)
+export default memo(Loading);

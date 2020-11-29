@@ -10,6 +10,6 @@ const EmptyCustomerRequest = () => (
     <Text h5 style={styles.empty_tasker_txt}>No Request</Text>
     <InternetConnectionChecker />
   </View>
-)
+);
 
-export default memo(EmptyCustomerRequest)
+export default memo(EmptyCustomerRequest);

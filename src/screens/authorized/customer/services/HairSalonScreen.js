@@ -8,7 +8,8 @@ import {
   FlatList,
   TextInput,
   Button,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Button as ButtonElement, Divider } from 'react-native-elements';
@@ -32,20 +33,27 @@ const NailCareScreen = ({ navigation }) => {
   const [keratin, setKeratin] = useState({ quantity: 0, price: 1000 })
   const [hair_cut, setHairCut] = useState({ quantity: 0, price: 100 })
   const totalPrice = (rebond.quantity * rebond.price) + (keratin.quantity * keratin.price) + (hair_cut.quantity * hair_cut.price)
-
+ 
   increaseQuantity = (item) => {
     if(netInfo.isConnected){
       item.setQuantity({ quantity: item.quantity += 1, price: item.price })
+      // setContainerVisibility("")
     }
   }
-
+ 
   decreaseQuantity = (item) => {
     if(netInfo.isConnected){
       if(item.quantity === 0) return false;
       item.setQuantity({ quantity: item.quantity -= 1, price: item.price })
+      // if(((rebond.quantity + keratin.quantity + hair_cut.quantity) - 1) >= 1) {
+      //   setContainerVisibility("")
+      // }
+      // else{
+      //   setContainerVisibility("none")
+      // }
     }
   }
-
+ 
   if(loading || error) return null; 
   return (
     <>
@@ -92,7 +100,7 @@ const NailCareScreen = ({ navigation }) => {
               what_is_included: data["service"][2]["whatIsIncludeds"]
             }
           ]}
-
+ 
           renderItem={({ item }) => 
             <TouchableWithoutFeedback onPress={() => { 
               navigation.navigate('DetailsScreen', {
@@ -145,9 +153,9 @@ const NailCareScreen = ({ navigation }) => {
                     />
                     <View style={styles.containerRow}> 
                       <View style={styles.quantityButton}>
-                        <Button 
-                          title="+"
-                          onPress={() => increaseQuantity(item) } 
+                        <Button
+                          title="-"
+                          onPress={() => decreaseQuantity(item) }
                         />
                       </View>
                       <TextInput
@@ -157,9 +165,9 @@ const NailCareScreen = ({ navigation }) => {
                         value={`${item.quantity}`}
                       />
                       <View style={styles.quantityButton}>
-                        <Button
-                          title="-"
-                          onPress={() => decreaseQuantity(item) }
+                        <Button 
+                          title="+"
+                          onPress={() => increaseQuantity(item) } 
                         />
                       </View>
                     </View>
@@ -194,6 +202,10 @@ const NailCareScreen = ({ navigation }) => {
             buttonStyle={styles.next_button_background_color}
             title="Next" 
             onPress={() => { 
+              if(rebond.quantity < 1 && keratin.quantity < 1 && hair_cut.quantity < 1){
+                Alert.alert('No selected service')
+              }else{
+ 
               navigation.navigate('GoogleMapScreen', { 
               totalPrice, 
               service_type_id: parseInt(navigation.state.params.service_type_id),
@@ -234,6 +246,7 @@ const NailCareScreen = ({ navigation }) => {
                   price: data["service"][2]["price"]
                 }]
               }) 
+            }
             }} 
           />
         </View>

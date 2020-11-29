@@ -1,7 +1,9 @@
 import React, { memo, useState } from 'react';
 import { SafeAreaView, ScrollView, Alert } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_CUSTOMER } from './../../queries';
+import { CREATE_CUSTOMER } from '../../queries';
+import { IEmail, IPassword, IFirstName, ILastName, IMoblieNumber } from '../../interfaces';
+
 
 import {
   emailValidator,
@@ -9,26 +11,26 @@ import {
   firstNameValidator,
   lastNameValidator,
   mobileNumberValidator
-} from './../../core/utils';
+} from '../../core/utils';
 
-import Button from './../../components/atoms/button/Button';
-import Header from './../../components/atoms/header/Header';
+import Button from '../../components/atoms/button/Button';
+import Header from '../../components/atoms/header/Header';
 import ModalLoader from '../../components/atoms/loader/ModalLoader';
-import TextInput from './../../components/atoms/text_input/TextInput';
-import Background from './../../components/atoms/background/Background';
-import BackButton from './../../components/atoms/button/BackButton';
+import TextInput from '../../components/atoms/text_input/TextInput';
+import Background from '../../components/atoms/background/Background';
+import BackButton from '../../components/atoms/button/BackButton';
 
-import RegisterTextWithLinkSection from './../../components/molecules/register_text_with_link_section/RegisterTextWithLinkSection';
+import RegisterTextWithLinkSection from '../../components/molecules/register_text_with_link_section/RegisterTextWithLinkSection';
 
 const RegisterScreen = ({ navigation }) => {
   const [createCustomer] = useMutation(CREATE_CUSTOMER)
 
-  const [isLoading, setLoading] = useState(false)
-  const [first_name, setFirstName] = useState({ value: '', error: '' })
-  const [last_name, setLastName] = useState({ value: '', error: '' })
-  const [mobile_number, setMobileNumber] = useState({ value: '', error: '' })
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [first_name, setFirstName] = useState<IFirstName>({ value: '', error: '' })
+  const [last_name, setLastName] = useState<ILastName>({ value: '', error: '' })
+  const [mobile_number, setMobileNumber] = useState<IMoblieNumber>({ value: '', error: '' })
+  const [email, setEmail] = useState<IEmail>({ value: '', error: '' })
+  const [password, setPassword] = useState<IPassword>({ value: '', error: '' })
 
   const _onSignUpPressed = () => {
     const firstNameError = firstNameValidator(first_name.value)
@@ -46,25 +48,31 @@ const RegisterScreen = ({ navigation }) => {
       return;
     }
 
-    createCustomer({ 
-      variables: { 
-        first_name: first_name.value,
-        last_name: last_name.value,
-        email: email.value,
-        mobile_number: mobile_number.value,
-        password: password.value 
-      } 
-    })
-    .then(({createData}) => {
-      if(createData.data.response === 'Customer Created'){
-        Alert.alert('Successfuly created!')
-        navigation.navigate('LoginScreen')
+    setTimeout(() => {
+      for(let i = 1; i <= 3; i++){
+        setLoading(true)
+        if(i === 3){
+          createCustomer({ 
+            variables: { 
+              first_name: first_name.value,
+              last_name: last_name.value,
+              email: email.value,
+              mobile_number: mobile_number.value,
+              password: password.value 
+            } 
+          })
+          .then(({ data }) => {
+            console.log(data)
+            // if(createData.data.response === 'Customer Created'){
+            //   console.log(createData);
+            //   // setLoading(false)
+            //   navigation.navigate('LoginScreen')
+            // }
+          })
+          .catch(err => console.log(err))
+        }
       }
-    })
-    .catch(err => console.log(err))
-    // .then((response) => {
-    //   console.log(response)
-    // })
+    },3000)
   };
 
   return (

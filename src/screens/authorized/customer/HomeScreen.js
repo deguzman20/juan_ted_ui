@@ -63,7 +63,7 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
     }
   }
 
-  _onNavigateToServiceTypePress = (id) => {
+  _onNavigateToServiceTypePress = (id: number) => {
     if(netInfo.isConnected){
       if(id === 1){
         navigation.navigate('BarberScreen', 

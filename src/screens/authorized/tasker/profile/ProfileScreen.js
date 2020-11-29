@@ -18,7 +18,6 @@ import Geolocation from '@react-native-community/geolocation';
 
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
-import MySkillsScreen from './MySkillsScreen';
 
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import Background from '../../../../components/atoms/background/Background';
@@ -117,20 +116,13 @@ const ProfileScreen = ({ navigation, tasker_id, taskerLogoutAction }) => {
                 />
                 <ListItem
                   key={2}
-                  title={'My Skills'}
-                  rightIcon={{ name: 'work' }}
-                  bottomDivider
-                  onPress={() => { netInfo.isConnected ? navigation.navigate('MySkillsScreen') : null } }
-                />
-                <ListItem
-                  key={3}
                   title={'Change Password'}
                   rightIcon={{ name: 'ac-unit' }}
                   bottomDivider
                   onPress={() => { netInfo.isConnected ? navigation.navigate('ChangePasswordScreen') : null }}
                 />
                 <ListItem
-                  key={4}
+                  key={3}
                   title={'Logout'}
                   rightIcon={{ name: 'arrow-drop-down' }}
                   onPress={() => { _onLogoutPressed() }}
@@ -159,12 +151,6 @@ const mapStateToProps = ({ taskerReducer }) => {
 const App = createStackNavigator({
   ProfileScreen: {
     screen: connect(mapStateToProps, { taskerLogoutAction })(ProfileScreen),
-    navigationOptions: {
-      headerShown: false
-    }
-  },
-  MySkillsScreen: { 
-    screen: MySkillsScreen,
     navigationOptions: {
       headerShown: false
     }

@@ -18,6 +18,7 @@ const GoogleMapScreen = ({ navigation }) => {
   const netInfo = useNetInfo()
   const [formatted_address, setFormattedAddress] = useState('')
   const [geolocation, setGeolocation] = useState({ lng: 1100.5680867, lat: 120.8805576 })
+  const mapRef = React.createRef();
 
   useEffect(() =>{
     if(_map.current && data.customer !== null) {
@@ -27,15 +28,19 @@ const GoogleMapScreen = ({ navigation }) => {
             latitude:  geolocation.lat,   
             longitude: geolocation.lng,
           },
-          zoom: 10
+          zoom: 20
         },
         5000
       )
     }
   },[])
-
-  const onRegionChange = (region) => {
-    _values.region = region;
+  changeRegion = () => {
+    mapRef.current.animateToRegion({
+      latitude:  geolocation.lat,   
+      longitude: geolocation.lng,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1
+    })
   }
 
   const _onNavigateToChooseSchedulePressed = () => {
@@ -57,18 +62,6 @@ const GoogleMapScreen = ({ navigation }) => {
     }
   } 
 
-  changeRegion = () => {
-    // const latitude = 6.86;
-    // const longitude = 6.86;
-    // this.setState({ latitude, longitude });
-    mapRef.current.animateToRegion({
-      latitude:  geolocation.lat,   
-      longitude: geolocation.lng,
-      latitudeDelta: 0.1,
-      longitudeDelta: 0.1
-    })
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.mapViewStack}>
@@ -76,13 +69,13 @@ const GoogleMapScreen = ({ navigation }) => {
           Platform.OS === 'ios' ?
           (
             <MapView
+              ref={mapRef}
               initialRegion={{
                 latitude: geolocation.lat,
                 longitude: geolocation.lng,
                 latitudeDelta: 60,
                 longitudeDelta: ITEM_WIDTH / ITEM_HEIGHT,
               }}
-              onRegionChangeComplete={this.onRegionChange}
               customMapStyle={[]}
               style={styles.mapView}
               zoomEnabled = {true}
@@ -97,6 +90,7 @@ const GoogleMapScreen = ({ navigation }) => {
             </MapView>
           ):(
             <MapView
+              ref={mapRef}
               provider={PROVIDER_GOOGLE}
               initialRegion={{
                 latitude: 37.78825,
@@ -104,7 +98,6 @@ const GoogleMapScreen = ({ navigation }) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
               }}
-              onRegionChangeComplete={this.onRegionChange}
               customMapStyle={[]}
               style={styles.mapView}
               zoomEnabled = {true}
@@ -130,6 +123,15 @@ const GoogleMapScreen = ({ navigation }) => {
               setGeolocation(({ lng, lat }))
               setFormattedAddress(data[0].formatted_address)
               changeRegion()
+              (<MapView.Marker.Animated
+                coordinate={{ 
+                  latitude: geolocation.lat,   
+                  longitude: geolocation.lng,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.033,
+                }}
+                title={"Your Location"}
+              />)
             })
             .catch((error) => console.log(error))
           }}

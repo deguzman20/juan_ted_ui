@@ -2,33 +2,34 @@ import React, { memo, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
-import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from './../../queries';
-import { customerSignInAction, taskerSignInAction } from './../../actions';
-import { emailValidator, passwordValidator } from './../../core/utils';
+import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from '../../queries';
+import { customerSignInAction, taskerSignInAction } from '../../actions';
+import { emailValidator, passwordValidator } from '../../core/utils';
+import { IEmail, IPassword, LoginProps } from '../../interfaces';
 
 // atoms
-import Logo from './../../components/atoms/logo/Logo';
+import Logo from '../../components/atoms/logo/Logo';
 import ModalLoader from '../../components/atoms/loader/ModalLoader';
-import Button from './../../components/atoms/button/Button';
-import TextInput from './../../components/atoms/text_input/TextInput';
-import Background from './../../components/atoms/background/Background';
-import ForgotPasswordlinkButton from './../../components/atoms/button/ForgotPasswordLinkButton';
+import Button from '../../components/atoms/button/Button';
+import TextInput from '../../components/atoms/text_input/TextInput';
+import Background from '../../components/atoms/background/Background';
+import ForgotPasswordlinkButton from '../../components/atoms/button/ForgotPasswordLinkButton';
 
 // molecules
-import SocialMediaButtons from '../../components/molecules/social_media_button/SocialMediaButtons';
 import TextWithLinkSection from '../../components/molecules/login_text_with_link_section/TextWithLinkSection';
 
 // screen
 import CustomerDashBoardScreen from '../authorized/customer/CustomerDashBoardScreen';
 import TaskerDashBoardScreen from '../authorized/tasker/TaskerDashBoardScreen';
 
-const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, customer_id, tasker_id}) => {
+
+const LoginScreen: React.FC<LoginProps> = ({ navigation, customerSignInAction, taskerSignInAction, customer_id, tasker_id}) => {
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN)
   const [taskerSignIn] = useMutation(TASKER_SIGN_IN)
 
-  const [isLoading, setLoading] = useState(false)
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [isLoading, setLoading] = useState<any>(false)
+  const [email, setEmail] = useState<IEmail>({ value: '', error: '' })
+  const [password, setPassword] = useState<IPassword>({ value: '', error: '' })
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value)
@@ -69,10 +70,10 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
     },3000)
   };
 
-  if(customer_id !== '' && tasker_id === ''){
+  if(customer_id !== null && tasker_id === null){
     return <CustomerDashBoardScreen />
   }
-  else if(customer_id === '' && tasker_id !== ''){
+  else if(customer_id === null && tasker_id !== null){
     return <TaskerDashBoardScreen />
   }
 
@@ -126,8 +127,8 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
 
 const mapStateToProps = ({ customerReducer, taskerReducer }) => {
   return {
-    customer_id: customerReducer.id,
-    tasker_id: taskerReducer.id
+    customer_id: parseInt(customerReducer.id),
+    tasker_id: parseInt(taskerReducer.id)
   }
 }
 

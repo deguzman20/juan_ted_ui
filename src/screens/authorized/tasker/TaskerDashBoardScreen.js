@@ -3,7 +3,7 @@ import { BottomNavigation } from 'react-native-paper';
 import { connect } from 'react-redux';
 import AppointmentScreen from '../tasker/appointment/AppointmentScreen';
 import ProfileScreen from '../tasker/profile/ProfileScreen';
-import CustomerRequestScreen from '../tasker/customer_request/CustomerRequestScreen';
+import MySkillsScreen from '../tasker/profile/MySkillsScreen';
 import ConversationsScreen from './conversation/ConversationScreen';
 import LoginScreen from './../../unauthorized/LoginScreen';
 
@@ -12,9 +12,9 @@ class TaskerDashBoardScreen extends React.Component {
     index: 0,
     routes: [
       { key: 'tasks', title: 'Tasks', icon: 'folder-multiple-outline', color: 'white'},
-      { key: 'customer_request', title: 'Request', icon: 'account-outline', color: 'white' },
+      { key: 'my_skills', title: 'Skills', icon: 'human', color: 'white' },
       { key: 'chat', title: 'Chat', icon: 'message-text-outline', color: 'white' },
-      { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' }
+      { key: 'profile', title: 'Profile', icon: 'account-circle', color: 'white' },  
     ]
   }
 
@@ -22,7 +22,7 @@ class TaskerDashBoardScreen extends React.Component {
 
   _renderScene = BottomNavigation.SceneMap({
     tasks: AppointmentScreen,
-    customer_request: CustomerRequestScreen,
+    my_skills: MySkillsScreen,
     chat: ConversationsScreen,
     profile: ProfileScreen,
   })

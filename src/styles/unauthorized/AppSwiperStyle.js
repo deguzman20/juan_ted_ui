@@ -2,6 +2,9 @@ import { StyleSheet } from 'react-native';
 import { ITEM_WIDTH, ITEM_HEIGHT  } from './../../actions/types';
 
 export const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1
+  },
   slide: {
     flex: 1,
     backgroundColor: 'white'

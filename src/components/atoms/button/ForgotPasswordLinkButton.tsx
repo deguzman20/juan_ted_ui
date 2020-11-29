@@ -1,8 +1,12 @@
-import React, { memo } from 'react';
+import React, { memo, FC } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../../../core/theme';
 
-const ForgotPasswordlinkButton = ({ navigation }) => (
+interface Props {
+  navigation: any;
+};
+
+const ForgotPasswordlinkButton: FC<Props> = ({ navigation }) => (
   <View style={styles.forgotPassword}>
     <TouchableOpacity
       onPress={() => navigation.navigate('ForgotPasswordScreen')}
@@ -10,7 +14,7 @@ const ForgotPasswordlinkButton = ({ navigation }) => (
       <Text style={styles.label}>Forgot your password?</Text>
     </TouchableOpacity>
   </View>
-)
+);
 
 const styles = StyleSheet.create({
   forgotPassword: {
@@ -19,8 +23,8 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   label: {
-    color: theme.colors.secondary,
+    color: theme.colors.secondary
   } 
-})
+});
 
-export default memo(ForgotPasswordlinkButton)
+export default memo(ForgotPasswordlinkButton);

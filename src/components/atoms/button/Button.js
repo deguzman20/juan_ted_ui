@@ -16,12 +16,11 @@ const Button = ({ mode, style, children, ...props }) => (
     color="#009C3C"
     labelStyle={styles.text}
     mode={mode}
-    labelStyle={{ color: "white" }}
     {...props}
   >
     {children}
   </PaperButton>
-)
+);
 
 const styles = StyleSheet.create({
   button: {

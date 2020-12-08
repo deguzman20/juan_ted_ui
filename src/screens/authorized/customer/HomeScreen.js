@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Card } from 'react-native-paper';
-import { styles } from './../../../styles/authorized/customer/HomeStyle';
+import { styles } from '../../../styles/authorized/customer/HomeStyle';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -16,9 +16,9 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { 
   ALL_SERVICE_TYPES, 
-  UPDATE_CUSTOMER_GEOLOCATION } from './../../../queries';
-import { DEFAULT_URL, ITEM_WIDTH } from './../../../actions/types';
-import { getAllServiceAction } from './../../../actions';
+  UPDATE_CUSTOMER_GEOLOCATION } from '../../../queries';
+import { DEFAULT_URL, ITEM_WIDTH } from '../../../actions/types';
+import { getAllServiceAction } from '../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { _androidRequestPermissions, _iosRequestPermissions } from '../../../helpers/location';
 
@@ -32,8 +32,8 @@ import TaskerInfoScreen from './geocoded_taskers/TaskerInfoScreen';
 import ReviewsScreen from './geocoded_taskers/ReviewsScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
 import DetailsScreen from './view_details/DetailsScreen';
-import PlaceOrderScreen from './../customer/place_order/PlaceOrderScreen';
-import PaypalScreen from './../customer/place_order/PaypalScreen';
+import PlaceOrderScreen from './place_order/PlaceOrderScreen';
+import PaypalScreen from './place_order/PaypalScreen';
 
 import InternetConnectionChecker from '../../../components/atoms/snackbar/InternetConnectionChecker';
 import Loading from '../../../components/atoms/loader/Loading';
@@ -63,7 +63,7 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
     }
   }
 
-  _onNavigateToServiceTypePress = (id: number) => {
+  _onNavigateToServiceTypePress = () => {
     if(netInfo.isConnected){
       if(id === 1){
         navigation.navigate('BarberScreen', 

@@ -5,7 +5,7 @@ const Loading = () => (
   <View style={styles.container}>
     <ActivityIndicator size="large" />
   </View>
-)
+);
 
 const styles = StyleSheet.create({
   container: {

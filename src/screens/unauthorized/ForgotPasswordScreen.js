@@ -17,11 +17,11 @@ import BackButton from '../../components/atoms/button/BackButton';
 import InternetConnectionChecker from '../../components/atoms/snackbar/InternetConnectionChecker';
 
 
-const ForgotPasswordScreen: React.FC<ForgotPasswordProps> = ({ navigation }) => {
+const ForgotPasswordScreen = ({ navigation }) => {
   const netInfo = useNetInfo()
-  const [isLoading, setLoading] = useState<boolean | false>(false)
+  const [isLoading, setLoading] = useState(false)
   const [forgotPassword] = useMutation(FORGOT_PASSWORD)
-  const [email, setEmail] = useState<IEmail>({ value: '', error: '' })
+  const [email, setEmail] = useState({ value: '', error: '' })
 
   const _onSendPressed = () => {
     const emailError = emailValidator(email.value)

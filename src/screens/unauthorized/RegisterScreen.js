@@ -25,12 +25,12 @@ import RegisterTextWithLinkSection from '../../components/molecules/register_tex
 const RegisterScreen = ({ navigation }) => {
   const [createCustomer] = useMutation(CREATE_CUSTOMER)
 
-  const [isLoading, setLoading] = useState<boolean>(false)
-  const [first_name, setFirstName] = useState<IFirstName>({ value: '', error: '' })
-  const [last_name, setLastName] = useState<ILastName>({ value: '', error: '' })
-  const [mobile_number, setMobileNumber] = useState<IMoblieNumber>({ value: '', error: '' })
-  const [email, setEmail] = useState<IEmail>({ value: '', error: '' })
-  const [password, setPassword] = useState<IPassword>({ value: '', error: '' })
+  const [isLoading, setLoading] = useState(false)
+  const [first_name, setFirstName] = useState({ value: '', error: '' })
+  const [last_name, setLastName] = useState({ value: '', error: '' })
+  const [mobile_number, setMobileNumber] = useState({ value: '', error: '' })
+  const [email, setEmail] = useState({ value: '', error: '' })
+  const [password, setPassword] = useState({ value: '', error: '' })
 
   const _onSignUpPressed = () => {
     const firstNameError = firstNameValidator(first_name.value)
@@ -145,9 +145,9 @@ const RegisterScreen = ({ navigation }) => {
             navigation={navigation}
           />
 
-          <ModalLoader 
+          {/* <ModalLoader 
             isLoading={isLoading} 
-          />
+          /> */}
         </Background>
       </ScrollView>  
     </React.Fragment>

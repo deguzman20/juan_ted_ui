@@ -2,11 +2,7 @@ import React, { memo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Loader from "react-native-modal-loader";
 
-interface Props {
-  isLoading: boolean;
-}
-
-const ModalLoader: React.FC<Props> = ({ isLoading }) => (
+const ModalLoader = ({ isLoading }) => (
   <View style={styles.container}>
     <Loader loading={isLoading} color="#ff66be" />
   </View>
@@ -21,4 +17,3 @@ const styles = StyleSheet.create({
   }
 });
 
-export default memo(ModalLoader);

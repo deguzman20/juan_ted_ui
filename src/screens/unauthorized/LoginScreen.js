@@ -5,7 +5,6 @@ import { useMutation } from '@apollo/react-hooks';
 import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from '../../queries';
 import { customerSignInAction, taskerSignInAction } from '../../actions';
 import { emailValidator, passwordValidator } from '../../core/utils';
-import { IEmail, IPassword, LoginProps } from '../../interfaces';
 
 // atoms
 import Logo from '../../components/atoms/logo/Logo';
@@ -23,13 +22,15 @@ import CustomerDashBoardScreen from '../authorized/customer/CustomerDashBoardScr
 import TaskerDashBoardScreen from '../authorized/tasker/TaskerDashBoardScreen';
 
 
-const LoginScreen: React.FC<LoginProps> = ({ navigation, customerSignInAction, taskerSignInAction, customer_id, tasker_id}) => {
+const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, customer_id, tasker_id}) => {
+
+  console.log(tasker_id)
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN)
   const [taskerSignIn] = useMutation(TASKER_SIGN_IN)
 
-  const [isLoading, setLoading] = useState<any>(false)
-  const [email, setEmail] = useState<IEmail>({ value: '', error: '' })
-  const [password, setPassword] = useState<IPassword>({ value: '', error: '' })
+  const [isLoading, setLoading] = useState(false)
+  const [email, setEmail] = useState({ value: '', error: '' })
+  const [password, setPassword] = useState({ value: '', error: '' })
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value)
@@ -70,15 +71,17 @@ const LoginScreen: React.FC<LoginProps> = ({ navigation, customerSignInAction, t
     },3000)
   };
 
-  if(customer_id !== null && tasker_id === null){
+
+  if(customer_id !== null && isNaN(tasker_id) === true){
     return <CustomerDashBoardScreen />
   }
-  else if(customer_id === null && tasker_id !== null){
+  else if(isNaN(customer_id) === true && tasker_id !== null){   
     return <TaskerDashBoardScreen />
   }
 
   return (
     <React.Fragment>
+      
       <View style={{ flex: 0.5, alignItems: 'center' }}>
         <Logo />
       </View>
@@ -118,7 +121,7 @@ const LoginScreen: React.FC<LoginProps> = ({ navigation, customerSignInAction, t
             navigation={navigation} 
           />
           {/* <SocialMediaButtons /> */}
-          <ModalLoader loading={isLoading} />
+          {/* <ModalLoader loading={isLoading} /> */}
         </Background>
       </View>
     </React.Fragment>

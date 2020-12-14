@@ -48,6 +48,7 @@
     "react-native-app-intro": "^1.1.5",
     "react-native-bootstrap-styles": "^0.0.9",
     "react-native-cdn-image": "^1.0.0",
+    "react-native-credit-card-input": "^0.4.1",
     "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^2.0.2",
     "react-native-fs": "^2.16.6",

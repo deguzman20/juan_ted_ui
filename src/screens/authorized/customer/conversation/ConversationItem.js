@@ -22,6 +22,6 @@ const ConversationItem = ({ l, i, navigation }) => {
       />
     </TouchableWithoutFeedback>
   )
-}
+};
 
-export default memo(ConversationItem)
+export default memo(ConversationItem);

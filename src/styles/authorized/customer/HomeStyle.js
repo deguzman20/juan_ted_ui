@@ -11,13 +11,27 @@ export const styles = StyleSheet.create({
   },
   hi_txt: {
     left: 20, 
-    marginTop: 20,
+    marginTop: 70,
+    color: 'white'
+  },
+  icon_profile: {
+    left: '100%', 
+    marginTop: 75,
     color: 'white'
   },
   wallet_wrapper: {
-    flex: 0.3, 
+    flexDirection: 'row',
+    flex: 0.2, 
     backgroundColor: '#009C3C', 
     width: '100%'
+  },
+  greeting_wrapper: {
+    flexDirection: 'row', 
+    width: '50%'
+  },
+  profile_wrapper: {
+    flexDirection: 'row', 
+    width: '50%'
   },
   wallet_ammount_txt: {
     marginTop: 40,

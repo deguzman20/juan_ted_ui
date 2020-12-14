@@ -22,8 +22,10 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
   const total_cost_arr = []
   const shipping_address_arr = [navigation.state.params.formatted_address]
   const [shipping_address, setShippingAddress] = useState(navigation.state.params.formatted_address)
+  const [payment_method, setPaymentMethod] = useState('')
   const [isLoading, setLoading] = useState(false)
-  const [visible, setVisible] = useState(false)
+  const [shippingAddressVisibility, setShippingAddressVisibility] = useState(false)
+  const [paymentMethodVisibility, setPaymentMethodVisibility] = useState(false)
   const { loading, error, data } = useQuery(CUSTOMER_SHIPPING_ADDRESS, {
     variables: {
       customer_id: parseInt(customer_id)
@@ -31,67 +33,81 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
     pollInterval: 1000
   })
 
-  toggleOverlay = () => {
-    setVisible(!visible)
+  shippingAddressToggleOverlay = () => {
+    setShippingAddressVisibility(!shippingAddressVisibility)
   }
+
+  paymentMethodToggleOverlay = () => {
+    setPaymentMethodVisibility(!paymentMethodVisibility)
+  }
+
 
   const _onCheckoutPressed = () => {
     if(netInfo.isConnected){
-      Alert.alert(
-        "Are you sure you want to checkout your order",
-        "",
-        [
-          {
-            text: "No",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { 
-            text: "Yes", 
-            onPress: () => {
-              setTimeout(() => {
-                for(let i = 1; i <= 3; i++){
-                  setLoading(true)
-                  if(i === 3){
-                    axios.get(`${DEFAULT_URL}/customer/create_transaction`,{
-                      params: {
-                        lng: navigation.state.params.lng,
-                        lat: navigation.state.params.lat,
-                        formatted_address: shipping_address,
-                        service_type_id: navigation.state.params.service_type_id,
-                        from: navigation.state.params.from,
-                        to: navigation.state.params.to,
-                        customer_id: navigation.state.params.customer_id,
-                        tasker_id: navigation.state.params.tasker_id
-                      }
-                    })
-                    .then((response) => {
-                      axios.get(`${DEFAULT_URL}/customer/create_bulk_of_transaction_service`,{
+      if(payment_method !== ''){
+        Alert.alert(
+          "Are you sure you want to checkout your order",
+          "",
+          [
+            {
+              text: "No",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { 
+              text: "Yes", 
+              onPress: () => {
+                setTimeout(() => {
+                  for(let i = 1; i <= 3; i++){
+                    setLoading(true)
+                    if(i === 3){
+                      axios.get(`${DEFAULT_URL}/customer/create_transaction`,{
                         params: {
-                          services: JSON.stringify(navigation.state.params.services.map((service) => {
-                            return {
-                              ...service, 
-                              transaction_id: parseInt(response.data)
+                          lng: navigation.state.params.lng,
+                          lat: navigation.state.params.lat,
+                          formatted_address: shipping_address,
+                          service_type_id: navigation.state.params.service_type_id,
+                          from: navigation.state.params.from,
+                          to: navigation.state.params.to,
+                          customer_id: navigation.state.params.customer_id,
+                          tasker_id: navigation.state.params.tasker_id
+                        }
+                      })
+                      .then((response) => {
+                        axios.get(`${DEFAULT_URL}/customer/create_bulk_of_transaction_service`,{
+                          params: {
+                            services: JSON.stringify(navigation.state.params.services.map((service) => {
+                              return {
+                                ...service, 
+                                transaction_id: parseInt(response.data)
+                              }
+                            }))
+                          }
+                        })
+                        .then((transaction_service_response) => {
+                          if(transaction_service_response.data === 'Transaction service was created successfuly'){
+                            setLoading(false)
+                            if(payment_method === 'Paypal'){
+                              navigation.navigate('PaypalScreen')
                             }
-                          }))
-                        }
+                            else if(payment_method === 'Debit'){
+                              navigation.navigate('DebitCardScreen')
+                            }
+                          }
+                        })
                       })
-                      .then((transaction_service_response) => {
-                        if(transaction_service_response.data === 'Transaction service was created successfuly'){
-                          setLoading(false)
-                          // Alert.alert(transaction_service_response.data)
-                          navigation.navigate('PaypalScreen')
-                        }
-                      })
-                    })
+                    }
                   }
-                }
-              },3000)
-            } 
-          }
-        ],
-        { cancelable: false }
-      )
+                },3000)
+              } 
+            }
+          ],
+          { cancelable: false }
+        )
+      }
+      else{
+        Alert.alert("Please select payment method")
+      }
     }
   }
 
@@ -158,7 +174,17 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
         <Text style={styles.shipping_address_content_txt}>
           {shipping_address}
         </Text>
-        <TouchableWithoutFeedback onPress={() => { toggleOverlay() }}>
+        <TouchableWithoutFeedback onPress={() => { shippingAddressToggleOverlay() }}>
+          <Text style={styles.change_txt}>
+            change
+          </Text>
+        </TouchableWithoutFeedback>
+        <Divider style={styles.divider} />
+        <Text style={styles.payment_method_txt}>Payment Method</Text>
+        <Text style={styles.payment_method_content_txt}>
+          {payment_method}
+        </Text>
+        <TouchableWithoutFeedback onPress={() => { paymentMethodToggleOverlay() }}>
           <Text style={styles.change_txt}>
             change
           </Text>
@@ -185,12 +211,13 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
           buttonStyle={styles.select_button_background_style} />
       </View>
       <Loader loading={isLoading} color="#ff66be" />
-      <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+      <Overlay isVisible={shippingAddressVisibility} onBackdropPress={shippingAddressToggleOverlay}>
         <View style={{
           flex: 1,
           flexDirection: 'column',
           width: ITEM_WIDTH
         }}>
+          <SafeAreaView />
           <View style={{ width: ITEM_WIDTH, flex: 6, paddingLeft: '10%', paddingRight: '10%' }}>
             <RadioButton.Group onValueChange={value => { setShippingAddress(value) }} value={shipping_address}>
               {
@@ -208,7 +235,35 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
           <View style={{ width: ITEM_WIDTH, flex: 1 }}>            
             <SafeAreaView />
             <Button title="Close" 
-              onPress={() => { toggleOverlay() }} 
+              onPress={() => { shippingAddressToggleOverlay() }} 
+              buttonStyle={styles.close_button_style}
+            />
+          </View>
+        </View>
+      </Overlay>
+      <Overlay isVisible={paymentMethodVisibility} onBackdropPress={paymentMethodToggleOverlay}>
+        <View style={{
+          flex: 1,
+          flexDirection: 'column',
+          width: ITEM_WIDTH
+        }}>
+          <SafeAreaView />
+          <View style={{ width: ITEM_WIDTH, flex: 6, paddingLeft: '10%', paddingRight: '10%' }}>
+            <RadioButton.Group onValueChange={value => { setPaymentMethod(value) }} value={payment_method}>
+                <React.Fragment>
+                  <RadioButton.Item label={'Paypal'} value={'Paypal'} />
+                  <Divider />
+                  <RadioButton.Item label={'Debit'} value={'Debit'} />
+                  <Divider />
+                  <RadioButton.Item label={'Gcash'} value={'Gcash'} />
+                  <Divider />
+                </React.Fragment>
+            </RadioButton.Group>
+          </View>
+          <View style={{ width: ITEM_WIDTH, flex: 1 }}>            
+            <SafeAreaView />
+            <Button title="Close" 
+              onPress={() => { paymentMethodToggleOverlay() }} 
               buttonStyle={styles.close_button_style}
             />
           </View>

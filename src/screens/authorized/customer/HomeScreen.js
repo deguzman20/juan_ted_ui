@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   Platform
 } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Text, Avatar } from 'react-native-elements';
 import { Card } from 'react-native-paper';
 import { styles } from '../../../styles/authorized/customer/HomeStyle';
 import { createAppContainer } from 'react-navigation';
@@ -22,6 +22,7 @@ import { getAllServiceAction } from '../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { _androidRequestPermissions, _iosRequestPermissions } from '../../../helpers/location';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
 import MyTodoListScreen from './todo/MyTodoListScreen';
 import ProfileScreen from './profile/ProfileScreen';
 import HairSalonScreen from './services/HairSalonScreen';
@@ -33,6 +34,7 @@ import ReviewsScreen from './geocoded_taskers/ReviewsScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
 import DetailsScreen from './view_details/DetailsScreen';
 import PlaceOrderScreen from './place_order/PlaceOrderScreen';
+import DebitCardScreen from './place_order/DebitCardScreen';
 import PaypalScreen from './place_order/PaypalScreen';
 
 import InternetConnectionChecker from '../../../components/atoms/snackbar/InternetConnectionChecker';
@@ -63,7 +65,7 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
     }
   }
 
-  _onNavigateToServiceTypePress = () => {
+  _onNavigateToServiceTypePress = (id) => {
     if(netInfo.isConnected){
       if(id === 1){
         navigation.navigate('BarberScreen', 
@@ -89,8 +91,16 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
         <View style={styles.container}>
           <View style={styles.wallet_wrapper}>
             <SafeAreaView/>
-            <Text h4 style={styles.hi_txt}>Hi {customer_first_name}</Text>
-            <Text h2 style={styles.wallet_ammount_txt}>PHP 1000.00</Text>
+            <View style={styles.greeting_wrapper}>
+              <Text h4 style={styles.hi_txt}>Hi {customer_first_name}</Text>
+            </View>
+            <View style={styles.profile_wrapper}>
+              <Icon 
+                name='user-circle'
+                style={styles.icon_profile}
+                size={30}
+              />
+            </View>
           </View>
           <View style={styles.service_wrapper}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -161,6 +171,10 @@ const App = createStackNavigator({
   },
   ProfileScreen: {
     screen: ProfileScreen,
+    navigationOptions: {
+      title: 'Todo List',
+      headerStyle: { backgroundColor: 'white' }
+    } 
   },
   BarberScreen: {
 
@@ -228,6 +242,13 @@ const App = createStackNavigator({
   },
   PaypalScreen: {
     screen: PaypalScreen,
+    navigationOptions: {
+      title: '',
+      headerVisible: false,
+    }
+  },
+  DebitCardScreen: {
+    screen: DebitCardScreen,
     navigationOptions: {
       title: '',
       headerVisible: false,

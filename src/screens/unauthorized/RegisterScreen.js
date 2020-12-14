@@ -2,8 +2,6 @@ import React, { memo, useState } from 'react';
 import { SafeAreaView, ScrollView, Alert } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
 import { CREATE_CUSTOMER } from '../../queries';
-import { IEmail, IPassword, IFirstName, ILastName, IMoblieNumber } from '../../interfaces';
-
 
 import {
   emailValidator,

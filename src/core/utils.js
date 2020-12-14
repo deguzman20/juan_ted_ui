@@ -12,6 +12,7 @@ export const mobileNumberValidator = mobile_number => {
 
   if (!mobile_number || mobile_number.length <= 0) return 'Mobile Number cannot be empty.';
   if (!re.test(mobile_number)) return 'Ooops! We need a valid mobile number.';
+  
 
   return '';
 };

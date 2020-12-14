@@ -4,7 +4,6 @@ import { useMutation } from '@apollo/react-hooks';
 import { emailValidator } from '../../core/utils';
 import { FORGOT_PASSWORD } from '../../queries';
 import { useNetInfo } from "@react-native-community/netinfo";
-import { IEmail, ForgotPasswordProps } from '../../interfaces';
 
 import { styles } from '../../styles/unauthorized/ForgotPasswordStyle';
 

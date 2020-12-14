@@ -10,7 +10,7 @@ const Header: FC<Props> = ({ children }) => <Text style={styles.header}>{childre
 
 const styles = StyleSheet.create({
   header: {
-    fontSize: 65,
+    fontSize: 60,
     color: theme.colors.primary,
     textAlign: 'center',
     fontWeight: 'bold',

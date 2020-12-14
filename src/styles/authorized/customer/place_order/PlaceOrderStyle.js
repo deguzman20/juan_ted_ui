@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     marginRight: '5%'
   },
   shipping_address_and_amount_container: {
-    flex: 1.7, 
+    flex: 2.5, 
     backgroundColor: 'white'
   },
   shipping_address_txt: {
@@ -41,10 +41,16 @@ export const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 15,
   },
-  shipping_address_content_txt: {
+  payment_method_txt: {
     marginLeft: '5%',
     marginTop: 10,
-    fontSize: 15
+    fontSize: 20,
+    color: 'gray'
+  },
+  payment_method_content_txt: {
+    marginLeft: '5%',
+    marginTop: 10,
+    fontSize: 15,
   },
   change_txt: {
     marginLeft: '5%',

@@ -20,33 +20,33 @@ import { SERVICE_DETAILS } from '../../../../queries';
 import { useQuery } from '@apollo/react-hooks';
 import { useNetInfo } from "@react-native-community/netinfo";
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
- 
+
 const BarberScreen = ({ navigation }) => {
   const netInfo = useNetInfo()
   const { loading, error, data } = useQuery(SERVICE_DETAILS, {
     variables: { service_type_id: parseInt(navigation.state.params["service_type_id"]) },
     pollInterval: 500,
   })
- 
+
   const [haircut, setHairCut] = useState({ quantity: 0, price: 200 })
   const [containerVisibility, setContainerVisibility] = useState("none")
   const totalPrice = (haircut.quantity * haircut.price)
- 
+
   increaseQuantity = (item) => {
     if(netInfo.isConnected){
       item.setQuantity({ quantity: item.quantity += 1, price: item.price })
     }
   }
- 
+
   decreaseQuantity = (item) => {
     if(netInfo.isConnected){
       if(item.quantity === 0) return false;
       item.setQuantity({ quantity: item.quantity -= 1, price: item.price })
     }
   }
- 
+
   if(loading || error) return null;
- 
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -65,7 +65,7 @@ const BarberScreen = ({ navigation }) => {
               what_is_included: data["service"][0]["whatIsIncludeds"]
             }
           ]}
- 
+
           renderItem={({ item }) =>
             <TouchableWithoutFeedback onPress={() => {
               navigation.navigate('DetailsScreen', {

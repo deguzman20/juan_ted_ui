@@ -20,9 +20,9 @@ import {
   emailValidator,
   mobileNumberValidator } from '../../../../core/utils';
 
-import Loader from "react-native-modal-loader";
+import isEqual from 'lodash/isEqual';
 
-import _ from 'lodash';
+import Loader from "react-native-modal-loader";
 
 import TextInput from '../../../../components/atoms/text_input/TextInput';
 import Background from '../../../../components/atoms/background/Background';
@@ -51,10 +51,10 @@ const DebitCardScreen = ({ customer_id, navigation }) => {
 
 
   const _onChange = (form)  => {
-    !_.isEqual(form.values.number, '') ? setCardNumber(form.values.number) : '';
-    !_.isEqual(form.values.expiry.split('/')[0], '') ? setExpMonth(form.values.expiry.split('/')[0]) : '';
-    !_.isEqual(form.values.expiry.split('/')[1], '') ? setExpYear(form.values.expiry.split('/')[1]) : '';
-    !_.isEqual(form.values.cvc, '') ? setCvc(form.values.cvc) : '';
+    !isEqual(form.values.number, '') ? setCardNumber(form.values.number) : '';
+    !isEqual(form.values.expiry.split('/')[0], '') ? setExpMonth(form.values.expiry.split('/')[0]) : '';
+    !isEqual(form.values.expiry.split('/')[1], '') ? setExpYear(form.values.expiry.split('/')[1]) : '';
+    !isEqual(form.values.cvc, '') ? setCvc(form.values.cvc) : '';
   }
 
   const _submitPayment = () => {
@@ -103,14 +103,14 @@ const DebitCardScreen = ({ customer_id, navigation }) => {
               mobile_no: mobile_number.value
             }
           }).then(({ data }) => {
-            if(!_.isEqual(data.createToken.response, '')){
+            if(!isEqual(data.createToken.response, '')){
               payViaCard({
                 variables: {
                   token: data.createToken.response,
                   amount: parseInt(navigation.state.params.amount) + 10000
                 }
               }).then(({ data }) => {
-                if(_.isEqual(data.payViaCard.response, 'Paid Successfuly')){
+                if(isEqual(data.payViaCard.response, 'Paid Successfuly')){
                   setLoading(false); 
                   navigation.popToTop();
                   Alert.alert('Paid Successfuly');

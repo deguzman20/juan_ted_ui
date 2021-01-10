@@ -11,7 +11,7 @@ import {
   mobileNumberValidator
 } from '../../core/utils';
 
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Loader from "react-native-modal-loader";
@@ -67,7 +67,7 @@ const RegisterScreen = ({ navigation }) => {
             } 
           })
           .then(({ data: { createCustomer } }) => {
-            if(_.isEqual(createCustomer.response, 'Customer Created')){
+            if(isEqual(createCustomer.response, 'Customer Created')){
               setLoading(false)
               navigation.navigate('LoginScreen')
             }

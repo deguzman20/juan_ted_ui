@@ -11,7 +11,7 @@ import { DEFAULT_URL } from '../../../../actions/types';
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { styles } from './../../../../styles/authorized/customer/geocoded_taskers/TaskersStyle';
-import _ from 'lodash';
+import sumBy from 'lodash/sumBy';
 
 import { useNetInfo } from "@react-native-community/netinfo";
 
@@ -64,7 +64,7 @@ const TaskersScreen = ({ navigation, customer_id }) => {
               type="star"
               imageSize={20}
               readonly
-              startingValue={(_.sumBy(item['reviews'], 'rating')) / 5}
+              startingValue={(sumBy(item['reviews'], 'rating')) / 5}
               
             />
           </View>

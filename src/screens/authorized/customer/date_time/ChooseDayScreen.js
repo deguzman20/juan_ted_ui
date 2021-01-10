@@ -9,7 +9,7 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { styles } from './../../../../styles/authorized/customer/date_time/ChooseDayStyle'
 import { formatMoney } from '../../../../core/utils';
 
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import DatePicker from 'react-native-datepicker';
@@ -43,10 +43,10 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
   const _onNavigateToAvailableTaskerPressed = () => {
     if(netInfo.isConnected){
       if(time.from !== null && time.to !== null){
-        if(_.isEqual(navigation.state.params.tasker_id, "")){
+        if(isEqual(navigation.state.params.tasker_id, "")){
           navigation.navigate('TaskersScreen',{
             formatted_address: navigation.state.params.formatted_address, 
-            longitude: String(navigation.state.params.longitude), 
+            longitude: String(navigation.state.params.longitude),
             latitude: String(navigation.state.params.latitude),
             start_from: `${date.date} ${time.from}`,
             start_to: `${date.date} ${time.to}`,
@@ -84,7 +84,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
   }
 
   const hoverizedCard = (data) => {
-    if(_.isEqual(data, 1)){
+    if(isEqual(data, 1)){
       setFirstStyle({ color: 'white', backgroundColor: 'black' })
       setSecondStyle({ color: 'black', backgroundColor: 'white' })
       setThirdStyle({ color: 'black', backgroundColor: 'white' })
@@ -92,7 +92,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       setFifthStyle({ color : 'black', backgroundColor: 'white' })
       setTimeRange({ from: '07:00:00', to: '10:00:00' })
     }
-    else if(_.isEqual(data, 2)){
+    else if(isEqual(data, 2)){
       setFirstStyle({ color: 'black', backgroundColor: 'white' })
       setSecondStyle({ color: 'white', backgroundColor: 'black' })
       setThirdStyle({ color: 'black', backgroundColor: 'white' })
@@ -100,7 +100,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '10:00:00', to: '13:00:00' })
     }
-    else if(_.isEqual(data, 3)){
+    else if(isEqual(data, 3)){
       setFirstStyle({ color: 'black', backgroundColor: 'white' })
       setSecondStyle({ color: 'black', backgroundColor: 'white' })
       setThirdStyle({ color: 'white', backgroundColor: 'black' })
@@ -108,7 +108,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '13:00:00', to: '16:00:00' })
     }
-    else if(_.isEqual(data, 4)){
+    else if(isEqual(data, 4)){
       setFirstStyle({ color: 'black', backgroundColor: 'white' })
       setSecondStyle({ color: 'black', backgroundColor: 'white' })
       setThirdStyle({ color: 'black', backgroundColor: 'white' })
@@ -116,7 +116,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '16:00:00', to: '19:00:00' })
     }
-    else if(_.isEqual(data, 5)){
+    else if(isEqual(data, 5)){
       setFirstStyle({ color: 'black', backgroundColor: 'white' })
       setSecondStyle({ color: 'black', backgroundColor: 'white' })
       setThirdStyle({ color: 'black', backgroundColor: 'white' })

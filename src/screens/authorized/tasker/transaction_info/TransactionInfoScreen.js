@@ -10,7 +10,6 @@ import { formatMoney } from '../../../../core/utils';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Loader from "react-native-modal-loader";
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
-import _ from 'lodash';
 
 const TransactionInfoScreen = ({ navigation }) => {
   const total_cost_arr = []

@@ -23,7 +23,9 @@ import { getAllServiceAction } from '../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { _androidRequestPermissions, _iosRequestPermissions } from '../../../helpers/location';
 
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
+import isNull from 'lodash/isNull';
+import isEmpty from 'lodash/isEmpty';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MyTodoListScreen from './todo/MyTodoListScreen';
@@ -56,7 +58,7 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
 
   const { info_loading, info_error } = useQuery(CUSTOMER_INFO, {
     onCompleted: (data) => {
-      if(!_.isNull(data) && !_.isEmpty(data)){
+      if(!isNull(data) && !isEmpty(data)){
         setFname(data.customer[0].firstName);
       }
     },
@@ -81,14 +83,14 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
 
   _onNavigateToServiceTypePress = (id) => {
     if(netInfo.isConnected){
-      if(_.isEqual(id, 1)){
+      if(isEqual(id, 1)){
         navigation.navigate('BarberScreen', 
         { 
           service_type_id: id,
           tasker_id: ""
         })
       }
-      else if(_.isEqual(id, 2)){
+      else if(isEqual(id, 2)){
         navigation.navigate('HairSalonScreen', 
         { 
           service_type_id: id,

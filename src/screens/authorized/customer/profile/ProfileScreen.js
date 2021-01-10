@@ -18,7 +18,7 @@ import { _androidRequestPermissions, _iosRequestPermissions } from '../../../../
 
 import Loader from "react-native-modal-loader";
 
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
@@ -90,7 +90,7 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
                   xlarge
                   rounded
                   // icon={{ name: 'account-circle' }}
-                  source={{ uri: !_.isEqual(image, '') ?  `${DEFAULT_URL}/${image}` : require('../../../../assets/blank_photo.jpg') }}
+                  source={{ uri: !isEqual(image, '') ?  `${DEFAULT_URL}/${image}` : require('../../../../assets/blank_photo.jpg') }}
                   onPress={() => {
                     navigation.navigate('CustomerImage')
                   }}

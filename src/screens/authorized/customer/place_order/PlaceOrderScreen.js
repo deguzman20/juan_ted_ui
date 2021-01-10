@@ -16,7 +16,6 @@ import { DEFAULT_URL, ITEM_WIDTH } from "./../../../../actions/types";
 import { useNetInfo } from "@react-native-community/netinfo";
 import Loader from "react-native-modal-loader";
 import axios from 'axios';
-import _ from 'lodash';
 
 const PlaceOrderScreen = ({ navigation, customer_id }) => {
   const netInfo = useNetInfo()

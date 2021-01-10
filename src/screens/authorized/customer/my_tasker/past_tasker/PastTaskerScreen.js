@@ -21,6 +21,8 @@ import InternetConnectionChecker from '../../../../../components/atoms/snackbar/
 import Loading from '../../../../../components/atoms/loader/Loading';
 import OutOfLocationService from '../../../../../components/molecules/out_of_location_service/OutOfLocationService';
 
+import sumBy from 'lodash/sumBy';
+
 const PastTaskerScreen = ({ customer_id, navigation }) => {
   const netInfo = useNetInfo()
   const pattern = /Parañaque/g
@@ -115,7 +117,7 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
               type="star"
               imageSize={20}
               readonly
-              startingValue={item.tasker.reviews.length >= 1 ?  _.sumBy(item.tasker.reviews, 'rating') / item.tasker.reviews.length : 0 }       
+              startingValue={item.tasker.reviews.length >= 1 ?  sumBy(item.tasker.reviews, 'rating') / item.tasker.reviews.length : 0 }       
             />
           </View>
         }

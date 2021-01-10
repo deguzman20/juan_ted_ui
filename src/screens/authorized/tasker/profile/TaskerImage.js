@@ -5,6 +5,7 @@ import { DEFAULT_URL } from './../../../../actions/types';
 import { connect } from 'react-redux';
 import CookieManager from '@react-native-community/cookies';
 
+import BackButton from '../../../../components/atoms/button/BackButton';
 
 const TaskerImage = ({ tasker_id, navigation }) => {
 
@@ -25,7 +26,8 @@ const TaskerImage = ({ tasker_id, navigation }) => {
 
   return(
     <>
-      <SafeAreaView/>
+      <BackButton goBack={() => navigation.navigate('ProfileScreen')} />
+      <SafeAreaView style={{ marginBottom: 50 }}/>
       { Platform.OS === 'ios' ? 
         (
           <WebView

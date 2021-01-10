@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import CookieManager from '@react-native-community/cookies';
 
 
+import BackButton from '../../../../components/atoms/button/BackButton';
+
 const CustomerImage = ({ customer_id, navigation }) => {
 
   const [status, setStatus] = useState('pending')
@@ -25,7 +27,8 @@ const CustomerImage = ({ customer_id, navigation }) => {
 
   return(
     <>
-      <SafeAreaView/>
+      <BackButton goBack={() => navigation.navigate('ProfileScreen')} />
+      <SafeAreaView style={{ marginBottom: 50 }}/>
       { Platform.OS === 'ios' ? 
         (
           <WebView

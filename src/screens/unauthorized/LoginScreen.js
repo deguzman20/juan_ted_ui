@@ -6,7 +6,8 @@ import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from '../../queries';
 import { customerSignInAction, taskerSignInAction } from '../../actions';
 import { emailValidator, passwordValidator } from '../../core/utils';
 
-import _ from 'lodash';
+import isNull from 'lodash/isNull';
+import isNaN  from 'lodash/isNaN';
 
 import Loader from "react-native-modal-loader";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -76,10 +77,10 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
   };
 
 
-  if(!_.isNull(customer_id) && _.isNull(tasker_id)){
+  if(!isNull(customer_id) && isNull(tasker_id)){
     return <CustomerDashBoardScreen />
   }
-  else if(_.isNull(customer_id) && !_.isNull(tasker_id)){   
+  else if(isNull(customer_id) && !isNull(tasker_id)){   
     return <TaskerDashBoardScreen />
   }
 
@@ -142,8 +143,8 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
 
 const mapStateToProps = ({ customerReducer, taskerReducer }) => {
   return {
-    customer_id: !_.isNull(parseInt(customerReducer.id)) && !isNaN(parseInt(customerReducer.id)) ? parseInt(customerReducer.id) : null,
-    tasker_id: !_.isNull(parseInt(taskerReducer.id)) && !isNaN(parseInt(taskerReducer.id)) ? parseInt(taskerReducer.id) : null
+    customer_id: !isNull(parseInt(customerReducer.id)) && !isNaN(parseInt(customerReducer.id)) ? parseInt(customerReducer.id) : null,
+    tasker_id: !isNull(parseInt(taskerReducer.id)) && !isNaN(parseInt(taskerReducer.id)) ? parseInt(taskerReducer.id) : null
   }
 }
 

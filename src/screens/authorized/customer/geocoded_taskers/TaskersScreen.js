@@ -42,7 +42,8 @@ const TaskersScreen = ({ navigation, customer_id }) => {
         customer_id: parseInt(customer_id),
         tasker_id: parseInt(tasker_id),
         services: navigation.state.params.services,
-        service_details: navigation.state.params.service_details
+        service_details: navigation.state.params.service_details,
+        total_price: navigation.state.params["total_price"]
       })
     }
   }

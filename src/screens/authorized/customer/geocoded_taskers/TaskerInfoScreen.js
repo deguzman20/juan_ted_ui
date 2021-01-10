@@ -19,6 +19,7 @@ import { TASKER_INFO } from '../../../../queries';
 import { styles } from './../../../../styles/authorized/customer/geocoded_taskers/TaskerInfoStyle';
 import { useQuery } from '@apollo/react-hooks';
 import { useNetInfo } from "@react-native-community/netinfo";
+import { formatMoney } from '../../../../core/utils';
 
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
@@ -100,88 +101,97 @@ const TaskerInfoScreen = ({ navigation }) => {
 
   if(loading || error) return null;
   return(
-    <React.Fragment>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <View style={styles.rectStackStack}>
-            <View style={styles.rectStack}>
-              <View style={styles.rect}/>
-              <Avatar
-                source={{ 
-                  uri: `${DEFAULT_URL}/${data.tasker[0].image}`
-                }}
-                xlarge
-                rounded
-                size={150}
-                containerStyle={styles.taskerImage}
+    <>
+      <View style={{ flex: 6.5 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.container}>
+            <View style={styles.rectStackStack}>
+              <View style={styles.rectStack}>
+                <View style={styles.rect}/>
+                <Avatar
+                  source={{ 
+                    uri: `${DEFAULT_URL}/${data.tasker[0].image}`
+                  }}
+                  xlarge
+                  rounded
+                  size={150}
+                  containerStyle={styles.taskerImage}
+                />
+                <Text style={styles.fullNameTxt}>
+                  {data.tasker[0].firstName} {data.tasker[0].lastName}
+                </Text>
+              </View>
+              <Divider style={styles.firstDivider} />
+              <Text style={styles.featuredSkills}>Featured Skills</Text>
+            </View>
+            <View style={styles.chipWrapper}>
+              <ScrollView 
+                showsHorizontalScrollIndicator={false} 
+                showsVerticalScrollIndicator={false}
+                horizontal={true}
+              >
+                {
+                  data.tasker[0].featuredSkills.map((fs) => {
+                    if(fs.serviceType !== null){
+                      return(
+                        <Chip>{fs.serviceType.name}</Chip>
+                      )
+                    }
+                  })
+                }
+              </ScrollView>
+            </View>
+            <Divider style={styles.secondDivider} />
+            <Text style={styles.introduction}>Introduction</Text>
+            <Text style={styles.introductionContent}>
+              {data.tasker[0].introduction}
+            </Text>
+            <View style={styles.reviewWrapper}>
+              <FlatList
+                keyExtractor={keyExtractor}
+                data={data.tasker[0].reviews.filter((i, index) => (index < 5))}
+                renderItem={renderItem}
               />
-              <Text style={styles.fullNameTxt}>
-                {data.tasker[0].firstName} {data.tasker[0].lastName}
+            </View>
+            <View>
+              {
+                data.tasker[0].reviews.length > 5 ? (
+                  <Button                   
+                    title="show more"
+                    titleStyle={{ color: "#009C3C" }}
+                    buttonStyle={{ backgroundColor: 'transparent' }}
+                    onPress={() => { 
+                      navigation.navigate('ReviewsScreen', { reviews:  data.tasker[0].reviews }) 
+                    }}
+                  />
+                ) : null
+              }
+            </View>
+          </View>
+        </ScrollView> 
+      </View>
+      <View style={styles.second_box_wrapper}>
+        <View style={{ flexDirection: 'row' }}>
+            <View style={styles.amount_wrapper}>
+              <Text style={styles.total_amount_txt}>
+                Total Amount
               </Text>
             </View>
-            <Divider style={styles.firstDivider} />
-            <Text style={styles.featuredSkills}>Featured Skills</Text>
+            <View style={styles.amount_value_wrapper}>
+              <Text style={styles.total_amount_value_txt}>
+                ₱ {formatMoney(navigation.state.params["total_price"])}
+              </Text>
+            </View>
           </View>
-          <View style={styles.chipWrapper}>
-            <ScrollView 
-              showsHorizontalScrollIndicator={false} 
-              showsVerticalScrollIndicator={false}
-              horizontal={true}
-            >
-              {
-                data.tasker[0].featuredSkills.map((fs) => {
-                  if(fs.serviceType !== null){
-                    return(
-                      <Chip>{fs.serviceType.name}</Chip>
-                    )
-                  }
-                })
-              }
-            </ScrollView>
-          </View>
-          <Divider style={styles.secondDivider} />
-          <Text style={styles.introduction}>Introduction</Text>
-          <Text style={styles.introductionContent}>
-            {data.tasker[0].introduction}
-          </Text>
-          <View style={styles.reviewWrapper}>
-            <FlatList
-              keyExtractor={keyExtractor}
-              data={data.tasker[0].reviews.filter((i, index) => (index < 5))}
-              renderItem={renderItem}
-            />
-          </View>
-          <View>
-            {
-              data.tasker[0].reviews.length > 5 ? (
-                <Button                   
-                  title="show more"
-                  titleStyle={{ color: "#009C3C" }}
-                  buttonStyle={{ backgroundColor: 'transparent' }}
-                  onPress={() => { 
-                    navigation.navigate('ReviewsScreen', { reviews:  data.tasker[0].reviews }) 
-                  }}
-                />
-              ) : null
-            }
-          </View>
-        </View>
-      </ScrollView>  
-      <View style={{
-        width: '100%',
-        height: 40,
-        backgroundColor: "white",
-        position: 'relative',
-        top: 0
-      }}>
+          <Divider style={styles.divider} />
         <Button 
-          style={styles.select_button} 
+          style={styles.next_button} 
           title="Checkout" 
-          onPress={() =>{ _onNavigateToInfoListAndSaveTransactionPressed() }} 
-          buttonStyle={styles.select_button_background_style} />
-      </View>
+          onPress={() =>{  _onNavigateToInfoListAndSaveTransactionPressed() }} 
+          buttonStyle={styles.next_button_background_color} />
+      </View> 
     <InternetConnectionChecker />
-    </React.Fragment>
+    </>
   )
 }
 

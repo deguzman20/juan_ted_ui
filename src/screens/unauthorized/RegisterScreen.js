@@ -11,25 +11,32 @@ import {
   mobileNumberValidator
 } from '../../core/utils';
 
+import _ from 'lodash';
+
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Loader from "react-native-modal-loader";
+
 import Button from '../../components/atoms/button/Button';
 import Header from '../../components/atoms/header/Header';
-import ModalLoader from '../../components/atoms/loader/ModalLoader';
 import TextInput from '../../components/atoms/text_input/TextInput';
 import Background from '../../components/atoms/background/Background';
 import BackButton from '../../components/atoms/button/BackButton';
+
 
 import RegisterTextWithLinkSection from '../../components/molecules/register_text_with_link_section/RegisterTextWithLinkSection';
 
 const RegisterScreen = ({ navigation }) => {
   const [createCustomer] = useMutation(CREATE_CUSTOMER)
 
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
+
   const [first_name, setFirstName] = useState({ value: '', error: '' })
   const [last_name, setLastName] = useState({ value: '', error: '' })
   const [mobile_number, setMobileNumber] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
-
+  
   const _onSignUpPressed = () => {
     const firstNameError = firstNameValidator(first_name.value)
     const lastNameError = lastNameValidator(last_name.value)
@@ -59,13 +66,11 @@ const RegisterScreen = ({ navigation }) => {
               password: password.value 
             } 
           })
-          .then(({ data }) => {
-            console.log(data)
-            // if(createData.data.response === 'Customer Created'){
-            //   console.log(createData);
-            //   // setLoading(false)
-            //   navigation.navigate('LoginScreen')
-            // }
+          .then(({ data: { createCustomer } }) => {
+            if(_.isEqual(createCustomer.response, 'Customer Created')){
+              setLoading(false)
+              navigation.navigate('LoginScreen')
+            }
           })
           .catch(err => console.log(err))
         }
@@ -129,7 +134,15 @@ const RegisterScreen = ({ navigation }) => {
             onChangeText={text => setPassword({ value: text, error: '' })}
             error={!!password.error}
             errorText={password.error}
-            secureTextEntry
+            secureTextEntry={hidePass ? true : false}
+          />
+
+          <Icon
+            name={hidePass ? 'eye-slash' : 'eye'}
+            size={15}
+            color="grey"
+            onPress={() => setHidePass(!hidePass)}
+            style={{ left: '40%', top: -47 }}
           />
 
           <Button mode="contained" 
@@ -142,10 +155,7 @@ const RegisterScreen = ({ navigation }) => {
           <RegisterTextWithLinkSection 
             navigation={navigation}
           />
-
-          {/* <ModalLoader 
-            isLoading={isLoading} 
-          /> */}
+          <Loader loading={isLoading} color="#ff66be" />
         </Background>
       </ScrollView>  
     </React.Fragment>

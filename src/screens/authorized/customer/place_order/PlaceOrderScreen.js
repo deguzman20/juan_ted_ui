@@ -16,6 +16,7 @@ import { DEFAULT_URL, ITEM_WIDTH } from "./../../../../actions/types";
 import { useNetInfo } from "@react-native-community/netinfo";
 import Loader from "react-native-modal-loader";
 import axios from 'axios';
+import _ from 'lodash';
 
 const PlaceOrderScreen = ({ navigation, customer_id }) => {
   const netInfo = useNetInfo()
@@ -91,7 +92,9 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
                               navigation.navigate('PaypalScreen')
                             }
                             else if(payment_method === 'Debit'){
-                              navigation.navigate('DebitCardScreen')
+                              navigation.navigate('DebitCardScreen', {
+                                amount: total_cost_arr.reduce((a, b) => a + b)
+                              })
                             }
                           }
                         })

@@ -19,6 +19,7 @@ const initialState = {
   todos: {}
 }
 
+
 export default customerReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_CURRENT_CUSTOMER_INFO:

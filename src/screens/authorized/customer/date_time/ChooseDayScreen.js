@@ -1,11 +1,15 @@
 import React, { memo, useState } from 'react';
 import { View, TouchableWithoutFeedback, Alert } from 'react-native';
-import { Card, Text, Button } from 'react-native-elements';
+import { Card, Text, Button, Divider } from 'react-native-elements';
 import { useQuery } from 'react-apollo';
 import { FAVORATE_TASKER_BY_GEOLOCATION } from '../../../../queries';
 import { connect } from 'react-redux';
 import { useNetInfo } from "@react-native-community/netinfo";
+
 import { styles } from './../../../../styles/authorized/customer/date_time/ChooseDayStyle'
+import { formatMoney } from '../../../../core/utils';
+
+import _ from 'lodash';
 
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import DatePicker from 'react-native-datepicker';
@@ -39,7 +43,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
   const _onNavigateToAvailableTaskerPressed = () => {
     if(netInfo.isConnected){
       if(time.from !== null && time.to !== null){
-        if(navigation.state.params.tasker_id === ""){
+        if(_.isEqual(navigation.state.params.tasker_id, "")){
           navigation.navigate('TaskersScreen',{
             formatted_address: navigation.state.params.formatted_address, 
             longitude: String(navigation.state.params.longitude), 
@@ -49,6 +53,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
             service_type_id: navigation.state.params.service_type_id,
             services: navigation.state.params.services,
             service_details: navigation.state.params.service_details,
+            total_price: navigation.state.params["total_price"]
           });
         }
         else{
@@ -64,6 +69,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
               tasker_id: parseInt(navigation.state.params.tasker_id),
               services: navigation.state.params.services,
               service_details: navigation.state.params.service_details,
+              total_price: navigation.state.params["total_price"]
             })
           }
           else{
@@ -78,7 +84,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
   }
 
   const hoverizedCard = (data) => {
-    if(data === 1){
+    if(_.isEqual(data, 1)){
       setFirstStyle({ color: 'white', backgroundColor: 'black' })
       setSecondStyle({ color: 'black', backgroundColor: 'white' })
       setThirdStyle({ color: 'black', backgroundColor: 'white' })
@@ -86,7 +92,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       setFifthStyle({ color : 'black', backgroundColor: 'white' })
       setTimeRange({ from: '07:00:00', to: '10:00:00' })
     }
-    else if(data === 2){
+    else if(_.isEqual(data, 2)){
       setFirstStyle({ color: 'black', backgroundColor: 'white' })
       setSecondStyle({ color: 'white', backgroundColor: 'black' })
       setThirdStyle({ color: 'black', backgroundColor: 'white' })
@@ -94,7 +100,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '10:00:00', to: '13:00:00' })
     }
-    else if(data === 3){
+    else if(_.isEqual(data, 3)){
       setFirstStyle({ color: 'black', backgroundColor: 'white' })
       setSecondStyle({ color: 'black', backgroundColor: 'white' })
       setThirdStyle({ color: 'white', backgroundColor: 'black' })
@@ -102,7 +108,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '13:00:00', to: '16:00:00' })
     }
-    else if(data === 4){
+    else if(_.isEqual(data, 4)){
       setFirstStyle({ color: 'black', backgroundColor: 'white' })
       setSecondStyle({ color: 'black', backgroundColor: 'white' })
       setThirdStyle({ color: 'black', backgroundColor: 'white' })
@@ -110,7 +116,7 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
       setFifthStyle({ color: 'black', backgroundColor: 'white' })
       setTimeRange({ from: '16:00:00', to: '19:00:00' })
     }
-    else if(data === 5){
+    else if(_.isEqual(data, 5)){
       setFirstStyle({ color: 'black', backgroundColor: 'white' })
       setSecondStyle({ color: 'black', backgroundColor: 'white' })
       setThirdStyle({ color: 'black', backgroundColor: 'white' })
@@ -122,85 +128,103 @@ const ChooseDayScreen = ({ navigation, customer_id }) => {
 
   return(
     <React.Fragment>
-      <DatePicker
-        style={styles.datePicker}
-        date={date.date}
-        mode="date"
-        placeholder="select date"
-        format="YYYY-MM-DD"
-        minDate={`${dateToday}`}
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
-        customStyles={{
-          dateIcon: {
-            position: 'absolute',
-            left: 0,
-            top: 4,
-            marginLeft: 0
-          },
-          dateInput: {
-            marginLeft: 36
-          }
-        }}
-        onDateChange={(date) => {setDate({ date: date })}}
-      />
-      <TouchableWithoutFeedback onPress={() => { hoverizedCard(1) }}>
-        <Card 
-          wrapperStyle={{ backgroundColor: firstStyle.backgroundColor }} 
-          containerStyle={{ backgroundColor: firstStyle.backgroundColor }}
-        >
-          <View style={styles.containerRows}>
-            <Text h4 style={{ color: firstStyle.color }}>7:00 AM - 10:00 AM</Text>
-          </View>
-        </Card>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => { hoverizedCard(2) }}>
-        <Card 
-          wrapperStyle={{ backgroundColor: secondStyle.backgroundColor }}
-          containerStyle={{ backgroundColor: secondStyle.backgroundColor }}
-        >
-          <View style={styles.containerRows}>
-            <Text h4 style={{ color: secondStyle.color }}>10:00 AM - 01:00 PM</Text>
-          </View>
-        </Card>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => { hoverizedCard(3) }}> 
-        <Card 
-          wrapperStyle={{ backgroundColor: thirdStyle.backgroundColor }}
-          containerStyle={{ backgroundColor: thirdStyle.backgroundColor }}
-        >
-          <View style={styles.containerRows}>
-            <Text h4 style={{ color: thirdStyle.color }}>01:00 PM - 04:00 PM</Text>
-          </View>
-        </Card>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => { hoverizedCard(4) }}>
-        <Card 
-          wrapperStyle={{ backgroundColor: fourthStyle.backgroundColor }}
-          containerStyle={{ backgroundColor: fourthStyle.backgroundColor }}
-        >
-          <View style={styles.containerRows}>
-            <Text h4 style={{  color: fourthStyle.color }}>04:00 PM - 07:00 PM</Text>
-          </View>
-        </Card>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => { hoverizedCard(5) }}>
-        <Card 
-          wrapperStyle={{ backgroundColor: fifthStyle.backgroundColor }}
-          containerStyle={{ backgroundColor: fifthStyle.backgroundColor }}
-        >
-          <View style={styles.containerRows}>
-            <Text h4 style={{  color: fifthStyle.color }}>07:00 PM : 10:00 PM</Text>
-          </View>
-        </Card>
-      </TouchableWithoutFeedback>
-      <View style={styles.buttonContainer}>
-        <Button title="Next" 
-          onPress={() => { _onNavigateToAvailableTaskerPressed() }} 
-          buttonStyle={{ backgroundColor: "#009C3C" }}
+      <View style={{ flex: 6.5 }}>
+        <DatePicker
+          style={styles.datePicker}
+          date={date.date}
+          mode="date"
+          placeholder="select date"
+          format="YYYY-MM-DD"
+          minDate={`${dateToday}`}
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 0
+            },
+            dateInput: {
+              marginLeft: 36
+            }
+          }}
+          onDateChange={(date) => {setDate({ date: date })}}
         />
+        <TouchableWithoutFeedback onPress={() => { hoverizedCard(1) }}>
+          <Card 
+            wrapperStyle={{ backgroundColor: firstStyle.backgroundColor }} 
+            containerStyle={{ backgroundColor: firstStyle.backgroundColor }}
+          >
+            <View style={styles.containerRows}>
+              <Text h4 style={{ color: firstStyle.color }}>7:00 AM - 10:00 AM</Text>
+            </View>
+          </Card>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => { hoverizedCard(2) }}>
+          <Card 
+            wrapperStyle={{ backgroundColor: secondStyle.backgroundColor }}
+            containerStyle={{ backgroundColor: secondStyle.backgroundColor }}
+          >
+            <View style={styles.containerRows}>
+              <Text h4 style={{ color: secondStyle.color }}>10:00 AM - 01:00 PM</Text>
+            </View>
+          </Card>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => { hoverizedCard(3) }}> 
+          <Card 
+            wrapperStyle={{ backgroundColor: thirdStyle.backgroundColor }}
+            containerStyle={{ backgroundColor: thirdStyle.backgroundColor }}
+          >
+            <View style={styles.containerRows}>
+              <Text h4 style={{ color: thirdStyle.color }}>01:00 PM - 04:00 PM</Text>
+            </View>
+          </Card>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => { hoverizedCard(4) }}>
+          <Card 
+            wrapperStyle={{ backgroundColor: fourthStyle.backgroundColor }}
+            containerStyle={{ backgroundColor: fourthStyle.backgroundColor }}
+          >
+            <View style={styles.containerRows}>
+              <Text h4 style={{  color: fourthStyle.color }}>04:00 PM - 07:00 PM</Text>
+            </View>
+          </Card>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => { hoverizedCard(5) }}>
+          <Card 
+            wrapperStyle={{ backgroundColor: fifthStyle.backgroundColor }}
+            containerStyle={{ backgroundColor: fifthStyle.backgroundColor }}
+          >
+            <View style={styles.containerRows}>
+              <Text h4 style={{  color: fifthStyle.color }}>07:00 PM : 10:00 PM</Text>
+            </View>
+          </Card>
+        </TouchableWithoutFeedback>
       </View>
-      <InternetConnectionChecker />
+      <View style={{ flex: 2 }}>
+        <View style={styles.second_box_wrapper}>
+          <View style={{ flexDirection: 'row' }}>
+              <View style={styles.amount_wrapper}>
+                <Text style={styles.total_amount_txt}>
+                  Total Amount
+                </Text>
+              </View>
+              <View style={styles.amount_value_wrapper}>
+                <Text style={styles.total_amount_value_txt}>
+                  ₱ {formatMoney(navigation.state.params["total_price"])}
+                </Text>
+              </View>
+            </View>
+            <Divider style={styles.divider} />
+          <Button 
+            style={styles.next_button} 
+            title="Next" 
+            onPress={() =>{  _onNavigateToAvailableTaskerPressed() }} 
+            buttonStyle={styles.next_button_background_color} />
+        </View>
+      </View>
+      <InternetConnectionChecker /> 
     </React.Fragment>
   )
 }

@@ -722,3 +722,19 @@ export const CUSTOMER_SHIPPING_ADDRESS = gql `
       formattedAddress
     }
   }`;
+
+export const CREATE_PAYMENT_TOKEN = gql `
+  mutation createToken($number: String!, $exp_month: String! $exp_year: String!, $cvc: String!, $address_line_one: String, $address_line_two: String, $city: String, $state: String, $postal_code: String, $country: String, $name: String, $email: String, $mobile_no: String) {
+    createToken(number: $number, expMonth: $exp_month, expYear: $exp_year, cvc: $cvc, addressLineOne: $address_line_one, addressLineTwo: $address_line_two, city: $city, state: $state, postalCode: $postal_code, country: $country, name: $name, email: $email, mobileNo: $mobile_no){
+      response
+      statusCode
+    }
+  }`;
+
+export const PAY_VIA_DEBIT_CARD = gql `
+  mutation payViaCard($token: String!, $amount: Int!){
+    payViaCard(token: $token, amount: $amount){
+      response
+      statusCode
+    }
+  }`;

@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     flex: 2, 
     flexDirection: 'row'
   },
-  my_order_txt: {
+  billing_address_txt: {
     paddingLeft: 30,
     paddingTop: 20
   },

@@ -7,8 +7,9 @@ import { useNetInfo } from "@react-native-community/netinfo";
 
 import { styles } from '../../styles/unauthorized/ForgotPasswordStyle';
 
+import Loader from "react-native-modal-loader";
+
 import Header from '../../components/atoms/header/Header';
-import ModalLoader from '../../components/atoms/loader/ModalLoader';
 import TextInput from '../../components/atoms/text_input/TextInput';
 import Button from '../../components/atoms/button/Button';
 import Background from '../../components/atoms/background/Background';
@@ -46,7 +47,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     <React.Fragment>
       <Background>
         <BackButton goBack={() => navigation.navigate('LoginScreen')} />
-        <SafeAreaView style={{marginBottom: 100}} />
+        <SafeAreaView/>
         <Header>Restore Password</Header>
 
         <TextInput
@@ -72,7 +73,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         >
           <Text style={styles.label}>← Back to login</Text>
         </TouchableOpacity>
-        <ModalLoader isLoading={isLoading} />
+        <Loader loading={isLoading} color="#ff66be" />
       </Background>
       <InternetConnectionChecker />
     </React.Fragment>

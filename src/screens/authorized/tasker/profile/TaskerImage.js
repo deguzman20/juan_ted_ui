@@ -5,7 +5,8 @@ import { DEFAULT_URL } from './../../../../actions/types';
 import { connect } from 'react-redux';
 import CookieManager from '@react-native-community/cookies';
 
-const PaypalScreen = ({ customer_id, navigation }) => {
+
+const TaskerImage = ({ tasker_id, navigation }) => {
 
   const [status, setStatus] = useState('pending')
   const webViewRef = useRef()
@@ -17,9 +18,8 @@ const PaypalScreen = ({ customer_id, navigation }) => {
   },[status])
 
   handleResponse = (e) =>{
-    if(e["canGoBack"]=== true){
-      // Alert.alert('Successful')
-      navigation.navigate('Home')
+    if(e['canGoBack'] === true){
+        navigation.navigate('ProfileScreen')
     }
   }
 
@@ -29,14 +29,8 @@ const PaypalScreen = ({ customer_id, navigation }) => {
       { Platform.OS === 'ios' ? 
         (
           <WebView
-            source={{ url: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` }}
+            source={{ url: `${DEFAULT_URL}/tasker/upload/edit?id=${tasker_id}` }}
             scalesPageToFit={true}
-            onLoad={
-              e => {
-                // Update the state so url changes could be detected by React and we could load the mainUrl.
-                `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` 
-              }
-            }
             incognito={true}
             onNavigationStateChange={e => handleResponse(e)}
             startInLoadingState={true}
@@ -44,14 +38,8 @@ const PaypalScreen = ({ customer_id, navigation }) => {
         ) :
         (
           <WebView
-            source={{ uri: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` }}
-            // scalesPageToFit={true}
-            // onLoad={
-            //   e => {
-            //     // Update the state so url changes could be detected by React and we could load the mainUrl.
-            //     `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` 
-            //   }
-            // }
+            source={{ uri: `${DEFAULT_URL}/tasker/upload/edit?id=${tasker_id}` }}
+            scalesPageToFit={true}
             incognito={true}
             onNavigationStateChange={e => handleResponse(e)}
             startInLoadingState={true}
@@ -62,10 +50,10 @@ const PaypalScreen = ({ customer_id, navigation }) => {
   )
 }
 
-const mapStateToProps = ({ customerReducer }) => {
+const mapStateToProps = ({ taskerReducer }) => {
   return {
-    customer_id: customerReducer.id
+    tasker_id: taskerReducer.id
   }
 }
 
-export default memo(connect(mapStateToProps, null)(PaypalScreen));
+export default memo(connect(mapStateToProps, null)(TaskerImage));

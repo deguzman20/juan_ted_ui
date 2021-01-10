@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
   },
   wallet_wrapper: {
     flexDirection: 'row',
-    flex: 0.2, 
+    flex: 0.3, 
     backgroundColor: '#009C3C', 
     width: '100%'
   },

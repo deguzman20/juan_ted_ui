@@ -14,7 +14,6 @@ import { Chip } from 'react-native-paper';
 
 import Background from './../../../../components/atoms/background/Background';
 import Header from './../../../../components/atoms/header/Header';
-import BackButton from './../../../../components/atoms/button/BackButton';
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import _ from 'lodash';
 
@@ -116,9 +115,6 @@ const MySkillsScreen = ({ navigation, tasker_id }) => {
     <React.Fragment>
       <SafeAreaView/>
       <Background>
-        <BackButton 
-          goBack={() => navigation.navigate('ProfileScreen')} 
-        />
         <KeyboardAwareScrollView>
           <ScrollView
             showsVerticalScrollIndicator={false}

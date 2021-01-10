@@ -14,10 +14,16 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { taskerLogoutAction } from './../../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
+
 import Geolocation from '@react-native-community/geolocation';
+
+import _ from 'lodash';
 
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
+import TaskerImage from './TaskerImage';
+
+import Loader from "react-native-modal-loader";
 
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import Background from '../../../../components/atoms/background/Background';
@@ -25,9 +31,11 @@ import Loading from '../../../../components/atoms/loader/Loading';
 import OutOfLocationService from '../../../../components/molecules/out_of_location_service/OutOfLocationService';
 import axios from 'axios';
 
+
 const ProfileScreen = ({ navigation, tasker_id, taskerLogoutAction }) => {
   const netInfo = useNetInfo()
   const pattern = /Parañaque/g
+  const [isLoading, setLoading] = useState(false)
   const [compoundCode, setCompoundCode] = useState('')
   const [update_tasker_geolocation] = useMutation(UPDATE_TASKER_GEOLOCATION)
   const { loading, error, data } = useQuery(TASKER_INFO, {
@@ -77,8 +85,16 @@ const ProfileScreen = ({ navigation, tasker_id, taskerLogoutAction }) => {
         { 
           text: "Yes", 
           onPress: () => {
-            taskerLogoutAction()
-            navigation.navigate('LoginScreen');
+            setLoading(true)
+            setTimeout(() => {
+              for(let i = 1; i <= 3; i++){
+                if(i === 3){
+                  setLoading(false)
+                  taskerLogoutAction()
+                  navigation.navigate('LoginScreen');
+                }
+              }
+            },3000)
           } 
         }
       ],
@@ -87,6 +103,7 @@ const ProfileScreen = ({ navigation, tasker_id, taskerLogoutAction }) => {
   }
 
   if(loading || error) return null;
+  const { image, firstName, lastName } = data.tasker[0];
   // if(compoundCode !== ""){
   //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
       return (
@@ -97,14 +114,16 @@ const ProfileScreen = ({ navigation, tasker_id, taskerLogoutAction }) => {
                 <Avatar
                   xlarge
                   rounded
-                  source={{ uri: `${DEFAULT_URL}/${data.tasker[0].image }` }}
-                  onPress={() => console.log("Works!")}
+                  source={{ uri: !_.isEqual(image, '') ?  `${DEFAULT_URL}/${image}` : require('../../../../assets/blank_photo.jpg') }}
+                  onPress={() => {
+                    navigation.navigate('TaskerImage')
+                  }}
                   activeOpacity={0.7}
                   size={150}
                 />
               </View>
               <View>
-                <Text style={styles.fullName}>{data.tasker[0].firstName } {data.tasker[0].lastName }</Text>
+                <Text style={styles.fullName}>{firstName} {lastName}</Text>
               </View>
               <View style={styles.container}>
                 <ListItem
@@ -128,6 +147,7 @@ const ProfileScreen = ({ navigation, tasker_id, taskerLogoutAction }) => {
                   onPress={() => { _onLogoutPressed() }}
                 />
               </View>
+              <Loader loading={isLoading} color="#ff66be" />
           </Background>
           <InternetConnectionChecker />
         </React.Fragment>
@@ -163,6 +183,12 @@ const App = createStackNavigator({
   },
   ChangePasswordScreen: { 
     screen: ChangePasswordScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+  TaskerImage: { 
+    screen: TaskerImage,
     navigationOptions: {
       headerShown: false
     }

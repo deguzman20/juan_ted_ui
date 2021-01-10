@@ -11,6 +11,7 @@ import {
   confirmPasswordValidator } from './../../../../core/utils';
 
 import Loader from "react-native-modal-loader";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import Background from './../../../../components/atoms/background/Background';
 import Header from './../../../../components/atoms/header/Header';
@@ -18,11 +19,19 @@ import Button from './../../../../components/atoms/button/Button';
 import TextInput from './../../../../components/atoms/text_input/TextInput';
 import BackButton from './../../../../components/atoms/button/BackButton';
 
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+
+
+
 const ChangePasswordScreen = ({ navigation, tasker_id }) => {
   const netInfo = useNetInfo()
   const [updatePassword] = useMutation(UPDATE_PASSWORD)
   
   const [isLoading, setLoading] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
+  const [hideOldPass, setHideOldPass] = useState(true);
+  const [hideConfirmPass, setHideConfirmPass] = useState(true);
+
   const [old_password, setOldPassword] = useState({ value: '', error: '' })
   const [new_password, setNewPassword] = useState({ value: '', error: '' })
   const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' })
@@ -72,50 +81,74 @@ const ChangePasswordScreen = ({ navigation, tasker_id }) => {
   };
 
   return(
-    <React.Fragment>
-      <SafeAreaView/>
-      <Background>
-        <BackButton goBack={() => navigation.navigate('ProfileScreen')} />
+    <>
+    <SafeAreaView/>
+    <Background>
+      <BackButton goBack={() => navigation.navigate('ProfileScreen')} />
 
-        <Header>Change Password</Header>
+      <Header>Change Password</Header>
 
-        <TextInput
-          label="Old Password"
-          returnKeyType="done"
-          value={old_password.value}
-          onChangeText={text => setOldPassword({ value: text, error: '' })}
-          error={!!old_password.error}
-          errorText={old_password.error}
-          secureTextEntry
-        />
+      <TextInput
+        label="Old Password"
+        returnKeyType="done"
+        value={old_password.value}
+        onChangeText={text => setOldPassword({ value: text, error: '' })}
+        error={!!old_password.error}
+        errorText={old_password.error}
+        secureTextEntry={hideOldPass ? true : false}
+      />
 
-        <TextInput
-          label="New Password"
-          returnKeyType="done"
-          value={new_password.value}
-          onChangeText={text => setNewPassword({ value: text, error: '' })}
-          error={!!new_password.error}
-          errorText={new_password.error}
-          secureTextEntry
-        />
+      <Icon
+        name={hideOldPass ? 'eye-slash' : 'eye'}
+        size={15}
+        color="grey"
+        onPress={() => setHideOldPass(!hideOldPass)}
+        style={{ left: '40%', top: -47 }}
+      />
 
-        <TextInput
-          label="Confirm Password"
-          returnKeyType="done"
-          value={confirm_password.value}
-          onChangeText={text => setConfirmPassword({ value: text, error: '' })}
-          error={!!confirm_password.error}
-          errorText={confirm_password.error}
-          secureTextEntry
-        />
+      <TextInput
+        label="New Password"
+        returnKeyType="done"
+        value={new_password.value}
+        onChangeText={text => setNewPassword({ value: text, error: '' })}
+        error={!!new_password.error}
+        errorText={new_password.error}
+        secureTextEntry={hidePass ? true : false}
+      />
 
-        <Button mode="contained" onPress={_onChangePasswordPressed} style={styles.button}>
-          Update Password
-        </Button>
-        <Loader loading={isLoading} color="#ff66be" />
-      </Background>
-      <InternetConnectionChecker />
-    </React.Fragment>
+      <Icon
+        name={hidePass ? 'eye-slash' : 'eye'}
+        size={15}
+        color="grey"
+        onPress={() => setHidePass(!hidePass)}
+        style={{ left: '40%', top: -47 }}
+      />
+
+      <TextInput
+        label="Confirm Password"
+        returnKeyType="done"
+        value={confirm_password.value}
+        onChangeText={text => setConfirmPassword({ value: text, error: '' })}
+        error={!!confirm_password.error}
+        errorText={confirm_password.error}
+        secureTextEntry={hideConfirmPass ? true : false}
+      />
+
+      <Icon
+        name={hideConfirmPass ? 'eye-slash' : 'eye'}
+        size={15}
+        color="grey"
+        onPress={() => setHideConfirmPass(!hideConfirmPass)}
+        style={{ left: '40%', top: -47 }}
+      />
+
+      <Button mode="contained" onPress={_onChangePasswordPressed} style={styles.button}>
+        Update
+      </Button>
+    </Background>
+    <Loader loading={isLoading} color="#ff66be" />
+    <InternetConnectionChecker />
+  </>
   )
 }
 

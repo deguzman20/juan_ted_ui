@@ -1,3 +1,11 @@
+import { CustomerInfo } from '../types/customer';
+import { TaskerInfo } from '../types/tasker';
+import { 
+  ICustomerSignInAction, 
+  ITaskerSignInAction,
+  ICustomerLogoutAction,
+  ITaskerLogoutAction } from '../types/action';
+
 import {
   CUSTOMER_LOGOUT,
   TASKER_LOGOUT,
@@ -7,9 +15,11 @@ import {
   GET_CURRENT_TASKER_INFO,
   GET_ALL_SERVICES,
   ADD_TODO,
-  DELETE_TODO } from '../actions/types';
+  DELETE_TODO } from './types';
 
-export const customerSignInAction = (data) => dispatch => {
+
+
+export const customerSignInAction = (data: CustomerInfo): ICustomerSignInAction => dispatch => {
   var data_obj = data.data.customerSignin;
   dispatch({
     type: GET_CURRENT_CUSTOMER_INFO,
@@ -17,7 +27,7 @@ export const customerSignInAction = (data) => dispatch => {
   })
 }
 
-export const taskerSignInAction = (data) => dispatch => {
+export const taskerSignInAction = (data: TaskerInfo): ITaskerSignInAction => dispatch => {
   var data_obj = data.data.taskerSignin;
   dispatch({
     type: GET_CURRENT_TASKER_INFO,
@@ -25,14 +35,14 @@ export const taskerSignInAction = (data) => dispatch => {
   })
 }
 
-export const customerLogoutAction = () => dispatch => {
+export const customerLogoutAction = (): ICustomerLogoutAction => dispatch => {
   dispatch({
     type: CUSTOMER_LOGOUT,
     payload: null
   })
 }
 
-export const taskerLogoutAction = () => dispatch => {
+export const taskerLogoutAction = (): ITaskerLogoutAction => dispatch => {
   dispatch({
     type: TASKER_LOGOUT,
     payload: null

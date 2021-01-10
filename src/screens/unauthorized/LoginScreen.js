@@ -6,9 +6,13 @@ import { CUSTOMER_SIGN_IN, TASKER_SIGN_IN } from '../../queries';
 import { customerSignInAction, taskerSignInAction } from '../../actions';
 import { emailValidator, passwordValidator } from '../../core/utils';
 
+import _ from 'lodash';
+
+import Loader from "react-native-modal-loader";
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 // atoms
 import Logo from '../../components/atoms/logo/Logo';
-import ModalLoader from '../../components/atoms/loader/ModalLoader';
 import Button from '../../components/atoms/button/Button';
 import TextInput from '../../components/atoms/text_input/TextInput';
 import Background from '../../components/atoms/background/Background';
@@ -24,13 +28,14 @@ import TaskerDashBoardScreen from '../authorized/tasker/TaskerDashBoardScreen';
 
 const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, customer_id, tasker_id}) => {
 
-  console.log(tasker_id)
   const [customerSignIn] = useMutation(CUSTOMER_SIGN_IN)
   const [taskerSignIn] = useMutation(TASKER_SIGN_IN)
 
-  const [isLoading, setLoading] = useState(false)
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [isLoading, setLoading] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
+
+  const [email, setEmail] = useState({ value: '', error: '' });
+  const [password, setPassword] = useState({ value: '', error: '' });
 
   const _onLoginPressed = () => {
     const emailError = emailValidator(email.value)
@@ -49,7 +54,6 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
           customerSignIn({ variables: { email: email.value, password: password.value } }).then((customer_data) => {
             if(customer_data.data.customerSignin !== null){
               customerSignInAction(customer_data)
-              setLoading(false)
               navigation.navigate('CustomerDashBoardScreen')
             }
             else{
@@ -72,16 +76,15 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
   };
 
 
-  if(customer_id !== null && isNaN(tasker_id) === true){
+  if(!_.isNull(customer_id) && _.isNull(tasker_id)){
     return <CustomerDashBoardScreen />
   }
-  else if(isNaN(customer_id) === true && tasker_id !== null){   
+  else if(_.isNull(customer_id) && !_.isNull(tasker_id)){   
     return <TaskerDashBoardScreen />
   }
 
   return (
     <React.Fragment>
-      
       <View style={{ flex: 0.5, alignItems: 'center' }}>
         <Logo />
       </View>
@@ -107,8 +110,17 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
             onChangeText={text => setPassword({ value: text, error: '' })}
             error={!!password.error}
             errorText={password.error}
-            secureTextEntry
+            secureTextEntry={hidePass ? true : false}
           />
+
+          <Icon
+            name={hidePass ? 'eye-slash' : 'eye'}
+            size={15}
+            color="grey"
+            onPress={() => setHidePass(!hidePass)}
+            style={{ left: '40%', top: -47 }}
+          />
+
 
           <ForgotPasswordlinkButton 
             navigation={navigation}
@@ -121,7 +133,7 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
             navigation={navigation} 
           />
           {/* <SocialMediaButtons /> */}
-          {/* <ModalLoader loading={isLoading} /> */}
+          <Loader loading={isLoading} color="#ff66be" />
         </Background>
       </View>
     </React.Fragment>
@@ -130,9 +142,9 @@ const LoginScreen = ({ navigation, customerSignInAction, taskerSignInAction, cus
 
 const mapStateToProps = ({ customerReducer, taskerReducer }) => {
   return {
-    customer_id: parseInt(customerReducer.id),
-    tasker_id: parseInt(taskerReducer.id)
+    customer_id: !_.isNull(parseInt(customerReducer.id)) && !isNaN(parseInt(customerReducer.id)) ? parseInt(customerReducer.id) : null,
+    tasker_id: !_.isNull(parseInt(taskerReducer.id)) && !isNaN(parseInt(taskerReducer.id)) ? parseInt(taskerReducer.id) : null
   }
 }
 
-export default memo(connect(mapStateToProps, { customerSignInAction, taskerSignInAction })(LoginScreen))
+export default memo(connect(mapStateToProps, { customerSignInAction, taskerSignInAction })(LoginScreen))  

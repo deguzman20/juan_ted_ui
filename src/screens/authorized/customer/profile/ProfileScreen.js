@@ -15,22 +15,28 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { customerLogoutAction } from './../../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { _androidRequestPermissions, _iosRequestPermissions } from '../../../../helpers/location';
+
+import Loader from "react-native-modal-loader";
+
+import _ from 'lodash';
+
 import ChangePasswordScreen from './ChangePasswordScreen';
 import EditProfileScreen from './EditProfileScreen';
+import CustomerImage from './CustomerImage';
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 import Background from '../../../../components/atoms/background/Background';
-import Loading from '../../../../components/atoms/loader/Loading';
 import OutOfLocationService from '../../../../components/molecules/out_of_location_service/OutOfLocationService';
 
 const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
   const netInfo = useNetInfo()
   const pattern = /Parañaque/g
+  const [isLoading, setLoading] = useState(false)
   const [compoundCode, setCompoundCode] = useState('')
   const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION)
   const { loading, error, data } = useQuery(CUSTOMER_INFO, {
     variables: { customer_id: parseInt(customer_id) },
     pollInterval: 500
-  })
+  });
 
   useEffect(() => {
     if(Platform.OS === 'ios'){
@@ -39,7 +45,7 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
     else {
       _androidRequestPermissions(customer_id, compoundCode, setCompoundCode, update_customer_geolocation)
     }
-  },[])
+  },[]);
   
   const _onLogoutPressed = () => {
     Alert.alert(
@@ -54,16 +60,25 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
         { 
           text: "Yes", 
           onPress: () => {
-            customerLogoutAction()
-            navigation.navigate('LoginScreen')
+            setLoading(true)
+            setTimeout(() => {
+              for(let i = 1; i <= 3; i++){
+                if(i === 3){
+                  setLoading(false)
+                  customerLogoutAction()
+                  navigation.navigate('LoginScreen');
+                }
+              }
+            },3000)
           } 
         }
       ],
       { cancelable: false }
     );  
-  }
+  };
 
   if(loading || error) return null;
+  const { image, firstName, lastName } = data.customer[0];
   // if(compoundCode !== ''){
   //   if(compoundCode.match(pattern) !== null){
       return (
@@ -74,15 +89,17 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
                 <Avatar
                   xlarge
                   rounded
-                  source={{ uri: `${DEFAULT_URL}/${data.customer[0].image}` }}
+                  // icon={{ name: 'account-circle' }}
+                  source={{ uri: !_.isEqual(image, '') ?  `${DEFAULT_URL}/${image}` : require('../../../../assets/blank_photo.jpg') }}
                   onPress={() => {
+                    navigation.navigate('CustomerImage')
                   }}
                   activeOpacity={0.7}
                   size={150}
                 />
               </View>
               <View>
-                <Text style={styles.fullName}>{data.customer[0].firstName} {data.customer[0].lastName}</Text>
+                <Text style={styles.fullName}>{firstName} {lastName}</Text>
               </View>
               <View style={styles.container}>
                 <ListItem
@@ -106,10 +123,11 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
                   onPress={() => { _onLogoutPressed() }}
                 />
               </View>
+              <Loader loading={isLoading} color="#ff66be" />
           </Background>
           <InternetConnectionChecker />
         </>
-      )
+      );
   //   }
   //   else{
   //     return <OutOfLocationService />
@@ -118,13 +136,13 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
   // else{
   //   return <Loading />
   // }
-}
+};
 
 const mapStateToProps = ({ customerReducer }) => {
   return {
     customer_id: customerReducer.id,
   }
-}
+};
 
 const App = createStackNavigator({
   ProfileScreen: { 
@@ -144,7 +162,13 @@ const App = createStackNavigator({
     navigationOptions: {
       headerShown: false
     }
+  },
+  CustomerImage: { 
+    screen: CustomerImage,
+    navigationOptions: {
+      headerShown: false
+    }
   }
-})
+});
 
-export default memo(createAppContainer(App))
+export default memo(createAppContainer(App));

@@ -15,12 +15,15 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { 
+  CUSTOMER_INFO,
   ALL_SERVICE_TYPES, 
   UPDATE_CUSTOMER_GEOLOCATION } from '../../../queries';
 import { DEFAULT_URL, ITEM_WIDTH } from '../../../actions/types';
 import { getAllServiceAction } from '../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { _androidRequestPermissions, _iosRequestPermissions } from '../../../helpers/location';
+
+import _ from 'lodash';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MyTodoListScreen from './todo/MyTodoListScreen';
@@ -42,13 +45,24 @@ import Loading from '../../../components/atoms/loader/Loading';
 import OutOfLocationService from '../../../components/molecules/out_of_location_service/OutOfLocationService';
 
 const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
-  const netInfo = useNetInfo()
-  const pattern = /Parañaque/g
-  const [compoundCode, setCompoundCode] = useState('')
-  const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION)
+  const netInfo = useNetInfo();
+  const pattern = /Parañaque/g;
+  const [fName, setFname] = useState('');
+  const [compoundCode, setCompoundCode] = useState('');
+  const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION);
   const { loading, error, data } = useQuery(ALL_SERVICE_TYPES, {
     pollInterval: 1000
-  })
+  });
+
+  const { info_loading, info_error } = useQuery(CUSTOMER_INFO, {
+    onCompleted: (data) => {
+      if(!_.isNull(data) && !_.isEmpty(data)){
+        setFname(data.customer[0].firstName);
+      }
+    },
+    variables: { customer_id: parseInt(customer_id) },
+    pollInterval: 500
+  });
 
   useEffect(() => {
     if(Platform.OS === 'ios'){
@@ -57,24 +71,24 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
     else {
       _androidRequestPermissions(customer_id, compoundCode, setCompoundCode, update_customer_geolocation)
     }
-  },[])
+  },[]);
 
   _onNavigateToTodoListPress = () => {
     if(netInfo.isConnected){
       navigation.navigate('MyTodoListScreen')
     }
-  }
+  };
 
   _onNavigateToServiceTypePress = (id) => {
     if(netInfo.isConnected){
-      if(id === 1){
+      if(_.isEqual(id, 1)){
         navigation.navigate('BarberScreen', 
         { 
           service_type_id: id,
           tasker_id: ""
         })
       }
-      else if(id === 2){
+      else if(_.isEqual(id, 2)){
         navigation.navigate('HairSalonScreen', 
         { 
           service_type_id: id,
@@ -82,9 +96,10 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
         })
       }
     } 
-  }
-  
+  };
+
   if (loading || error) return null;
+  // const { firstName } = customerInfoArr[0].customer[0];
   // if(compoundCode !== ''){
   //   if(compoundCode.match(pattern) !== null){
       return(
@@ -92,15 +107,15 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
           <View style={styles.wallet_wrapper}>
             <SafeAreaView/>
             <View style={styles.greeting_wrapper}>
-              <Text h4 style={styles.hi_txt}>Hi {customer_first_name}</Text>
+              <Text h4 style={styles.hi_txt}>Hi {fName}</Text>
             </View>
-            <View style={styles.profile_wrapper}>
+            {/* <View style={styles.profile_wrapper}>
               <Icon 
                 name='user-circle'
                 style={styles.icon_profile}
                 size={30}
               />
-            </View>
+            </View> */}
           </View>
           <View style={styles.service_wrapper}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -145,7 +160,7 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
   // else{
   //   return <Loading />
   // }
-}
+};
 
 const mapStateToProps = ({ serviceReducer, customerReducer }) => {
   return {
@@ -153,7 +168,7 @@ const mapStateToProps = ({ serviceReducer, customerReducer }) => {
     customer_id: customerReducer.id,
     customer_first_name: customerReducer.first_name
   }
-}
+};
 
 const App = createStackNavigator({
   Home: { 

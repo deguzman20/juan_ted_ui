@@ -11,6 +11,7 @@ import {
   confirmPasswordValidator } from './../../../../core/utils';
 
 import Loader from "react-native-modal-loader";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import Background from './../../../../components/atoms/background/Background';
 import Header from './../../../../components/atoms/header/Header';
@@ -24,6 +25,10 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
   const [updatePassword] = useMutation(UPDATE_PASSWORD)
 
   const [isLoading, setLoading] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
+  const [hideOldPass, setHideOldPass] = useState(true);
+  const [hideConfirmPass, setHideConfirmPass] = useState(true);
+
   const [old_password, setOldPassword] = useState({ value: '', error: '' })
   const [new_password, setNewPassword] = useState({ value: '', error: '' })
   const [confirm_password, setConfirmPassword] = useState({ value: '', error: '' })
@@ -86,7 +91,15 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
           onChangeText={text => setOldPassword({ value: text, error: '' })}
           error={!!old_password.error}
           errorText={old_password.error}
-          secureTextEntry
+          secureTextEntry={hideOldPass ? true : false}
+        />
+
+        <Icon
+          name={hideOldPass ? 'eye-slash' : 'eye'}
+          size={15}
+          color="grey"
+          onPress={() => setHideOldPass(!hideOldPass)}
+          style={{ left: '40%', top: -47 }}
         />
 
         <TextInput
@@ -96,7 +109,15 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
           onChangeText={text => setNewPassword({ value: text, error: '' })}
           error={!!new_password.error}
           errorText={new_password.error}
-          secureTextEntry
+          secureTextEntry={hidePass ? true : false}
+        />
+
+        <Icon
+          name={hidePass ? 'eye-slash' : 'eye'}
+          size={15}
+          color="grey"
+          onPress={() => setHidePass(!hidePass)}
+          style={{ left: '40%', top: -47 }}
         />
 
         <TextInput
@@ -106,7 +127,15 @@ const ChangePasswordScreen = ({ navigation, customer_id }) => {
           onChangeText={text => setConfirmPassword({ value: text, error: '' })}
           error={!!confirm_password.error}
           errorText={confirm_password.error}
-          secureTextEntry
+          secureTextEntry={hideConfirmPass ? true : false}
+        />
+
+        <Icon
+          name={hideConfirmPass ? 'eye-slash' : 'eye'}
+          size={15}
+          color="grey"
+          onPress={() => setHideConfirmPass(!hideConfirmPass)}
+          style={{ left: '40%', top: -47 }}
         />
 
         <Button mode="contained" onPress={_onChangePasswordPressed} style={styles.button}>

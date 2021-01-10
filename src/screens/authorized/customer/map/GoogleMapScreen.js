@@ -53,7 +53,8 @@ const GoogleMapScreen = ({ navigation }) => {
           service_type_id: navigation.state.params.service_type_id,
           services: navigation.state.params.services,
           service_details: navigation.state.params.service_details,
-          tasker_id: navigation.state.params.tasker_id
+          tasker_id: navigation.state.params.tasker_id,
+          total_price: navigation.state.params["totalPrice"]
         });
       }
       else{
@@ -166,7 +167,7 @@ const GoogleMapScreen = ({ navigation }) => {
         height: 171,
         backgroundColor: "white",
         position: 'relative',
-        top: -109,
+        top: -100,
         alignItems: 'stretch',
       }}>
         <View style={{ flexDirection: 'row' }}>

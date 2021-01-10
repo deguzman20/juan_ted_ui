@@ -77,10 +77,11 @@ export const styles = StyleSheet.create({
   },
   next_button_background_color: {
     backgroundColor: '#009C3C',
-    width: '100%',
+    width: '92%',
     height: 41,
     marginTop: 45,
     color:'white',
+    left: '20%',
     paddingLeft: 10,
     paddingRight: 10,
   },

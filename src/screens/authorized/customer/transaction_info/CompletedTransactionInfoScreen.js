@@ -29,22 +29,22 @@ import TextInput from '../../../../components/atoms/text_input/TextInput';
 import _ from 'lodash';
 
 const CompletedTransactionInfoScreen = ({ navigation, customer_id }) => {
-  const total_cost_arr = []
-  const netInfo = useNetInfo()
-  const [isLoading, setLoading] = useState(false)  
-  const [visible, setVisible] = useState(false)
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState({ value: '', error: '' })
+  const total_cost_arr = [];
+  const netInfo = useNetInfo();
+  const [isLoading, setLoading] = useState(false);  
+  const [visible, setVisible] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState({ value: '', error: '' });
 
-  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT
-  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5)
-  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO
-  const [submit_review] = useMutation(CREATE_REVIEW)
+  const ASPECT_RATIO = ITEM_WIDTH / ITEM_HEIGHT;
+  const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
+  const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO;
+  const [submit_review] = useMutation(CREATE_REVIEW);
   const { loading, error, data } = useQuery(TRANSACTION_SERVICE, {
     variables: {
       transaction_id: parseInt(navigation.state.params.transaction_id)
     }
-  })
+  });
 
   toggleOverlay = () => {
     setVisible(!visible)
@@ -113,6 +113,7 @@ const CompletedTransactionInfoScreen = ({ navigation, customer_id }) => {
         total_cost_arr.push(ts.transactionServices[i].quantity * ts.transactionServices[i].service.price)
       }
     })
+
     return(
       <React.Fragment>
         <ScrollView showsVerticalScrollIndicator={false}>

@@ -1,3 +1,45 @@
+export const fnameValidator = fname => {
+  if (!fname || fname.length <= 0) return 'Firstname cannot be empty.';
+
+  return '';
+};
+
+export const lnameValidator = lname => {
+  if (!lname || lname.length <= 0) return 'Lastname cannot be empty.';
+
+  return '';
+};
+
+export const addressLineOneValidator = addlineone => {
+  if (!addlineone || addlineone.length <= 0) return 'Address Line 1 cannot be empty.';
+
+  return '';
+};
+
+export const addressLineTwoValidator = addlinetwo => {
+  if (!addlinetwo || addlinetwo.length <= 0) return 'Address Line 2 cannot be empty.';
+
+  return '';
+};
+
+export const cityValidator = city => {
+  if (!city || city.length <= 0) return 'City Code cannot be empty.';
+
+  return '';
+};
+
+export const postalValidator = postal => {
+  if (!postal || postal.length <= 0) return 'Postal Code cannot be empty.';
+
+  return '';
+};
+
+export const stateValidator = state => {
+  if (!state || state.length <= 0) return 'State cannot be empty.';
+
+  return '';
+};
+
 export const emailValidator = email => {
   const re = /\S+@\S+\.\S+/;
 

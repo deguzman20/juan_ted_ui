@@ -10,7 +10,8 @@ import {
   firstNameValidator, 
   lastNameValidator,
   emailValidator,
-  mobileNumberValidator } from './../../../../core/utils';
+  mobileNumberValidator,
+  introductionValidator } from './../../../../core/utils';
 
 import Loader from "react-native-modal-loader";
 
@@ -28,6 +29,7 @@ const EditProfileScreen = ({ navigation, tasker_id }) => {
   const [last_name, setLastName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ valu: '', error: '' })
   const [mobile_number, setMobileNumber] = useState({ value: '', error: '' })
+  const [introduction, setIntroduction] = useState({ value: '', error: '' })
 
   const { loading, error } = useQuery(TASKER_INFO, {
     onCompleted: (data) => {
@@ -35,6 +37,7 @@ const EditProfileScreen = ({ navigation, tasker_id }) => {
       setLastName({ value: data.tasker[0].lastName })
       setEmail({ value: data.tasker[0].email })
       setMobileNumber({ value: data.tasker[0].mobileNumber })
+      setIntroduction(({ value: data.tasker[0].introduction }))
     },
     variables: { tasker_id: parseInt(tasker_id) },
     pollInterval: 500
@@ -47,12 +50,14 @@ const EditProfileScreen = ({ navigation, tasker_id }) => {
     const lastNameError = lastNameValidator(last_name.value)
     const emailError = emailValidator(email.value)
     const mobileNumberError = mobileNumberValidator(mobile_number.value)
+    const introductionError = introductionValidator(introduction.value)
 
-    if (firstNameError || lastNameError || emailError || mobileNumberError) {
+    if (firstNameError || lastNameError || emailError || mobileNumberError || introductionError) {
       setFirstName({ ...first_name, error: firstNameError })
       setLastName({ ...last_name, error: lastNameError })
       setEmail({ ...email, error: emailError })
       setMobileNumber({ ...mobile_number, error: mobileNumberError })
+      setIntroduction({ ...introduction, error: introductionError })
       return;
     }
 
@@ -67,7 +72,8 @@ const EditProfileScreen = ({ navigation, tasker_id }) => {
                 first_name: first_name.value,
                 last_name: last_name.value,
                 email: email.value,
-                mobile_number: mobile_number.value
+                mobile_number: mobile_number.value,
+                introduction: introduction.value
               } 
             }).then((data) => {
               if(data.data.updateTaskerInfo.response === 'Tasker info was updated!'){
@@ -129,6 +135,16 @@ const EditProfileScreen = ({ navigation, tasker_id }) => {
               onChangeText={text => setMobileNumber({ value: text, error: '' })}
               error={!!mobile_number.error}
               errorText={mobile_number.error}
+            />
+
+            <TextInput
+              label="Introduction"
+              returnKeyType="done"
+              value={introduction.value}
+              onChangeText={text => setIntroduction({ value: text, error: '' })}
+              error={!!introduction.error}
+              errorText={introduction.error}
+              multiline={true}
             />
 
             <Button mode="contained" onPress={ _onEditProfileInfoPressed } style={styles.button}>

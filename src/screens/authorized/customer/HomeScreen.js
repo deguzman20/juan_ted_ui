@@ -39,6 +39,7 @@ import ReviewsScreen from './geocoded_taskers/ReviewsScreen';
 import ChooseDayScreen from './date_time/ChooseDayScreen';
 import DetailsScreen from './view_details/DetailsScreen';
 import PlaceOrderScreen from './place_order/PlaceOrderScreen';
+import NewBillingAddressScreen from './place_order/NewBillingAddressScreen';
 import DebitCardScreen from './place_order/DebitCardScreen';
 import PaypalScreen from './place_order/PaypalScreen';
 
@@ -255,6 +256,13 @@ const App = createStackNavigator({
     navigationOptions: {
       title: '',
       headerStyle: {}
+    }
+  },
+  NewBillingAddressScreen: {
+    screen: NewBillingAddressScreen,
+    navigationOptions: {
+      title: '',
+      headerVisible: false,
     }
   },
   PaypalScreen: {

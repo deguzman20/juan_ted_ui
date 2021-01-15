@@ -17,7 +17,7 @@ const GoogleMapScreen = ({ navigation }) => {
   const _map = useRef(null)
   const netInfo = useNetInfo()
   const [formatted_address, setFormattedAddress] = useState('')
-  const [geolocation, setGeolocation] = useState({ lng: 1100.5680867, lat: 120.8805576 })
+  const [geolocation, setGeolocation] = useState({ lng: 14.4846614, lat: 120.9770033 })
   const mapRef = React.createRef();
 
   useEffect(() =>{
@@ -74,7 +74,7 @@ const GoogleMapScreen = ({ navigation }) => {
               initialRegion={{
                 latitude: geolocation.lat,
                 longitude: geolocation.lng,
-                latitudeDelta: 60,
+                latitudeDelta: 400,
                 longitudeDelta: ITEM_WIDTH / ITEM_HEIGHT,
               }}
               customMapStyle={[]}
@@ -115,6 +115,7 @@ const GoogleMapScreen = ({ navigation }) => {
         }
         <GooglePlacesAutocomplete
           placeholder='Search'
+          filterReverseGeocodingByTypes={['']}
           onPress={(details = null) => {
             axios.get(`${GOOGLE_GEOCODE_URL}?place_id=${details['place_id']}&key=${GOOGLE_PLACE_API_KEY}`)
             .then((response) => {
@@ -139,7 +140,11 @@ const GoogleMapScreen = ({ navigation }) => {
           query={{
             key: GOOGLE_PLACE_API_KEY,
             language: 'en',
-            components: 'country:ph'
+            radius: '3000',
+            components: 'country:ph',
+            location: '14.4846614, 120.9770033',
+            strictbounds: true
+            
           }}
           styles={{
             textInputContainer: {

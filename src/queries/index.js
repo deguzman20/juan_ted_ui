@@ -568,6 +568,21 @@ export const PENDING_TRANSACTION_LIST = gql `
     }
   }`;
 
+export const BILLING_ADDRESSES_LIST = gql `
+  query billingAddressList($customer_id: Int!) {
+    billingAddressList(customerId: $customer_id) {
+      id
+      firstName
+      lastName
+      addressLineOne
+      addressLineTwo
+      state
+      postalCode
+      email
+      mobileNumber
+    }
+  }`;
+
 export const PENDING_TRANSACTION_SERVICE_INFO = gql `
   query pendingTransactionServiceInfo($transaction_id: Int!) {
     pendingTransactionServiceInfo(transactionId: $transaction_id) {
@@ -615,12 +630,12 @@ export const UPDATE_CUSTOMER_INFO = gql`
   }`;
 
 export const UPDATE_TASKER_INFO = gql `
-  mutation updateTaskerInfo($tasker_id: Int!, $first_name: String!, $last_name: String!, $email: String, $mobile_number: String!) {
-    updateTaskerInfo(taskerId: $tasker_id, firstName: $first_name, lastName: $last_name, email: $email, mobileNumber: $mobile_number) {
-      response
-      statusCode
-    }
-  }`;
+  mutation updateTaskerInfo($tasker_id: Int!, $first_name: String!, $last_name: String!, $email: String, $mobile_number: String!, $introduction: String!) {
+      updateTaskerInfo(taskerId: $tasker_id, firstName: $first_name, lastName: $last_name, email: $email, mobileNumber: $mobile_number, introduction: $introduction) {
+        response
+        statusCode
+      }
+    }`;
 
 export const UPDATE_TRANSACTION_STATUS = gql `
   mutation updateTransactionStatus($transaction_id: Int!) {
@@ -723,17 +738,24 @@ export const CUSTOMER_SHIPPING_ADDRESS = gql `
     }
   }`;
 
-export const CREATE_PAYMENT_TOKEN = gql `
-  mutation createToken($number: String!, $exp_month: String! $exp_year: String!, $cvc: String!, $address_line_one: String, $address_line_two: String, $city: String, $state: String, $postal_code: String, $country: String, $name: String, $email: String, $mobile_no: String) {
-    createToken(number: $number, expMonth: $exp_month, expYear: $exp_year, cvc: $cvc, addressLineOne: $address_line_one, addressLineTwo: $address_line_two, city: $city, state: $state, postalCode: $postal_code, country: $country, name: $name, email: $email, mobileNo: $mobile_no){
+export const CREATE_PAYMENT_TOKEN = gql `mutation createToken($number: String!, $exp_month: String! $exp_year: String!, $cvc: String!, $billing_address_id: Int!) {
+  createToken(number: $number, expMonth: $exp_month, expYear: $exp_year, cvc: $cvc, billingAddressId: $billing_address_id){
+    response
+    statusCode
+  }
+}`;
+
+export const PAY_VIA_DEBIT_CARD = gql `
+  mutation payViaCard($token: String!, $amount: Int!, $customer_id: Int!){
+    payViaCard(token: $token, amount: $amount,customerId:$customer_id){
       response
       statusCode
     }
   }`;
 
-export const PAY_VIA_DEBIT_CARD = gql `
-  mutation payViaCard($token: String!, $amount: Int!){
-    payViaCard(token: $token, amount: $amount){
+export const CREATE_BILLING_ADDRESS = gql `
+  mutation createBillingAddress($customer_id: Int!, $first_name: String!, $last_name: String!, $address_line_one: String!, $address_line_two: String!, $city: String!, $state: String!, $postal_code: String!, $country: String!, $email: String!, $mobile_number: String!) {
+    createBillingAddress(customerId: $customer_id, firstName: $first_name, lastName: $last_name, addressLineOne: $address_line_one, addressLineTwo: $address_line_two, city: $city, state: $state, postalCode: $postal_code, country: $country, email: $email, mobileNumber: $mobile_number) {
       response
       statusCode
     }

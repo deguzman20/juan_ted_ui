@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     fontSize: 14
   },
   viewDetails: {
-    top: -10,
+    top: -5,
     fontSize: 15,
     fontWeight: 'bold',
     color: '#4a71e3'
@@ -55,7 +55,7 @@ export const styles = StyleSheet.create({
   chevron: {
     position: 'absolute',
     left: '60%',
-    top: 50
+    top: 68
   },
   image: {
     flex: 1,

@@ -100,7 +100,7 @@ const NailCareScreen = ({ navigation }) => {
               what_is_included: data["service"][2]["whatIsIncludeds"]
             }
           ]}
- 
+
           renderItem={({ item }) => 
             <TouchableWithoutFeedback onPress={() => { 
               navigation.navigate('DetailsScreen', {
@@ -131,6 +131,8 @@ const NailCareScreen = ({ navigation }) => {
                   <View style={styles.containerDetails}>
                     <View style={styles.containerRow}>
                       <Text style={styles.serviceItemName}>{item.key}</Text>
+                    </View>
+                    <View>
                       <Text style={styles.serviceItemPrice}>₱ {item.price}</Text>
                     </View>
                     <TouchableWithoutFeedback onPress={() => { 
@@ -204,49 +206,49 @@ const NailCareScreen = ({ navigation }) => {
             onPress={() => { 
               if(rebond.quantity < 1 && keratin.quantity < 1 && hair_cut.quantity < 1){
                 Alert.alert('No selected service')
-              }else{
- 
-              navigation.navigate('GoogleMapScreen', { 
-              totalPrice, 
-              service_type_id: parseInt(navigation.state.params.service_type_id),
-              tasker_id: navigation.state.params.tasker_id,  
-              services: [
-                { 
-                  service_id: 2,
-                  quantity: rebond.quantity,
-                }, 
-                {
-                  service_id: 3,
-                  quantity: keratin.quantity
-                },
-                { 
-                  service_id: 4,
-                  quantity: hair_cut.quantity
-                }],
-              service_details: [
-                { 
-                  service_id: 2,
-                  quantity: rebond.quantity,
-                  service_name: data["service"][0]["name"],
-                  image: data["service"][0]["image"], 
-                  price: data["service"][0]["price"]
-                }, 
-                {
-                  service_id: 3,
-                  quantity: keratin.quantity,
-                  service_name: data["service"][1]["name"],
-                  image: data["service"][1]["image"],  
-                  price: data["service"][1]["price"]
-                },
-                { 
-                  service_id: 4,
-                  quantity: hair_cut.quantity,
-                  service_name: data["service"][2]["name"],
-                  image: data["service"][2]["image"],
-                  price: data["service"][2]["price"]
-                }]
-              }) 
-            }
+              }
+              else{
+                navigation.navigate('GoogleMapScreen', { 
+                totalPrice, 
+                service_type_id: parseInt(navigation.state.params.service_type_id),
+                tasker_id: navigation.state.params.tasker_id,  
+                services: [
+                  { 
+                    service_id: 2,
+                    quantity: rebond.quantity,
+                  }, 
+                  {
+                    service_id: 3,
+                    quantity: keratin.quantity
+                  },
+                  { 
+                    service_id: 4,
+                    quantity: hair_cut.quantity
+                  }],
+                service_details: [
+                  { 
+                    service_id: 2,
+                    quantity: rebond.quantity,
+                    service_name: data["service"][0]["name"],
+                    image: data["service"][0]["image"], 
+                    price: data["service"][0]["price"]
+                  }, 
+                  {
+                    service_id: 3,
+                    quantity: keratin.quantity,
+                    service_name: data["service"][1]["name"],
+                    image: data["service"][1]["image"],  
+                    price: data["service"][1]["price"]
+                  },
+                  { 
+                    service_id: 4,
+                    quantity: hair_cut.quantity,
+                    service_name: data["service"][2]["name"],
+                    image: data["service"][2]["image"],
+                    price: data["service"][2]["price"]
+                  }]
+                }) 
+              }
             }} 
           />
         </View>

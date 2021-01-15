@@ -11,30 +11,43 @@ import { styles } from '../../../../styles/authorized/customer/place_order/Place
 import { formatMoney } from './../../../../core/utils';
 import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
-import { CUSTOMER_SHIPPING_ADDRESS } from './../../../../queries';
+import { BILLING_ADDRESSES_LIST } from './../../../../queries';
 import { DEFAULT_URL, ITEM_WIDTH } from "./../../../../actions/types";
 import { useNetInfo } from "@react-native-community/netinfo";
+
 import Loader from "react-native-modal-loader";
 import axios from 'axios';
+import { isEqual } from 'apollo-utilities';
 
 const PlaceOrderScreen = ({ navigation, customer_id }) => {
   const netInfo = useNetInfo()
   const total_cost_arr = []
+  const billing_address_arr = []
   const shipping_address_arr = [navigation.state.params.formatted_address]
-  const [shipping_address, setShippingAddress] = useState(navigation.state.params.formatted_address)
   const [payment_method, setPaymentMethod] = useState('')
+  const [shipping_address, setShippingAddress] = useState('')
+  const [billing_address, setBillingAddress] = useState({ value:'', id: null })
   const [isLoading, setLoading] = useState(false)
-  const [shippingAddressVisibility, setShippingAddressVisibility] = useState(false)
+
+
+  const [billingAddressVisibility, setBillingAddressVisibility] = useState(false)
   const [paymentMethodVisibility, setPaymentMethodVisibility] = useState(false)
-  const { loading, error, data } = useQuery(CUSTOMER_SHIPPING_ADDRESS, {
+
+  const { loading, error, data } = useQuery(BILLING_ADDRESSES_LIST, {
+    onCompleted: (data) => {
+      billing_address_arr.push(data.billingAddressList)
+    },
     variables: {
       customer_id: parseInt(customer_id)
     },
     pollInterval: 1000
   })
 
-  shippingAddressToggleOverlay = () => {
-    setShippingAddressVisibility(!shippingAddressVisibility)
+  billingAddressToggleOverlay = () => {
+    if(billing_address_arr !== null){
+      console.log(billing_address_arr)
+    }
+    setBillingAddressVisibility(!billingAddressVisibility)
   }
 
   paymentMethodToggleOverlay = () => {
@@ -44,7 +57,7 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
 
   const _onCheckoutPressed = () => {
     if(netInfo.isConnected){
-      if(payment_method !== ''){
+      if(!isEqual(payment_method, '') && !isEqual(billing_address.value, '')){
         Alert.alert(
           "Are you sure you want to checkout your order",
           "",
@@ -70,7 +83,8 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
                           from: navigation.state.params.from,
                           to: navigation.state.params.to,
                           customer_id: navigation.state.params.customer_id,
-                          tasker_id: navigation.state.params.tasker_id
+                          tasker_id: navigation.state.params.tasker_id,
+                          billing_address_id: billing_address.id
                         }
                       })
                       .then((response) => {
@@ -92,7 +106,8 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
                             }
                             else if(payment_method === 'Debit'){
                               navigation.navigate('DebitCardScreen', {
-                                amount: total_cost_arr.reduce((a, b) => a + b)
+                                amount: total_cost_arr.reduce((a, b) => a + b),
+                                billing_address_id: billing_address.id
                               })
                             }
                           }
@@ -107,8 +122,14 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
           { cancelable: false }
         )
       }
-      else{
+      else if(isEqual(payment_method, '') && !isEqual(billing_address.value, '')){
         Alert.alert("Please select payment method")
+      }
+      else if(!isEqual(payment_method, '') && isEqual(billing_address.value, '')){
+        Alert.alert("Please select billing address")
+      }
+      else {
+        Alert.alert("Please select billing address and payment method")
       }
     }
   }
@@ -138,17 +159,47 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
     )
   }
 
+  keyBillingExtractor = (item, index) => index.toString()
+  
+  renderBillingItem = ({ item }) => {
+    return(
+      <ListItem
+        title={    
+          <View style={styles.serviceWrapper}>
+            <Text>
+              {item.addressLineOne}
+            </Text>
+          </View>
+        }
+        subtitle={
+          <View style={styles.priceWrapper}>
+          </View>
+        }
+        // leftAvatar={{ source: { uri: `${DEFAULT_URL}/${item.image}` } }}
+        rightElement={
+          <Button title={"Select"} 
+            buttonStyle={styles.bt_main_color}
+            onPress={() => {
+              setBillingAddress({ value: item.addressLineOne, id: parseInt(item.id) })
+              billingAddressToggleOverlay()
+            }}
+          />
+        }
+        bottomDivider
+      />
+    )
+  }
+
   navigation.state.params.service_details.map((ts, i) => {
     total_cost_arr.push(ts.price * ts.quantity)
   })
 
 
   if(loading || error) return null;
-  if(data.customerShippingAddressList.length >= 1){
-    data.customerShippingAddressList.map((sa) => {
-      shipping_address_arr.push(sa.formattedAddress)
-    })
+  if(data.billingAddressList.length >= 1){
+    billing_address_arr.push(data.billingAddressList);
   }
+  
 
   return(
     <View style={{ flex: 1 }}>
@@ -171,14 +222,19 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
           </View>
         </View> 
       </View>
-      <View style={styles.shipping_address_and_amount_container}>
-        <Text style={styles.shipping_address_txt}>Shipping Address</Text>
-        <Text style={styles.shipping_address_content_txt}>
-          {shipping_address}
+      <View style={styles.billing_address_and_amount_container}>
+        <Text style={styles.billing_address_txt}>Billing Address</Text>
+        <Text style={styles.bliing_address_content_txt}>
+          {billing_address.value}
         </Text>
-        <TouchableWithoutFeedback onPress={() => { shippingAddressToggleOverlay() }}>
+        <TouchableWithoutFeedback onPress={() => { billingAddressToggleOverlay() }}>
           <Text style={styles.change_txt}>
-            change
+            {isEqual(billing_address.value, '') ? 'Select' : 'Change'}
+          </Text>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => { navigation.navigate('NewBillingAddressScreen') }}>
+          <Text style={styles.change_txt}>
+            Add new billing address
           </Text>
         </TouchableWithoutFeedback>
         <Divider style={styles.divider} />
@@ -188,7 +244,7 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
         </Text>
         <TouchableWithoutFeedback onPress={() => { paymentMethodToggleOverlay() }}>
           <Text style={styles.change_txt}>
-            change
+          {isEqual(payment_method, '') ? 'Select' : 'Change'}
           </Text>
         </TouchableWithoutFeedback>
         <Divider style={styles.divider} />
@@ -213,7 +269,7 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
           buttonStyle={styles.select_button_background_style} />
       </View>
       <Loader loading={isLoading} color="#ff66be" />
-      <Overlay isVisible={shippingAddressVisibility} onBackdropPress={shippingAddressToggleOverlay}>
+      <Overlay isVisible={billingAddressVisibility} onBackdropPress={billingAddressToggleOverlay}>
         <View style={{
           flex: 1,
           flexDirection: 'column',
@@ -221,23 +277,23 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
         }}>
           <SafeAreaView />
           <View style={{ width: ITEM_WIDTH, flex: 6, paddingLeft: '10%', paddingRight: '10%' }}>
-            <RadioButton.Group onValueChange={value => { setShippingAddress(value) }} value={shipping_address}>
-              {
-                shipping_address_arr.map(sa => {
-                  return(
-                    <React.Fragment>
-                      <RadioButton.Item label={sa} value={sa} />
-                      <Divider />
-                    </React.Fragment>
-                  )
-                })
-              }
-            </RadioButton.Group>
+            <View style={{ flex: 0.2 }}>
+              <View style={styles.first_row_container}>
+                <Text h4 style={styles.select_billing_txt}>
+                  Select Billing Address
+                </Text> 
+              </View>
+            </View>
+            <FlatList
+                keyExtractor={keyBillingExtractor}
+                data={billing_address_arr[0]}
+                renderItem={renderBillingItem}
+              />
           </View>
           <View style={{ width: ITEM_WIDTH, flex: 1 }}>            
             <SafeAreaView />
             <Button title="Close" 
-              onPress={() => { shippingAddressToggleOverlay() }} 
+              onPress={() => { billingAddressToggleOverlay() }} 
               buttonStyle={styles.close_button_style}
             />
           </View>
@@ -252,14 +308,14 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
           <SafeAreaView />
           <View style={{ width: ITEM_WIDTH, flex: 6, paddingLeft: '10%', paddingRight: '10%' }}>
             <RadioButton.Group onValueChange={value => { setPaymentMethod(value) }} value={payment_method}>
-                <React.Fragment>
+                <>
                   <RadioButton.Item label={'Paypal'} value={'Paypal'} />
                   <Divider />
                   <RadioButton.Item label={'Debit'} value={'Debit'} />
                   <Divider />
                   <RadioButton.Item label={'Gcash'} value={'Gcash'} />
                   <Divider />
-                </React.Fragment>
+                </>
             </RadioButton.Group>
           </View>
           <View style={{ width: ITEM_WIDTH, flex: 1 }}>            

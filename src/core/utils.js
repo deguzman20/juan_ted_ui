@@ -101,6 +101,12 @@ export const todoDescriptionValidator = todo_description => {
   return '';
 };
 
+export const introductionValidator = introduction => {
+  if (!introduction || introduction.length <= 0) return 'Introduction cannot be empty.';
+
+  return '';
+};
+
 export const formatMoney = (amount, decimalCount = 2, decimal = ".", thousands = ",") => {
   try {
     decimalCount = Math.abs(decimalCount);

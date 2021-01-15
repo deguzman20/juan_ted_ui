@@ -40,7 +40,7 @@ const ScheduledTaskScreen = ({ customer_id, navigation }) => {
 
   _onNavigateToTransactionInfoPressed = (id) => {
     if(netInfo.isConnected){
-      navigation.navigate('CompletedTransactionInfoScreen', {
+      navigation.navigate('ScheduledTransactionInfoScreen', {
         transaction_id: parseInt(id)
       })
     }
@@ -58,8 +58,8 @@ const ScheduledTaskScreen = ({ customer_id, navigation }) => {
       })
     })
 
-  if(compoundCode !== ''){
-    if(compoundCode.match(pattern) !== null){
+  // if(compoundCode !== ''){
+  //   if(compoundCode.match(pattern) !== null){
       return(
         <React.Fragment>
           <RNSchedule
@@ -72,14 +72,14 @@ const ScheduledTaskScreen = ({ customer_id, navigation }) => {
           <InternetConnectionChecker />
         </React.Fragment>
       )
-    }
-    else{
-      return <OutOfLocationService />
-    }
-  }
-  else{
-    return <Loading />
-  }
+  //   }
+  //   else{
+  //     return <OutOfLocationService />
+  //   }
+  // }
+  // else{
+  //   return <Loading />
+  // }
 }
 
 const mapStateToProps = ({ customerReducer }) => {

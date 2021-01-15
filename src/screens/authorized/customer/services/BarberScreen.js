@@ -96,6 +96,8 @@ const BarberScreen = ({ navigation }) => {
                   <View style={styles.containerDetails}>
                     <View style={styles.containerRow}>
                       <Text style={styles.serviceItemName}>{item.key}</Text>
+                    </View>
+                    <View>
                       <Text style={styles.serviceItemPrice}>₱ {item.price}</Text>
                     </View>
                     <TouchableWithoutFeedback onPress={() => {

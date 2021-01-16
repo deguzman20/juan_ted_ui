@@ -58,7 +58,8 @@ const DebitCardScreen = ({ customer_id, navigation }) => {
                   variables: {
                     token: data.createToken.response,
                     amount: parseInt(navigation.state.params.amount) + 10000,
-                    customer_id: parseInt(customer_id)
+                    customer_id: parseInt(customer_id),
+                    tasker_id: parseInt(navigation.state.params.tasker_id)
                   }
                 }).then(({ data }) => {
                   if(_.isEqual(data.payViaCard.response, 'Paid Successfuly')){

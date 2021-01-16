@@ -7,6 +7,21 @@ import ScheduledTaskScreen from "./scheduled/ScheduledTaskScreen";
 import ScheduledTransactionInfoScreen from '../transaction_info/ScheduledTransactionInfoScreen';
 import CompletedTransactionInfoScreen from '../transaction_info/CompletedTransactionInfoScreen';
 
+const ScheduledStack = createStackNavigator({
+  ScheduledTaskScreen: {
+    screen: ScheduledTaskScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+  },
+  ScheduledTransactionInfoScreen: {
+    screen: ScheduledTransactionInfoScreen,
+    navigationOptions: {
+      headerShown: false
+    }
+  }
+})
+
 const CompletedStack = createStackNavigator({
   CompletedTaskScreen: {
     screen: CompletedTaskScreen,
@@ -22,20 +37,6 @@ const CompletedStack = createStackNavigator({
   }
 });
 
-const ScheduledStack = createStackNavigator({
-  ScheduledTaskScreen: {
-    screen: ScheduledTaskScreen,
-    navigationOptions: {
-      headerShown: false
-    }
-  },
-  ScheduledTransactionInfoScreen: {
-    screen: ScheduledTransactionInfoScreen,
-    navigationOptions: {
-      headerShown: false
-    }
-  }
-})
 
 const AppNavigator = createMaterialTopTabNavigator({  
   "Scheduled": ScheduledStack,  

@@ -102,12 +102,15 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
                           if(transaction_service_response.data === 'Transaction service was created successfuly'){
                             setLoading(false)
                             if(payment_method === 'Paypal'){
-                              navigation.navigate('PaypalScreen')
+                              navigation.navigate('PaypalScreen', {
+                                tasker_id: navigation.state.params.tasker_id
+                              })
                             }
                             else if(payment_method === 'Debit'){
                               navigation.navigate('DebitCardScreen', {
                                 amount: total_cost_arr.reduce((a, b) => a + b),
-                                billing_address_id: billing_address.id
+                                billing_address_id: billing_address.id,
+                                tasker_id: navigation.state.params.tasker_id
                               })
                             }
                           }
@@ -313,7 +316,7 @@ const PlaceOrderScreen = ({ navigation, customer_id }) => {
                   <Divider />
                   <RadioButton.Item label={'Debit'} value={'Debit'} />
                   <Divider />
-                  <RadioButton.Item label={'Gcash'} value={'Gcash'} />
+                  {/* <RadioButton.Item label={'Gcash'} value={'Gcash'} /> */}
                   <Divider />
                 </>
             </RadioButton.Group>

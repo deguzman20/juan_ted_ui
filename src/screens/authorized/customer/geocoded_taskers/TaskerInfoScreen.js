@@ -92,6 +92,7 @@ const TaskerInfoScreen = ({ navigation }) => {
         from: navigation.state.params.start_from,
         to: navigation.state.params.start_to,
         customer_id: navigation.state.params.customer_id,
+        customer_id: navigation.state.params.tasker_id,
         tasker_id: navigation.state.params.tasker_id,
         services: navigation.state.params.services,
         service_details: navigation.state.params.service_details

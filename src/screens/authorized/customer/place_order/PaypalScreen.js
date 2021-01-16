@@ -29,12 +29,12 @@ const PaypalScreen = ({ customer_id, navigation }) => {
       { Platform.OS === 'ios' ? 
         (
           <WebView
-            source={{ url: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` }}
+            source={{ url: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}?tasker_id=${navigation.state.params.tasker_id}` }}
             scalesPageToFit={true}
             onLoad={
               e => {
                 // Update the state so url changes could be detected by React and we could load the mainUrl.
-                `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` 
+                `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}?tasker_id=${navigation.state.params.tasker_id}` 
               }
             }
             incognito={true}
@@ -44,7 +44,7 @@ const PaypalScreen = ({ customer_id, navigation }) => {
         ) :
         (
           <WebView
-            source={{ uri: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}` }}
+            source={{ uri: `${DEFAULT_URL}/redirect_to_paypal?customer_id=${customer_id}?tasker_id=${navigation.state.params.tasker_id}` }}
             // scalesPageToFit={true}
             // onLoad={
             //   e => {

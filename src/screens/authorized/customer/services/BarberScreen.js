@@ -201,5 +201,5 @@ const BarberScreen = ({ navigation }) => {
     </>
   )
 }
- 
+
 export default memo(BarberScreen)

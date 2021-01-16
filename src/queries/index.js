@@ -746,8 +746,8 @@ export const CREATE_PAYMENT_TOKEN = gql `mutation createToken($number: String!, 
 }`;
 
 export const PAY_VIA_DEBIT_CARD = gql `
-  mutation payViaCard($token: String!, $amount: Int!, $customer_id: Int!){
-    payViaCard(token: $token, amount: $amount,customerId:$customer_id){
+  mutation payViaCard($token: String!, $amount: Int!, $customer_id: Int!, $tasker_id: Int!){
+    payViaCard(token: $token, amount: $amount, customerId:$customer_id, taskerId: $tasker_id){
       response
       statusCode
     }

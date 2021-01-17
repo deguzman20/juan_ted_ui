@@ -21,6 +21,7 @@ import InternetConnectionChecker from '../../../../components/atoms/snackbar/Int
 import Loading from '../../../../components/atoms/loader/Loading';
 import OutOfLocationService from '../../../../components/molecules/out_of_location_service/OutOfLocationService';
 import axios from 'axios';
+import isEqual from 'lodash/isEqual';
 
 
 const TaskerServiceScreen = ({ navigation, customer_id }) =>{
@@ -66,7 +67,7 @@ const TaskerServiceScreen = ({ navigation, customer_id }) =>{
   },[])
 
   navigateToService = (id) => {
-    if(id === 1){
+    if(isEqual(id, 1)){
       if(netInfo.isConnected){
         navigation.navigate('BarberScreen', 
         { 
@@ -75,7 +76,7 @@ const TaskerServiceScreen = ({ navigation, customer_id }) =>{
         })
       }
     }
-    else if(id === 2){
+    else if(isEqual(id, 2)){
       if(netInfo.isConnected){
         navigation.navigate('HairSalonScreen', 
         { 

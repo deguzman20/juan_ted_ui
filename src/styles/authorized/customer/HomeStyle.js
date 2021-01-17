@@ -15,8 +15,6 @@ export const styles = StyleSheet.create({
     color: 'white'
   },
   icon_profile: {
-    left: '100%', 
-    marginTop: 75,
     color: 'white'
   },
   wallet_wrapper: {
@@ -64,5 +62,5 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1
-  }
+  },
 })

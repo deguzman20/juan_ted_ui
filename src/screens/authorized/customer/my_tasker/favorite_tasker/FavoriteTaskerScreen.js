@@ -28,6 +28,7 @@ import Loading from '../../../../../components/atoms/loader/Loading';
 import OutOfLocationService from '../../../../../components/molecules/out_of_location_service/OutOfLocationService';
 import axios from 'axios';
 import sumBy from 'lodash/sumBy';
+import isEqual from 'lodash/isEqual';
 
 const FavoriteTaskerScreen = ({ customer_id, navigation }) => {
   const netInfo = useNetInfo()
@@ -57,7 +58,7 @@ const FavoriteTaskerScreen = ({ customer_id, navigation }) => {
         }).then(({ data }) => {
           axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${currentLatitude},${currentLongitude}&key=${GOOGLE_PLACE_API_KEY}`)
           .then((response) => {
-            if(response.data.plus_code.compound_code !== ''){
+            if(!isEqual(response.data.plus_code.compound_code, '')){
               setCompoundCode(response.data.plus_code.compound_code)
             }
           })

@@ -19,8 +19,10 @@ import Button from './../../../../components/atoms/button/Button';
 import TextInput from './../../../../components/atoms/text_input/TextInput';
 import BackButton from './../../../../components/atoms/button/BackButton';
 
-import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+import isEqual from 'lodash/isEqual';
+import isNull from 'lodash/isNull';
 
+import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
 
 
 const ChangePasswordScreen = ({ navigation, tasker_id }) => {
@@ -52,7 +54,7 @@ const ChangePasswordScreen = ({ navigation, tasker_id }) => {
       setTimeout(() => {
         for(let i = 1; i <= 3; i++){
           setLoading(true)
-          if(i === 3){
+          if(isEqual(i, 3)){
             updatePassword({ 
               variables: { 
                 id: parseInt(tasker_id), 
@@ -62,8 +64,8 @@ const ChangePasswordScreen = ({ navigation, tasker_id }) => {
                 customer: false
               } 
             }).then(({ data }) =>{
-              if(data !== null){
-                if(data.updatePassword.response === "Password Successfuly updated!"){
+              if(!isNull(data)){
+                if(isEqual(data.updatePassword.response, "Password Successfuly updated!")){
                   setLoading(false)
                   Alert.alert(data.updatePassword.response)
                   navigation.navigate('ProfileScreen')

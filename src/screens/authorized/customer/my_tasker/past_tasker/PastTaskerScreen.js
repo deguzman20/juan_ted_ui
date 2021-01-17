@@ -124,7 +124,7 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
         rightElement={
           <Button 
             buttonStyle={{ backgroundColor: '#009C3C' }}
-            title={`${item.favorate ? 'Remove': 'Add'} to favorite`}
+            title={`${item.favorate ? 'Remove from favorites': 'Add to favorite'}`}
             onPress={() => { item.favorate ?  _onRemoveToFavorateTaskerPressed(item.id) :  _onAddToFavorateTaskerPressed(item.id) }}
           /> 
         }
@@ -136,9 +136,9 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
 
   if(loading || error) return null;
 
-  if(compoundCode !== ''){
-    if(compoundCode.match(pattern) === null){
-      if(data.pastTaskerList.length >= 1){
+  // if(compoundCode !== ''){
+  //   if(compoundCode.match(pattern) === null){
+  //     if(data.pastTaskerList.length >= 1){
         return(
           <React.Fragment>
             <SafeAreaView />
@@ -159,18 +159,18 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
             </View>  
           </React.Fragment>
         )
-      }
-      else {
-        return <EmptyPastTasker />
-      }
-    }
-    else{
-      return <OutOfLocationService />
-    }
-  }
-  else{
-    return <Loading />
-  }
+  //     }
+  //     else {
+  //       return <EmptyPastTasker />
+  //     }
+  //   }
+  //   else{
+  //     return <OutOfLocationService />
+  //   }
+  // }
+  // else{
+  //   return <Loading />
+  // }
 }
 
 const mapStateToProps = ({ customerReducer }) => {

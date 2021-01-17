@@ -3,15 +3,17 @@ import { View, FlatList, ScrollView, Platform } from 'react-native';
 import { Text, ListItem, Avatar, Button, Divider } from 'react-native-elements';
 import { styles } from './../../../../styles/authorized/tasker/transaction_info/TransactionInfoStyle';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { connect } from 'react-redux';
 import { useNetInfo } from '@react-native-community/netinfo';
-import { TRANSACTION_SERVICE, UPDATE_TRANSACTION_STATUS_TO_DONE } from '../../../../queries';
+import { TRANSACTION_SERVICE, UPDATE_TRANSACTION_STATUS_TO_DONE, CREATE_NOTIFICATION } from '../../../../queries';
 import { DEFAULT_URL, ITEM_WIDTH, ITEM_HEIGHT } from '../../../../actions/types';
 import { formatMoney } from '../../../../core/utils';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Loader from "react-native-modal-loader";
 import InternetConnectionChecker from '../../../../components/atoms/snackbar/InternetConnectionChecker';
+import isEqual from 'lodash/isEqual';
 
-const TransactionInfoScreen = ({ navigation }) => {
+const TransactionInfoScreen = ({ navigation, tasker_id }) => {
   const total_cost_arr = []
   const netInfo = useNetInfo()
   const [isLoading, setLoading] = useState(false)
@@ -19,38 +21,53 @@ const TransactionInfoScreen = ({ navigation }) => {
   const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5)
   const LONGITUDE_DELTA = LATITUDE_DELTA / ASPECT_RATIO
   const [update_transaction_status_to_done] = useMutation(UPDATE_TRANSACTION_STATUS_TO_DONE)
+  const [create_notification] = useMutation(CREATE_NOTIFICATION)
   const { loading, error, data } = useQuery(TRANSACTION_SERVICE, {
     variables: {
       transaction_id: parseInt(navigation.state.params.transaction_id)
     }
   })
 
-  _onMarkAsDonePressed = () => {
-    if(netInfo.isConnected){
-      setTimeout(() => {
-        for(let i = 1; i <= 3; i++){
-          setLoading(true)
-          update_transaction_status_to_done({ 
-            variables: {
-              transaction_id: parseInt(navigation.state.params.transaction_id)
-            }
-          }).then(({ data }) => {
-            if(i === 3 && data.updateTransactionStatusToDone.response === 'Update was successfully') {
-              setLoading(false)
-              // Alert.alert("Mark as completed");
-              navigation.navigate('AppointmentScreen');
-            }
-          })
-        }
-      },3000)
-    }
-  } 
-
   if(loading || error) return null; 
   if([data.transactionService].length >= 1){
-    const { firstName, lastName, image } = data.transactionService.customer;
-    keyExtractor = (item, index) => index.toString()    
-    renderItem = ({ item }) => {
+    const { firstName, lastName, image, id } = data.transactionService.customer;
+
+    
+    
+    const _onMarkAsDonePressed = () => {
+      if(netInfo.isConnected){
+        setTimeout(() => {
+          for(let i = 1; i <= 3; i++){
+            setLoading(true)
+            update_transaction_status_to_done({ 
+              variables: {
+                transaction_id: parseInt(navigation.state.params.transaction_id)
+              }
+            }).then(({ data }) => {
+              if(i === 3 && data.updateTransactionStatusToDone.response === 'Update was successfully') {
+                setLoading(false)
+                create_notification({
+                  variables: {
+                    customer_id: parseInt(id),
+                    tasker_id: tasker_id,
+                    text: 'Your task was completed'
+                  }
+                }).then(({ data: { createNotification: { response } } }) => {
+                  if(isEqual(response, "Successfuly updated")){
+                    
+                  }
+                })
+                // Alert.alert("Mark as completed");
+                navigation.navigate('AppointmentScreen');
+              }
+            })
+          }
+        },3000)
+      }
+    } 
+
+    const keyExtractor = (item, index) => index.toString()    
+    const renderItem = ({ item }) => {
       const { name, price, image } = item.service;
       return(
         <ListItem
@@ -207,4 +224,10 @@ const TransactionInfoScreen = ({ navigation }) => {
   }
 }
 
-export default memo(TransactionInfoScreen)
+const mapStateToProps = ({ taskerReducer }) => {
+  return {
+    tasker_id: parseInt(taskerReducer.id)
+  }
+}
+
+export default memo(connect(mapStateToProps, null)(TransactionInfoScreen))

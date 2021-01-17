@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     width: ITEM_WIDTH,
     paddingLeft: '4%',
-    paddingRight: '4s%',
+    paddingRight: '4%',
     paddingTop: '1%'
   },
   divider: {

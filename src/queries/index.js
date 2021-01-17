@@ -335,6 +335,7 @@ export const CUSTOMER_INFO = gql `
       image
       email
       mobileNumber
+      notificationCount
     }
   }`; 
 
@@ -760,3 +761,33 @@ export const CREATE_BILLING_ADDRESS = gql `
       statusCode
     }
   }`;
+
+export const CREATE_NOTIFICATION = gql `
+  mutation createNotification($customer_id: Int!, $tasker_id: Int!, $text: String!){
+    createNotification(customerId: $customer_id, taskerId: $tasker_id, text: $text){
+      response
+    }
+  }`;
+
+export const CLEAR_NOTIFICATION = gql `
+  mutation clearNotificationCount($customer_id: Int!){
+    clearNotificationCount(customerId: $customer_id){
+      response
+    }
+  }`;
+
+export const GET_ALL_NOTIFICATION = gql `
+  query ($customer_id: Int!){
+    allNotificationsPerCustomer(customerId: $customer_id){
+      id
+      tasker {
+        id
+        firstName
+        lastName
+        image
+      }
+      text
+    }
+  }`;
+  
+  

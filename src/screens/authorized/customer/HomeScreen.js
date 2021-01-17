@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   Platform
 } from 'react-native';
-import { Text, Avatar } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { Card } from 'react-native-paper';
 import { styles } from '../../../styles/authorized/customer/HomeStyle';
 import { createAppContainer } from 'react-navigation';
@@ -16,7 +16,8 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 import { 
   CUSTOMER_INFO,
-  ALL_SERVICE_TYPES, 
+  ALL_SERVICE_TYPES,
+  CLEAR_NOTIFICATION,
   UPDATE_CUSTOMER_GEOLOCATION } from '../../../queries';
 import { DEFAULT_URL, ITEM_WIDTH } from '../../../actions/types';
 import { getAllServiceAction } from '../../../actions';
@@ -26,6 +27,8 @@ import { _androidRequestPermissions, _iosRequestPermissions } from '../../../hel
 import isEqual from 'lodash/isEqual';
 import isNull from 'lodash/isNull';
 import isEmpty from 'lodash/isEmpty';
+
+import IconBadge from 'react-native-icon-badge';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MyTodoListScreen from './todo/MyTodoListScreen';
@@ -42,29 +45,33 @@ import PlaceOrderScreen from './place_order/PlaceOrderScreen';
 import NewBillingAddressScreen from './place_order/NewBillingAddressScreen';
 import DebitCardScreen from './place_order/DebitCardScreen';
 import PaypalScreen from './place_order/PaypalScreen';
+import NotificationScreen from './notification/NotificationScreen';
 
 import InternetConnectionChecker from '../../../components/atoms/snackbar/InternetConnectionChecker';
 import Loading from '../../../components/atoms/loader/Loading';
 import OutOfLocationService from '../../../components/molecules/out_of_location_service/OutOfLocationService';
 
-const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
+const HomeScreen = ({ navigation, customer_id }) => {
   const netInfo = useNetInfo();
   const pattern = /Parañaque/g;
   const [fName, setFname] = useState('');
   const [compoundCode, setCompoundCode] = useState('');
+  const [BadgeCount, setBadgeCount] = useState(0);
   const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION);
+  const [clear_notification] = useMutation(CLEAR_NOTIFICATION);
   const { loading, error, data } = useQuery(ALL_SERVICE_TYPES, {
     pollInterval: 1000
   });
 
-  const { info_loading, info_error } = useQuery(CUSTOMER_INFO, {
+  const {  } = useQuery(CUSTOMER_INFO, {
     onCompleted: (data) => {
       if(!isNull(data) && !isEmpty(data)){
         setFname(data.customer[0].firstName);
+        setBadgeCount(data.customer[0].notificationCount)
       }
     },
     variables: { customer_id: parseInt(customer_id) },
-    pollInterval: 500
+    pollInterval: 400
   });
 
   useEffect(() => {
@@ -101,8 +108,23 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
     } 
   };
 
+  _onNavigateToNotificationScreen = () => {
+    clear_notification({
+      variables: {
+        customer_id: parseInt(customer_id)
+      }
+    }).then(({ data: { clearNotificationCount: { response }  } }) => {
+      console.log(response)
+      if(isEqual(response, 'Successfull updated')){
+         navigation.navigate('NotificationScreen')
+      }
+    })
+  }
+
+  
+
   if (loading || error) return null;
-  // const { firstName } = customerInfoArr[0].customer[0];
+ // const { firstName } = customerInfoArr[0].customer[0];
   // if(compoundCode !== ''){
   //   if(compoundCode.match(pattern) !== null){
       return(
@@ -112,13 +134,35 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
             <View style={styles.greeting_wrapper}>
               <Text h4 style={styles.hi_txt}>Hi {fName}</Text>
             </View>
-            {/* <View style={styles.profile_wrapper}>
-              <Icon 
-                name='user-circle'
-                style={styles.icon_profile}
-                size={30}
-              />
-            </View> */}
+            <View style={styles.profile_wrapper}>
+              <View style={{flexDirection: 'row',marginTop:'35%',marginLeft:'70%'}}>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    _onNavigateToNotificationScreen()
+                  }}
+                >
+                  <IconBadge
+                    MainElement={
+                      <Icon 
+                        name='bell'
+                        style={styles.icon_profile}
+                        size={30}
+                      />
+                    }
+                    BadgeElement={
+                      <Text style={{color:'#FFFFFF'}}>{BadgeCount}</Text>
+                    }
+                    IconBadgeStyle={
+                      {width:14,
+                      height:14,
+                      left:8,
+                      backgroundColor: 'red'}
+                    }
+                    Hidden={BadgeCount==0}
+                  />
+                </TouchableWithoutFeedback>
+              </View>
+            </View>
           </View>
           <View style={styles.service_wrapper}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -168,8 +212,7 @@ const HomeScreen = ({ navigation, customer_id, customer_first_name }) => {
 const mapStateToProps = ({ serviceReducer, customerReducer }) => {
   return {
     services: serviceReducer,
-    customer_id: customerReducer.id,
-    customer_first_name: customerReducer.first_name
+    customer_id: customerReducer.id
   }
 };
 
@@ -274,6 +317,13 @@ const App = createStackNavigator({
   },
   DebitCardScreen: {
     screen: DebitCardScreen,
+    navigationOptions: {
+      title: '',
+      headerVisible: false,
+    }
+  },
+  NotificationScreen: {
+    screen: NotificationScreen,
     navigationOptions: {
       title: '',
       headerVisible: false,

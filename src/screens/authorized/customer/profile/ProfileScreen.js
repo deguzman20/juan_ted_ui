@@ -15,7 +15,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { customerLogoutAction } from './../../../../actions';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { _androidRequestPermissions, _iosRequestPermissions } from '../../../../helpers/location';
-
+import * as OpenAnything from 'react-native-openanything';
 import Loader from "react-native-modal-loader";
 
 import isEqual from 'lodash/isEqual';
@@ -116,8 +116,15 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
                   bottomDivider
                   onPress={() => netInfo.isConnected ? navigation.navigate('EditProfileScreen') : null }
                 />
+                
                 <ListItem
                   key={3}
+                  title={'Contact Us'}
+                  rightIcon={{ name: 'arrow-drop-down' }}
+                  onPress={() => { OpenAnything.Web('https://m.me/andy.dangas') }}
+                />
+                <ListItem
+                  key={4}
                   title={'Logout'}
                   rightIcon={{ name: 'arrow-drop-down' }}
                   onPress={() => { _onLogoutPressed() }}

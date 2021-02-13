@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect } from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { ScrollView } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { 
@@ -11,15 +11,19 @@ import { GOOGLE_PLACE_API_KEY } from './../../../../actions/types';
 import Geolocation from '@react-native-community/geolocation';
 import ConversationList from './ConversationList';
 import MessageScreen from '../messages/MessageScreen';
+import ReportScreen from '../report/ReportScreen';
 import Loading from './../../../../components/atoms/loader/Loading';
 import InternetConnectionChecker from './../../../../components/atoms/snackbar/InternetConnectionChecker';
 import EmptyConversation from './../../../../components/molecules/empty_container/EmptyConversation';
 import OutOfLocationService from './../../../../components/molecules/out_of_location_service/OutOfLocationService';
 import axios from 'axios';
 
+let taskerID = null;
+let nav = null;
 const ConversationScreen = ({ user_id, navigation }) => {
   const pattern = /Parañaque/g
   const [compoundCode, setCompoundCode] = useState('')
+  const [taskerId, setTaskerId] = useState()
   const [update_customer_geolocation] = useMutation(UPDATE_CUSTOMER_GEOLOCATION)
   const { loading, error, data } = useQuery(CUSTOMER_CONVERSATION_LIST, {
     variables: { user_id: parseInt(user_id) },
@@ -55,6 +59,13 @@ const ConversationScreen = ({ user_id, navigation }) => {
     )
   },[])
 
+  nav = navigation;
+
+  setTimeout(() => {
+    taskerID = taskerId;
+    // console.log(taskerId)
+  }, 100)
+
   if(loading || error) return null;
   // if(compoundCode !== ''){
   //   if(compoundCode.match(pattern)[0] === 'Parañaque'){
@@ -67,6 +78,7 @@ const ConversationScreen = ({ user_id, navigation }) => {
                 loading={loading} 
                 error={error}
                 navigation={navigation}
+                setTaskerId={setTaskerId}
               />
             </ScrollView>
             <InternetConnectionChecker />
@@ -101,7 +113,26 @@ const App = createStackNavigator({
     }
   },
   MessageScreen: { 
-    screen: MessageScreen
+    screen: MessageScreen,
+    navigationOptions: {
+      headerRight: <TouchableWithoutFeedback onPress={() => {
+                      nav.navigate('ReportScreen', {
+                        tasker_id: taskerID
+                      })
+                    }}>
+                      <Text style={{
+                        left: -10
+                      }}>
+                        Report
+                      </Text>
+                   </TouchableWithoutFeedback>
+    }
+  },
+  ReportScreen: {
+    screen: ReportScreen,
+    navigationOptions: {
+      headerShown: false
+    }
   }
 })
 

@@ -3,6 +3,7 @@ import { View, ScrollView, SafeAreaView, FlatList } from 'react-native';
 import { Text, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
+import EmptyNotification from '../../../../components/molecules/empty_container/EmptyNotification';
 
 import { DEFAULT_URL } from '../../../../actions/types';
 
@@ -23,6 +24,8 @@ const NotificationScreen = ({ customer_id }) => {
   const keyExtractor = (item, index) => index.toString()
  
   const renderItem = ({ item }) => {
+    let timestamp = item.createdDate;
+ 
     const { firstName, lastName, image } = item.tasker
     return(
       <ListItem
@@ -37,12 +40,16 @@ const NotificationScreen = ({ customer_id }) => {
           <Text>{item.text}</Text>
         }
         leftAvatar={{ source: { uri: `${DEFAULT_URL}/${image}` } }}
+        rightElement={
+          <TimeAgo time={timestamp} />
+        }
         bottomDivider
         chevron
       />
     )
   }
  
+  if (loading || error) return null;
   if(data.allNotificationsPerCustomer.length >= 1){
     return(
       <>
@@ -58,11 +65,7 @@ const NotificationScreen = ({ customer_id }) => {
     )
   }
   else{
-    return(
-      <View>
-        <Text>No notification</Text>
-      </View>
-    )
+    return <EmptyNotification />
   }
 }
 

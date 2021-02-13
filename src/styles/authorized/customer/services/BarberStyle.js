@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     width:50,
   },
   quantityInput: {
-    height: 35,
+    height: 40,
     width: 40, 
     textAlign:'center',
     alignItems: 'flex-end', 

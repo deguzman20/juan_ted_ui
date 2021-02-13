@@ -138,7 +138,7 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
 
   // if(compoundCode !== ''){
   //   if(compoundCode.match(pattern) === null){
-  //     if(data.pastTaskerList.length >= 1){
+      if(data.pastTaskerList.length >= 1){
         return(
           <React.Fragment>
             <SafeAreaView />
@@ -159,10 +159,10 @@ const PastTaskerScreen = ({ customer_id, navigation }) => {
             </View>  
           </React.Fragment>
         )
-  //     }
-  //     else {
-  //       return <EmptyPastTasker />
-  //     }
+      }
+      else {
+        return <EmptyPastTasker />
+      }
   //   }
   //   else{
   //     return <OutOfLocationService />

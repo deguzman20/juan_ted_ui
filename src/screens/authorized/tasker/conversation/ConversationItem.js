@@ -4,7 +4,11 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { DEFAULT_URL } from '../../../../actions/types';
 import { useNetInfo } from '@react-native-community/netinfo';
 import last from 'lodash/last';
+import TimeAgo from 'react-native-timeago';
+
 const ConversationItem = ({ l, i, navigation }) => {
+  let timestamp = last(l['messages']).createdDate;
+
   const netInfo = useNetInfo()
   return(
     <TouchableWithoutFeedback onPress={() =>{
@@ -20,7 +24,7 @@ const ConversationItem = ({ l, i, navigation }) => {
         title={`${l['customer'].firstName} ${l['customer'].lastName}`}
         subtitle={l['messages'].length >= 1 ? `${last(l['messages']).text.substring(0, 20)}....` : ''} 
         bottomDivider
-        rightSubtitle={l['messages'].length >= 1 ? `${last(l['messages']).createdAt}` :  '' }
+        rightSubtitle={l['messages'].length >= 1 ? <TimeAgo time={timestamp} /> :  '' }
       />
     </TouchableWithoutFeedback>
   )

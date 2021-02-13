@@ -105,8 +105,8 @@ export const CREATE_REVIEW = gql `
   }`;
 
 export const SEND_MESSAGE = gql`
-  mutation createMessage($customer_id: Int!, $tasker_id: Int!, $own_by_customer: Boolean!, $text: String!) {
-    createMessage(customerId: $customer_id, taskerId: $tasker_id, ownByCustomer: $own_by_customer, text: $text) {
+  mutation createMessage($customer_id: Int!, $tasker_id: Int!, $own_by_customer: Boolean!, $text: String!, $date_created: String!) {
+    createMessage(customerId: $customer_id, taskerId: $tasker_id, ownByCustomer: $own_by_customer, text: $text, dateCreated: $date_created) {
       message {
         id
       }
@@ -201,7 +201,7 @@ export const CUSTOMER_CONVERSATION_LIST = gql`
           messages {
             id
             text
-            createdAt
+            createdDate
           }
         }
       }

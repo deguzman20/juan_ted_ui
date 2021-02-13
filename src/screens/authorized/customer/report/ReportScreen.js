@@ -8,7 +8,7 @@ import CookieManager from '@react-native-community/cookies';
 
 import BackButton from '../../../../components/atoms/button/BackButton';
 
-const CustomerImage = ({ customer_id, navigation }) => {
+const ReportScreen = ({ customer_id, tasker_id, navigation }) => {
 
   const [status, setStatus] = useState('pending')
   const webViewRef = useRef()
@@ -21,18 +21,18 @@ const CustomerImage = ({ customer_id, navigation }) => {
 
   handleResponse = (e) =>{
     if(e['canGoBack'] === true){
-        navigation.navigate('ProfileScreen')
+        navigation.navigate('MessageScreen')
     }
   }
 
   return(
     <>
-      <BackButton goBack={() => navigation.navigate('ProfileScreen')} />
+      <BackButton goBack={() => navigation.navigate('MessageScreen')} />
       <SafeAreaView style={{ marginBottom: 50 }}/>
       { Platform.OS === 'ios' ? 
         (
           <WebView
-            source={{ url: `${DEFAULT_URL}/customer/upload/edit?id=${customer_id}` }}
+            source={{ url: `${DEFAULT_URL}/customer/report/new?customer_id=${customer_id}?tasker_id=${tasker_id}` }}
             scalesPageToFit={true}
             incognito={true}
             onNavigationStateChange={e => handleResponse(e)}
@@ -41,7 +41,7 @@ const CustomerImage = ({ customer_id, navigation }) => {
         ) :
         (
           <WebView
-            source={{ uri: `${DEFAULT_URL}/customer/upload/edit?id=${customer_id}` }}
+            source={{ uri: `${DEFAULT_URL}/customer/report/new?customer_id=${customer_id}?tasker_id=${tasker_id}` }}
             scalesPageToFit={true}
             incognito={true}
             onNavigationStateChange={e => handleResponse(e)}
@@ -62,4 +62,4 @@ const mapStateToProps = ({ customerReducer }) => {
   }
 }
 
-export default memo(connect(mapStateToProps, null)(CustomerImage));
+export default memo(connect(mapStateToProps, null)(ReportScreen));

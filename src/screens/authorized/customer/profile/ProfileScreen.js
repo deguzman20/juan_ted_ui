@@ -17,6 +17,7 @@ import { useNetInfo } from "@react-native-community/netinfo";
 import { _androidRequestPermissions, _iosRequestPermissions } from '../../../../helpers/location';
 import * as OpenAnything from 'react-native-openanything';
 import Loader from "react-native-modal-loader";
+import Icon from 'react-native-vector-icons/Fontisto'
 
 import isEqual from 'lodash/isEqual';
 
@@ -120,9 +121,15 @@ const ProfileScreen = ({ navigation, customer_id, customerLogoutAction }) => {
                 <ListItem
                   key={3}
                   title={'Contact Us'}
-                  rightIcon={{ name: 'arrow-drop-down' }}
+                  rightIcon={ 
+                    <Icon 
+                      name={"messenger"}
+                      size={20}
+                    />
+                   }
                   onPress={() => { OpenAnything.Web('https://m.me/andy.dangas') }}
                 />
+
                 <ListItem
                   key={4}
                   title={'Logout'}

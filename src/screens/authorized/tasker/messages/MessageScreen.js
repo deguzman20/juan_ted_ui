@@ -18,7 +18,8 @@ const MessageScreen = ({ navigation, tasker_id }) => {
                   customer_id: navigation.state.params.customer_id, 
                   tasker_id: parseInt(tasker_id), 
                   own_by_customer: false, 
-                  text: message.value } })
+                  text: message.value,
+                  date_created: new Date()  } })
     setMessage({ value: '' })
   }
 

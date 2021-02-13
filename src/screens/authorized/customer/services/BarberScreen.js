@@ -119,24 +119,26 @@ const BarberScreen = ({ navigation }) => {
                       size={15}
                     />
                     <View style={styles.containerRow}>
-                    <View style={styles.quantityButton}>
-                        <Button
-                          title="-"
-                          onPress={() => decreaseQuantity(item) }
-                        />
+                      <View style={styles.quantityButton}>
+                          <ButtonElement
+                            buttonStyle={{ backgroundColor:'black' }}
+                            title="-"
+                            onPress={() => decreaseQuantity(item) }
+                          />
                       </View>
-                      <TextInput
-                        editable={false}
-                        style={styles.quantityInput}
-                        onChangeText={text => onChangeText(text)}
-                        value={`${item.quantity}`}
-                      />
-                    <View style={styles.quantityButton}>
-                        <Button
-                          title="+"
-                          onPress={() => increaseQuantity(item) }
+                        <TextInput
+                          editable={false}
+                          style={styles.quantityInput}
+                          onChangeText={text => onChangeText(text)}
+                          value={`${item.quantity}`}
                         />
-                    </View>
+                      <View style={styles.quantityButton}>
+                          <ButtonElement
+                            buttonStyle={{ backgroundColor:'black' }}
+                            title="+"
+                            onPress={() => increaseQuantity(item) }
+                          />
+                      </View>
                     </View>
                   </View>
                 </View>

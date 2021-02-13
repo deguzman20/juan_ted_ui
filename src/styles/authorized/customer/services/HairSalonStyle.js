@@ -24,14 +24,13 @@ export const styles = StyleSheet.create({
   imageServiceItem: {
     flex: 2,
     alignSelf: 'baseline',
-    width: 150, 
-    height: 150,
+    height: 150
   },
   quantityButton: {
     width:50,
   },
   quantityInput: {
-    height: 35,
+    height: 40,
     width: 40, 
     textAlign:'center',
     alignItems: 'flex-end', 
@@ -72,17 +71,17 @@ export const styles = StyleSheet.create({
   cost: {
     fontFamily: "verdana",
     color: "#121212",
-    fontSize: 25,
+    fontSize: 20,
     marginLeft: '60%',
     marginTop: -30,
   },
   next_button_background_color: {
     backgroundColor: '#009C3C',
     width: '92%',
-    left: '20%',
     height: 41,
     marginTop: 45,
     color:'white',
+    left: '20%',
     paddingLeft: 10,
     paddingRight: 10,
   },

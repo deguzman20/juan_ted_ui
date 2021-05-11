@@ -36,7 +36,7 @@
     "graphql": "^14.6.0",
     "graphql-ruby-client": "^1.7.10",
     "graphql-tag": "^2.10.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.27.0",
     "popup-ui": "^1.0.10",
     "prop-types": "^15.7.2",
